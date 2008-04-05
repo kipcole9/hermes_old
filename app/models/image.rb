@@ -1,5 +1,5 @@
 class Image < ActiveRecord::Base
-  require 'rmagick'
+  require 'RMagick'
   require 'rexml/document'
   require 'mini_exiftool'
   include HermesImageMetadataImport
