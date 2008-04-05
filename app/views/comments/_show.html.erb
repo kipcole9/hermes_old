@@ -1,0 +1,15 @@
+<% @comments = show.comments.published %>
+<% if (@comments.count > 0 rescue nil) %>
+	<%= render :partial => "comments/comments", :object => @comments %>
+<% end %>
+
+<% if show.allow_comments?(publication) %>
+	<%= render :partial => "comments/comment_form", :object => show %>
+<% end %>
+
+<% if current_user.is_admin? %>
+	<% @draft_comments = show.comments.draft %>
+	<% if (@draft_comments.count > 0 rescue nil)  %>
+		<%= render :partial => "comments/draft_comments", :object => @draft_comments %>
+	<% end %>
+<% end %>

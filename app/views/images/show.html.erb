@@ -1,0 +1,16 @@
+<%
+	sidebar_clear
+	sidebar :image_data
+	sidebar :image_gallery_list
+	sidebar :asset_map if (@asset.latitude && @asset.longitude)
+%>
+<% content_for :javascripts do %>
+	<%= javascript_include_tag "scriptaculous.js" %>
+	<%= javascript_include_tag "lightview.js" %>
+<% end %>
+
+<div class="_article clearfix">
+	<%= render :partial => "image", :locals => {:image => @image} %>
+</div>
+
+<%= render :partial => "comments/show", :object => @image %>

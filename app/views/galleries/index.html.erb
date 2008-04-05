@@ -1,0 +1,21 @@
+<%
+	sidebar_clear
+	sidebar :galleries_recent
+	sidebar :galleries_popular
+%>
+<% content_for :head do %>
+	<%= auto_discovery_link_tag(:rss, formatted_galleries_url(params.merge(:format => "rss"))) %>
+	<%= auto_discovery_link_tag(:atom, formatted_galleries_url(params.merge(:format => "atom"))) %>
+<% end %>
+	
+<div class='_article'>
+	<% category = params[:category] ? params[:category].capitalize + " " : "" %>
+	<h2><%= "#{category}Gallery Index" -%></h2>
+	<%= render :partial => "shared/page_numbers", :locals => {:collection => @galleries} %>
+	<div id="_allGalleries" class="_thumbnailList clearfix">
+		<% @galleries.each do |g| %>
+			<%= render :partial => "images/slide", :locals => {:image => g.popular_image(current_user), 
+				:caption => g.title, :gallery => g} %>
+		<% end %>
+	</div>
+</div>

@@ -1,0 +1,59 @@
+ActionController::Routing::Routes.draw do |map|
+  # The priority is based upon order of creation: first created -> highest priority.
+
+  # Sample of regular route:
+  #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'
+  # Keep in mind you can assign values other than :controller and :action
+
+  # Sample of named route:
+  #   map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
+  # This route can be invoked with purchase_url(:id => product.id)
+
+  # Sample resource route (maps HTTP verbs to controller actions automatically):
+  #   map.resources :products
+
+  # Sample resource route with options:
+  #   map.resources :products, :member => { :short => :get, :toggle => :post }, :collection => { :sold => :get }
+
+  # Sample resource route with sub-resources:
+  #   map.resources :products, :has_many => [ :comments, :sales ], :has_one => :seller
+
+  # Sample resource route within a namespace:
+  #   map.namespace :admin do |admin|
+  #     # Directs /admin/products/* to Admin::ProductsController (app/controllers/admin/products_controller.rb)
+  #     admin.resources :products
+  #   end
+
+  # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
+  map.root :controller => "articles"
+
+  # See how all your routes lay out with "rake routes"
+
+  # Authentication routes
+  map.resource  :sessions
+  map.signup '/signup', :controller => 'users', :action => 'new'
+  map.login  '/login', :controller => 'sessions', :action => 'new'
+  map.logout '/logout', :controller => 'sessions', :action => 'destroy'
+  map.open_id_complete 'session', :controller => "sessions", :action => "create", :requirements => { :method => :get }
+   
+  # Assets routes
+  map.resources :articles, :collection => {:list => :get, :recent => :get, :popular => :get, :live_search => :post}
+  map.resources :assets, :collection => {:live_search => :post}
+  map.resources :images, :member => {:serve => :get}, :collection => {:recent => :get, :popular => :get, :random => :post, :roulette => :get, :live_search => :post}
+  map.resources :galleries, :collection => {:recent => :get, :popular => :get}
+  map.resources :maps, :collection => {:world => :get}
+  map.resources :comments, :collection => {:delete => :delete}, :member => {:approve => :put, :spam => :put, :notspam => :put}
+  map.resources :publications
+  map.resources :users
+
+  
+  map.index     ':year/:month/:day', :controller => 'articles', :action => 'date',
+                :month => nil, :day => nil,
+                :requirements => {:year => /\d{4}/, :day => /\d{1,2}/, :month => /\d{1,2}/}
+               
+  map.category  'articles/:category', :controller => 'articles', :action => 'category', :category => '[SECTIONS]'  
+  
+  # Install the default routes as the lowest priority.
+  map.connect ':controller/:action/:id'
+  map.connect ':controller/:action/:id.:format'
+end

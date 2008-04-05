@@ -1,0 +1,8 @@
+<div class='_article'>
+	<h2>List of articles</h2>
+	<ul>
+		<% for article in @articles %>
+			<li><%= link_to article.title, article_url(article) %></li>
+		<% end %>
+	</ul>
+</div>

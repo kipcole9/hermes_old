@@ -1,0 +1,11 @@
+development:
+  api_key: 62076cbd4a1d96250b10f1f67c96e14f
+  owner_url: http://refuge.noexpectations.com.au:3000
+
+test:
+  api_key: 1234abc
+  owner_url: http://code.macournoyer.com/svn/plugins/defensio
+
+production:
+  api_key: 6789xyz
+  owner_url: http://code.macournoyer.com/svn/plugins/defensio

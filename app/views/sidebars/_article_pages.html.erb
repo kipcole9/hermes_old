@@ -1,0 +1,7 @@
+<h4>Article Pages</h4>
+<ul>
+	<li><%= link_to "Create new page", new_article_page_url(@article) %></li>
+	<% for page in @article.pages %>
+		<li><%= link_to page.heading, article_page_url(@article, page.name) %></li>
+	<% end %>
+</ul>

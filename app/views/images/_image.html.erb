@@ -1,0 +1,9 @@
+<!-- This partial formulates the html for an image view -->
+<div id="image_<%= image.id -%>" class="_articleImage">
+	<a href="<%= serve_image_url(image, :type => :full) -%>" class='lightview' title="<%= image.title -%>" >
+		<img alt="<%= image.title -%>" title="<%= image.title -%>"
+			src="<%= serve_image_url(image, :type => :display) -%>" />
+	</a>
+	<p><%= image.display_caption %></p>
+</div>
+<p><%= image.description %></p>

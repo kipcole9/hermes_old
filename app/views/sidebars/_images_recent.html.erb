@@ -1,0 +1,6 @@
+<h4>Recent images:</h4>
+<div class="_thumbsmallList clearfix">
+<% Image.recent(12).each do |i|%>
+	<%= render :partial => "images/thumbnail", :locals => {:image => i} %>
+<% end %>
+</div>

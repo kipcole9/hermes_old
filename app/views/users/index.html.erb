@@ -1,0 +1,20 @@
+<div class='_index'>
+<h2>Registered Users</h2>
+
+<% for user in @users %>
+	<div class="_indexRow" >
+	    <% if user.photo then %>
+			Photo
+		<% end %>
+		<div class="_indexText">
+			<h3><%= link_to user.full_name, user %></h3>
+			Login name: <%= user.login %><br />
+			Email: <%= user.email %><br />
+			From: <%= user.city %><%= user.country ? ", #{user.country}" : "" %></p>
+		</div>
+	</div>
+	<div class="_indexFooter"></div>
+<% end %>
+
+</div>
+

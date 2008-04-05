@@ -1,0 +1,890 @@
+/* Default settings
+----------------------------------------------*/
+
+body {
+  background:#000;
+  margin:0;
+  padding:10px 20px;
+  font-family: Tahoma, Arial, Helv;
+  font-weight: normal;
+  letter-spacing: 0.1em;
+  text-align:left;
+  color:#ccc;
+  font-size/* */:/**/medium;
+  font-size: /**/medium;
+  }
+  
+a:link {
+  color:#9ad;
+  text-decoration:none;
+  }
+a:visited {
+  color:#ad9;
+  text-decoration:none;
+  }
+a:hover {
+  color:#ad9;
+  text-decoration:underline;
+  }
+a img {
+  border-width:0;
+  }
+
+code {
+	display: block;
+	border: 1px solid #555;
+	background: #333;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 20px;
+	margin-right: 20px;
+	padding: 10px;
+}
+
+blockquote {
+	float: left;
+	border-top: 1px solid #ad9;
+	border-bottom: 1px solid #ad9;
+	padding: 8px;
+	padding-bottom: 10px;
+	margin-right: 0.7em;
+	margin-top: 0.6em;
+	margin-bottom: 0.2em;
+	margin-left: 0;
+	width: 200px;
+	font-style: italic;
+}
+
+h2 {
+  padding-top: 0em;
+  font-weight: normal;
+  font-size: 1.3em;
+  letter-spacing:.2em;
+  color:#ad9;
+  margin: 0;
+  }
+  
+h3 {
+  padding-top: 0em;
+  font-weight: normal;
+  font-size: 1em;
+  letter-spacing:.2em;
+  color:#ad9;
+  }
+
+h2, h3 a:visited {
+  color:#9ad;
+  }
+h2 a:hover, h3 a:hover {
+  color:#9ad;
+  text-decoration: underline;
+  }
+
+/* Content
+----------------------------------------------- */
+#_wrapper {
+  width:900px;
+  margin: 0 auto;
+  padding:0;
+  text-align:left;
+  }
+
+#_header {
+  margin:0 auto 15px;
+  border:1px solid #555;
+  }
+
+#_content {
+  width:580px;
+  float:left;
+  /* border:1px solid #333;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  background-color: #111; */
+  }
+
+#_flash {
+  border:1px solid #333;
+  text-align: center;
+  padding: 1em;
+  color: #f00;
+  margin-bottom: 10px;
+}
+
+#_sidebar {
+  width:300px;
+  float:right;
+  }
+
+#_footer {
+  clear: both;
+  position: relative;
+  top: 10px;
+  color:#777;
+  font-size: 75%;
+  padding-top: 5px;
+  margin-bottom: 1em;
+  text-align: center;
+  border-top: 2px solid #555;
+  letter-spacing: 0.1em;
+  }  
+
+
+/* Header
+----------------------------------------------- */
+  
+div#_header h1 {
+  margin:5px 5px 0;
+  padding:20px 20px .25em;
+  border:1px solid #555;
+  border-width:1px 1px 0;
+  font-size:150%;
+  font-weight: normal;
+  line-height:1.2em;
+  color:#ccc;
+  /* text-transform:uppercase; */
+  letter-spacing:.3em;
+  text-align: center;
+  }
+  
+
+
+/* Top of page menu bar 
+-----------------------------------------------*/
+div#_navigation {
+  margin:0 5px 5px;
+  padding:0 20px 20px;
+  border:1px solid #555;
+  border-width:0 1px 1px;
+  font-size:74%;
+  text-transform:uppercase;
+  letter-spacing:.2em;
+  text-align: center;
+  color:#9ad;
+  }
+
+div#_navigation a:visited {
+  color:#9ad;
+}
+
+div#_navigation a:hover {
+  color:#9ad;
+  }
+
+
+/* Article Summary - for main index
+----------------------------------------------*/
+
+/* Article format */  
+._article {
+  padding-bottom: 0.5em;
+  padding-right: 0.5em;
+  margin-bottom: 0.7em;
+  line-height: 120%;
+  border-bottom: 1px dotted #333;
+  clear: both;
+  /* background-color: #333; */
+  /* background-image: url("/images/article_background.jpg"); */
+  }
+
+/* Article Heading */
+._article h2 {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 0.5em;
+  font-size: 1.3em;
+  font-weight: normal;
+  letter-spacing:.1em;
+  color:#9ad;
+  }  
+
+._article h2 a:visited {
+  color:#9ad;
+}
+
+._article h2 a:hover {
+  color:#9ad;
+  }
+
+/* For byline on article summary */
+._article h3 {
+	margin: 0;
+	color: #777;
+	padding: 0;
+	font-size: 70%;
+	font-weight: normal;
+	margin-bottom: 0.7em;
+	letter-spacing: 0.1em;
+	margin-top: -0.7em;
+}
+
+/* For page numbers */
+._article h4 {
+	margin: 0;
+	color: #777;
+	padding: 0;
+	font-size: 90%;
+	font-weight: normal;
+	margin-bottom: 0.7em;
+}
+
+div._comment {
+	margin-top: 0.5em;
+	margin-bottom: 1em;
+}
+
+/* For byline on article summary */
+._comment h3 {
+	margin: 0;
+	color: #777;
+	padding: 0;
+	font-size: 70%;
+	margin-bottom: 0.7em;
+	margin-top: 0.2em;
+	letter-spacing: 0.1em;
+}
+
+/* Author name on comments */
+._comment_author {
+	color: #ad9;
+}
+  
+/* Article footer - important to use because it does a clear:both */
+._articleFooter {
+  font-size:78%;
+  text-transform:uppercase;
+  text-align: left;
+  letter-spacing:.2em;
+  color:#777;
+  padding: 0 0 0 0;
+  padding-top: 2em;
+  margin-bottom: 0em;
+  clear: both;
+  }
+
+._articleFooter a:link {
+  color:#9ad;
+  text-decoration: none;
+  }
+
+._articleFooter a:visited {
+  color:#9ad;
+  text-decoration: none;
+  }
+
+._articleFooter a:hover {
+  color:#9ad;
+  text-decoration: underline;
+  }
+
+
+/* Article Image - full width image in an article or article summary */
+._articleImage {
+  border:2px solid #444;
+  padding: 4px;
+  padding-top: 20px;
+  text-align: center;
+  background: #222;
+  }
+  
+._articleImage img {
+  max-width: 540px;  /* Content div width - (2*border size) - (2*img padding size) */
+  max-height: 540px;
+  }
+  
+._articleImage p {
+  margin:0px;
+  font-size: 78%;
+  text-align:center;
+  text-transform:uppercase;
+  color:#777;
+  }
+
+#_slideshow {
+  border:2px solid #444;
+  width: 540px;
+  height: 540px;
+  padding: 4px;
+  padding-top: 20px;
+  text-align: center;
+  background: #222;
+  }
+
+/* 
+ * For image thumbnails in a gallery view
+ * NOTE: Very dependent on the knowledge that thumbnails
+ * are generated at 160px dimensions
+----------------------------------------------*/
+._thumbnailList {
+	padding: 0;
+
+	}
+
+._thumbnail {
+  float: left;
+  margin-right: 3px;		/* spacing between thumbnails	*/
+  margin-bottom: 3px;
+  width: 169px;
+  height: 182px; 			/* so we can position the caption under the image */
+  padding: 4px;
+  border:1px solid #555;
+  text-align: center;
+  line-height: 170px;
+  background: #222;
+  }
+  
+._thumbnail img {
+	vertical-align: middle;
+	max-width: 160px;
+	max-height: 160px;
+  }
+  
+._thumbnail p {
+  margin:-1px;
+  font-size:55%;
+  text-align:center;
+  text-transform:uppercase;
+  line-height: 11px;
+  color:#777;
+  }
+  
+/* For out lightbox and search results */
+._thumbsmallList {
+	padding-left: 0px;
+}
+
+._thumbsmall_p, ._thumbsmall_l {
+  border: 1px solid #444;
+  width: 86px;
+  height: 86px;
+  background: #222;
+  float: left;
+  margin: 2px;
+  padding: 2px;
+  line-height: 86px;
+  text-align: center;
+  }
+  
+._thumbsmall_p img {
+	max-width: 50px;
+    vertical-align: middle;
+  }
+
+._thumbsmall_l img {
+	max-width: 80px;
+    vertical-align: middle;
+  }
+  
+/* For image thumbnails floated in an article or article summary
+---------------------------------------------------------------*/
+._thumbnailLeft {
+  position:relative;
+  top:4px;
+  width: auto;
+  float:left;
+  padding: 4px;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+  border:1px solid #444;
+  background: #222;
+  }
+  
+._thumbnailLeft img {
+	max-width: 160px;
+	max-height: 160px;
+  }
+  
+._thumbnailLeft p {
+  margin-top: -3px;
+  margin-bottom: -3px;
+  padding: 0;
+  font-size:78%;
+  text-align:center;
+  text-transform:uppercase;
+  color:#777;
+  }
+
+._thumbnailRight {
+  position:relative;
+  top:1px;
+  width: auto;
+  float:right;
+  padding: 4px;
+  margin-left: 0.5em;
+  border:1px solid #444;
+  background: #222;
+  }
+ 
+._thumbnailRight img {
+	max-width: 160px;
+	max-height: 160px;
+  }
+  
+._thumbnailRight p {
+  margin: 0;
+  padding: 0;
+  font-size:78%;
+  text-align:center;
+  text-transform:uppercase;
+  color:#777;
+  margin-top: -3px;
+  margin-bottom: -3px;
+  }
+
+.fieldWithErrors {
+	padding: 1px;
+	background-color: red;
+	display: table;
+	}
+	
+.formError {
+	text-indent: 130px;
+	color: red;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	text-transform: uppercase;
+	font-size: 80%;
+	top: 8px;
+	}
+		
+/* Classes for tag cloud */
+.cloud1 {
+	font-size: 90%;
+}
+.cloud2 {
+	font-size: 110%;
+	}
+.cloud3 {
+	font-size: 120%;
+	}
+.cloud4 {
+	font-size: 150%;
+	}
+.cloud5 {
+	font-size: 180%;
+	}
+.cloud6 {
+	font-size: 200%;
+	}
+
+/* For forms */
+div#_form {
+	width:580px; /* Same as for _content */
+	}
+	
+div#_form h3 {
+	margin:0; 
+	color: #ad9;
+	/* background: #222; */
+	border: 2px solid #222;
+	font-weight:normal;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 5px;
+	margin-bottom: 1em;
+	margin-top: 1em;
+	font-size:1em;
+	}	
+	
+div#_form h4 {
+	margin:0 0 5px 10px; 
+	font-weight:normal; 
+	font-size:.75em;
+	}
+	
+div#_form form  {
+	/* border-top: 2px solid #9ad; */
+	padding-bottom: 10px;
+	/* border-bottom: 2px solid #9ad; */
+	} /* the top border is visually 1 px thicker because it touches the div.clearfix bordertop */
+
+div#_form div._formField {
+	/* border-bottom: 1px solid #333; */
+	padding:0px 0px;
+	vertical-align:top;
+	} /* For master record information */
+
+div#_form div._formDetail {
+	padding: 0;
+	margin-left: 0px;
+	vertical-align:top;
+	} /* For detail records of master record in form processing */
+	
+div#_form form label {
+	width:145px; 
+	margin: 0;
+	padding: 0;
+	padding-top: 3px;
+	float:left;
+	text-align: left;
+	font-weight: normal;
+	font-size:1em;
+	} /* this is the text label on the left of each input */
+
+div#_form div.buttongroup {
+	float:left; 
+	margin:0px; 
+	padding:0px;
+	} /* a container for a groups of buttons - suppresses the clearfix div top border on the divs around the radio buttons/checkboxes */
+
+div#_form div.buttongroup div {
+	margin-bottom:5px; 
+	font-size:.75em;
+	} /* wrapper for the INPUT and its text - margin-bottom sets the vertical distance between buttons */
+
+div#_form div.buttongroup input {
+	margin-right:5px;
+	} /* set the distance between button and its label text */
+
+/* postions the submit button by selecting a div with attribute type SUBMIT - IDWIMIE */
+div#_form input {
+	color: #ccc;
+	background: #333;
+	border: 1px solid #555;
+	padding-left: 3px;
+	padding-right: 3px;
+	}
+	
+div#_form input[type="submit"] {
+	display:block; 
+	margin-left:auto;
+	margin-top: 10px;
+	margin-bottom: 2px;
+	margin-right: 2px;
+	padding-left: 3px;
+	padding-right: 3px;
+	}
+
+div#_form input[type="submit"]:hover {
+	background: #ad9;
+	color: #333;
+	}
+	
+/* Select needs to be given its own css otherwise it won't format in ff */
+div#_form select {
+  	text-align:left;
+  	color:#ccc;
+	background: #333;
+	border: 1px solid #555;
+  	font-size/* */:/**/small;
+  	font-size: /**/small;
+	}
+	
+div#_form fieldset {
+	border: 0;
+	margin-left: -10px;
+	margin-right: 0;
+	padding-right: 0;
+}
+
+/* Input for text-areas */
+._formText {
+  	text-align:left;
+	padding-left: 3px;
+	padding-right: 3px;
+  	color:#ccc;
+	background: #333;
+	border: 1px solid #555;
+	font-family: Tahoma, Arial, Helv;
+  	font-size/* */:/**/small;
+  	font-size: /**/small;
+	}
+/* END OF THE FORMS CSS*/
+
+/* Content in the sidebar.  Can be multiples of these.
+-------------------------------------------------------*/
+
+#_sidebarList {
+  padding-left: 0;
+  padding-top: 0;
+  margin-top: 0;
+  margin-left: 0;
+  list-style: none;
+  }
+
+._sidebarContent {
+  border: 1px solid #333;
+  color: #999;
+  padding: 4px;
+  margin-bottom: 0.5em
+  }
+
+/* Bullet lists */
+._sidebarContent li {
+  list-style-image: url(/images/icons/bullet_orange.png); 
+  color: #777;
+}
+._sidebarContent li a:visited { 
+  color: #777; 
+}
+._sidebarContent li a:hover { 
+  color: #777;
+} 
+._sidebarContent h4 {
+	font-size: small;
+	font-weight: normal;
+	margin: 0;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	padding: 0;
+}
+
+._sidebar p {
+	margin-left: 0.5em;
+}
+
+._sidebarContent li sup {  /* better align the image bullets and the text */
+	font-size: 100%;
+	vertical-align: 25%;
+}
+
+._sidebarContent img {
+  width: 290px;   /* sidebar div width - (2* border size) - (2 * padding) */
+  text-align: center;
+  padding-top: 2px;
+  }
+  
+._sidebarContent h6 {  /* used for sidebar image caption */
+  margin: 0;
+  font-size: 70%;
+  text-align:center;
+  text-transform:uppercase;
+  font-weight: normal;
+  color:#777;
+  }
+  
+._sidebarError {
+  border: 2px solid red;
+  /* -moz-border-radius: 5px;
+  -webkit-border-radius: 5px; */
+  color: #999;
+  padding: 0px;
+  padding-bottom: 0.5em;
+  margin: 0px;
+  margin-bottom: 0.5em
+  }
+
+._sidebarError h4 {
+	font-size: 80%;
+	background-color: red;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	padding-bottom: 0.2em;
+	color: white;
+}
+
+._sidebarError p {
+	margin: 0.5em;
+}
+
+.red {
+	color: red;
+}
+
+/* For example, login and search 
+--------------------------------*/
+div._sidebarForm {
+	margin: 0;
+	padding: 0;
+	}
+
+div._sidebarForm p {
+	font-size: 80%;
+	margin: 0;
+	padding: 2px;
+}
+
+div._sidebarForm form {
+	margin: 0;
+	padding: 0;
+	margin-bottom: 4px;
+}
+	
+div._sidebarForm form label {
+	width:70px; 
+	float:left;
+	}
+	
+div._sidebarForm input {
+	border: solid 1px #CDBE70;
+	background-color: #000;
+	color: #ddd;
+	padding-left: 2px;
+	}
+	
+div._sidebarForm input[type="submit"] {
+	display:inline; 
+	margin-right: 2px;
+	padding-left: 3px;
+	padding-right: 3px;
+  	color:#ccc;
+	background: #333;
+	border: 1px solid #555;
+	}
+
+div._sidebarForm input[type="submit"]:hover {
+	background: #ad9;
+	color: #333;
+	}
+
+div._login {
+	line-height: 2em;
+	}
+	
+/* The div which we fill in from dynamic search */
+div#_searchImageResults {
+
+	}
+	
+div._helpText {  /* goes with the search results - the text under the search box */
+	position: relative;
+	top: 0px;
+	text-indent: 47px;
+	padding: 0;
+	margin: 0;
+	font-size: 70%;
+	text-transform: uppercase;
+}
+
+/* For index listings 
+----------------------*/
+div._index {
+	text-align: left;
+}
+
+div._indexRow {
+  border-top: solid 1px #9da;
+  margin-top: 0.5em;
+  padding-top: 0.5em;
+  }
+	
+div._indexText {
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  margin-left: 190px;
+  }
+  
+div._indexText h3 {
+	margin-top: 0;
+}  
+  
+div._indexFooter {
+  clear: both;
+  }
+
+/* Clearing stuff.  Add the clearfix class to a containing div you want to clear at the end */
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+	}
+.clearfix {display: inline-block;}
+* html .clearfix {height: 1%;}
+.clearfix {display: block;}
+/* Don't change the stuff above!!!!! */
+
+/* Div model to give two columns adjacent - used in sidebar exif */
+div.columnFirst {
+	width: 92px;
+	float: left;
+	color: #8FBC8F;
+	font-size: small;
+	text-align: right;
+	margin-right: 10px;
+	overflow: hidden;
+	letter-spacing: 0;
+	}
+	
+div.columnSecond {
+	width: 185px;
+	font-size: small;
+	float: left;
+	letter-spacing: 0;
+}
+
+/* To centre an image in full width */
+div ._articleCentre {
+	float: left;
+	margin: 0;
+	padding: 0;
+	/* width: 580px; */
+	text-align: center;
+	margin-bottom: 10px;
+	}
+	
+/* For progress spinners
+------------------------ */
+div._spinner {
+	position: relative;
+	top: -20px;
+	left: -40px;
+	float: right;
+	margin: 0;
+	padding: 0;
+	}
+
+div._spinner img {
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	padding: 0;
+}
+
+/* For google maps
+-------------------*/
+._smallMap {
+	width: 290px;
+	height: 250px;
+	white-space: normal; 
+}
+
+._largeMap {
+	margin-top: 0.5em;
+	width: 900px;
+	height: 500px;
+	z-index: 5000;
+	}
+	
+div._infoWindow {  /* Container window for our info content */
+	margin-top: -20px;
+	width: 250px;
+	height: 80px;
+	margin: 0;
+	padding: 0;
+	}
+
+div._infoWindow h4 {
+	color: black;
+	font-size: 80%;
+	margin: 0;
+	padding: 0;
+	margin-bottom: 2px;
+}
+
+div._infoWindow a { 
+	color: black; 
+}
+
+div._infoWindow p {
+	font-size: 70%;
+	color: black;
+	margin: 0;
+	padding: 0;
+	margin-left: 5px;
+}
+
+/*---------- For Pagination ------------*/
+._rightAlign {
+	text-align: right;
+}
+
+/* VML style declaration - required for IE (used my mapping) */
+v:* { 
+	behavior:url(#default#VML);
+} 
+

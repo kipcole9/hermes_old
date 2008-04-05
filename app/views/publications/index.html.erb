@@ -1,0 +1,8 @@
+<div class='_article'>
+	<h2>List of publications</h2>
+	<ul>
+		<% for publication in @publications %>
+			<li><%= link_to publication.title, publication_url(publication) %></li>
+		<% end %>
+	</ul>
+</div>

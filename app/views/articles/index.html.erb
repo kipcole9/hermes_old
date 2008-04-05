@@ -1,0 +1,27 @@
+<%
+	sidebar_clear
+	sidebar :asset_search
+	sidebar :article_categories
+	sidebar :image_tag_cloud
+	sidebar :image_random
+%>
+<% content_for :head do %>
+	<%= auto_discovery_link_tag(:rss, formatted_articles_url(params.merge(:format => "rss"))) %>
+	<%= auto_discovery_link_tag(:atom, formatted_articles_url(params.merge(:format => "atom"))) %>
+<% end %>
+<% if @articles %>
+	<% for article in @articles -%>
+	    <div id="<%= 'article_' + article.id.to_s -%>" class="_article" >
+		  <h2><%= link_to article.title, article %></h2>
+		  <h3>
+			<%= "by #{article.created_by.full_name} on #{article.created_at.strftime("%A, %B %d %Y at %H:%M %Z")}" -%>
+			<% if (comment_count = article.comments.published.count) > 0 %>
+				<%= "(#{pluralize(comment_count, "comment")})" %>
+			<% end %>
+		  </h3>
+		  <%= render :inline => article.description -%>
+		  <%= link_to "More&hellip;", article %>
+		  <%= render(:partial => "articles/article_footer", :locals => {:article => article}) -%>
+	    </div>	
+	<% end %>
+<% end %>

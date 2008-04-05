@@ -1,0 +1,8 @@
+<% @images.each_with_index do |image, index|  %>
+	<div class="_thumbsmall"> 
+		<%= render :partial => "images/thumbnail", :locals => {:image => image}  %>
+	</div>
+	<% if index == 20 %>
+		<% break %>
+	<% end %>
+<% end %>

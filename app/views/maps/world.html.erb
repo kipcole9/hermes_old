@@ -1,0 +1,10 @@
+<%= GMap.header :host => request.host, :with_vml => false -%>
+<script type="text/javascript">
+//<![CDATA[
+<%= @map.to_html(:no_script_tag => true) -%>
+//]]>
+</script>
+
+<h2>World Map</h2>
+<div id="_largeMap" class="_largeMap">
+</div>

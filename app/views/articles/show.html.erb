@@ -1,0 +1,15 @@
+<%
+	sidebar_clear
+	sidebar :asset_search
+	sidebar :image_tag_cloud
+	sidebar :asset_map if @article.mappable?
+%>
+
+<div id="<%= "article_#{@article.id}" %>" class="_article">
+	<h2><%= @article.title -%></h2>
+	<h3><%= "by #{@article.created_by.full_name} on #{@article.created_at.strftime("%A, %B %d %Y at %H:%M %Z")}" -%></h3>
+	<%= render :inline => @article.full_content -%> 
+	<%= render :partial => "articles/article_footer", :locals => {:article => @article } -%>
+</div>
+
+<%= render :partial => "comments/show", :object => @article %>

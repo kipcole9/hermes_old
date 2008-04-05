@@ -1,0 +1,19 @@
+<div class="_sidebarForm">	
+	<% form_remote_tag :url => {:action => :live_search} do %>
+	  <p>Search: <%= text_field_tag :search, "", :size => 23 %></p>
+	  <div class="_spinner">
+		<div id="imageSpinner" style="display: none" >
+			<img src="/images/spinners/arrows.gif" alt="Spinner" />
+		</div>
+	  </div>
+	<% end %>
+</div>
+
+<div id="_searchImageResults" class="clearfix" style="display: none">
+</div>
+
+<%= observe_field "search" , :frequency => 1, :update => "_searchImageResults",
+					 :with => 'tags',
+					 :url => {:controller=>"assets", :action=>"live_search"},
+					 :loading => "Element.show('imageSpinner');Element.hide('_searchImageResults')",
+          		     :complete => "Element.hide('imageSpinner');Element.show('_searchImageResults')" %>

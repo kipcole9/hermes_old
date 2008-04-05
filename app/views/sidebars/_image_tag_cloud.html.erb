@@ -1,0 +1,5 @@
+<h4>Common Image Tags:</h4>
+  <% tag_cloud Image.tag_cloud(current_user), %w(cloud1 cloud2 cloud3 cloud4 cloud5) do |name, css_class| -%>
+  		<%= link_to h(name), images_url(:tags => h(name)), :class => css_class -%>
+  <% end %>
+

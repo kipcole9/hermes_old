@@ -1,0 +1,21 @@
+<% 
+	sidebar_clear
+	sidebar :image_search
+	sidebar :image_tag_cloud
+	sidebar :image_random
+%>
+<% content_for :head do %>
+	<%= auto_discovery_link_tag(:rss, formatted_images_url(params.merge(:format => "rss"))) %>
+	<%= auto_discovery_link_tag(:atom, formatted_images_url(params.merge(:format => "atom"))) %>
+<% end %>
+
+<div class="_article clearfix">
+<% category = params[:category] ? params[:category].capitalize + " " : "" %>
+<h2><%= "#{category}Image Index" -%></h2>
+<%= render :partial => "shared/page_numbers", :locals => {:collection => @images} %>
+	<div id="_thumbnailList" class="_thumbnailList">
+		<% @images.each do |i| %>
+			<%= render :partial => "slide", :locals => {:image => i} %>
+		<% end %>
+	</div>
+</div>

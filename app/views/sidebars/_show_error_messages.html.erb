@@ -1,0 +1,13 @@
+<h4>Errors prevented an update to the database</h4>
+<p>
+	Please correct the <%= @current_object.errors.count == 1 ? '' :  "#{@current_object.errors.count} " -%>
+	error<%= @current_object.errors.count == 1 ? '' : 's' %> 
+	below and submit again.
+</p>
+<ul>
+	<% @current_object.errors.each_full do |msg| %>
+		<li><%= msg %></li>
+	<% end %>
+</ul>
+
+	

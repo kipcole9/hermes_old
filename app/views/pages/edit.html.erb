@@ -1,0 +1,14 @@
+<div id="_form">
+<%= render :partial => "shared/form_heading", :locals => {:asset => @page} %>
+<% hermes_form_for :page, :url => get_url(@page), :html => {:method => get_method, :id => "_formEdit"} do |form| %>
+	<h3>Page content</h3>
+	<%= form.text_field :heading, :disabled => is_show?, :size => 60 %>
+	<%= form.text_area :content, :disabled => is_show?, :size => "57x20"%>
+
+	<% if !is_show? %>
+		<%= submit_tag "Save changes" %>
+	<% end %>
+	
+<% end %>
+
+</div>

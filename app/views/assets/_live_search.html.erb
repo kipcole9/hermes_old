@@ -1,0 +1,8 @@
+<ol>
+<% @assets.each_with_index do |asset, index|  %>
+	<li><%= asset.content_type %>: <%= asset.title %></li>
+	<% if index == 20 %>
+		<% break %>
+	<% end %>
+<% end %>
+</ol>

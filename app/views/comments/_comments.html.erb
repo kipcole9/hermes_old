@@ -1,0 +1,16 @@
+<div class="_article">
+	<h2>Comments</h2>
+	<% comments.each do |comment| %>
+		<div  id="<%= "comment_#{comment.id.to_s}" -%>" class="_comment">
+		<span class="_comment_author"> <%= "#{sanitize comment.author_name} said:" %></span>
+		<%= format_content(comment.content) -%>	
+		<h3><%= "#{comment.created_at.strftime("%A, %B %d %Y at %H:%M %Z")}" -%>
+			<% if current_user.is_admin? %>
+				<%= link_to_remote "Edit", :url => edit_comment_url(comment) %> | 
+				<%= link_to_remote "Delete", :url => comment_url(comment), :confirm => "Are you sure?", :method => :delete %> | 
+				<%= link_to_remote "Mark as spam", :url => spam_comment_url(comment), :method => :put %>
+			<% end %>
+		</h3>
+		</div>
+	<% end %>
+</div>

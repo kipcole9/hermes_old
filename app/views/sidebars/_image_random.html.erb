@@ -1,0 +1,13 @@
+<% image = Image.random(current_user, :landscape) -%>
+<% if !(ajax rescue nil) %>
+	<div id="_random_image">
+<% end %>
+	<a href="<%= image_url(image) -%>" >
+		<img alt="<%= image.caption -%>" title="<%= image.title -%>"
+			src="<%= serve_image_url(image, :type => :display) -%>" />
+	</a>
+	<h6><%= image.title %></h6>
+<% if !(ajax rescue nil) %>
+	</div>
+	<%= periodically_call_remote  :update => '_random_image', :url => random_images_url, :frequency => 30 %>	
+<% end %>

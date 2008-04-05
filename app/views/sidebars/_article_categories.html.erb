@@ -1,0 +1,9 @@
+<% categories = Category.published_in(publication).published.viewable_by(current_user).counts %>
+<h4>Categories</h4>
+<ul>
+	<% categories.each do |category| %>
+		<li>
+			<%= link_to(category.name, articles_url(:category => category.name)) -%><%= " (#{category.counts})" %>
+		</li>
+	<% end %>
+</ul>	

@@ -1,0 +1,12 @@
+<% if @image %>
+	<% @image.get_shot_data.each do |f| %>
+		<div class="clearfix">
+			<div class="columnFirst">
+				<%= f[:heading] -%>:
+			</div>
+			<div class="columnSecond">
+				<%= image_tag_link(f) -%>
+			</div>
+		</div>
+	<% end %>
+<% end %>
