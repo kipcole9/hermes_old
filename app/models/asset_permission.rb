@@ -8,8 +8,8 @@ class AssetPermission < ActiveRecord::Base
   Default_create_permissions  = GROUP["admin"]
   
   
-  def self.group_others(user)
-    user.groups ^ GROUP["owner"]
+  def self.non_owner_groups(user)
+    user.groups & ~GROUP["owner"]
   end
   
   # Default set of groups a user belongs to
@@ -34,18 +34,18 @@ class AssetPermission < ActiveRecord::Base
   end  
 
   def self.can_update?(asset, user)
-    ((asset.created_by == user.id) and (asset.update_permission & GROUP["owner"] > 0)) || 
-      (asset.update_permissions & group_others(user) > 0) || 
+    ((asset.created_by == user.id) && (asset.update_permissions & GROUP["owner"]) > 0) || 
+      (asset.update_permissions & non_owner_groups(user)) > 0 || 
       user.is_admin? ? true : false
   end
 
   def self.can_create?(asset_class, user)
-    (create_permission(asset_class) & group_others(user) > 0) || user.is_admin? ? true : false
+    (create_permission(asset_class) & non_owner_groups(user) > 0) || user.is_admin? ? true : false
   end
   
   def self.can_delete?(asset, user)
-    ((asset.created_by == user.id) and (asset.delete_permission & GROUP["owner"] > 0)) || 
-      (asset.delete_permissions & group_others(user) > 0) || user.is_admin? ? true : false
+    ((asset.created_by == user.id) and (asset.delete_permissions & GROUP["owner"] > 0)) || 
+      (asset.delete_permissions & non_owner_groups(user) > 0) || user.is_admin? ? true : false
   end
 
   def self.is_admin?(user)

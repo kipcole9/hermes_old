@@ -1,9 +1,10 @@
 class AssetsController < ApplicationController
   include HermesControllerExtensions
-  before_filter :login_required, :only => [ :edit, :update, :new, :create, :destroy ]
+
   before_filter :before_retrieve
   before_filter :retrieve_parent_assets
-  before_filter :retrieve_this_asset, :only => [:edit, :update, :show]
+  before_filter :retrieve_this_asset, :only => [:edit, :update, :show, :destroy]
+  before_filter :login_required, :only => [ :edit, :update, :new, :create, :destroy ]
   before_filter :retrieve_assets, :only => [:index]
   before_filter :after_retrieve
   before_filter :create_asset, :only => [:new]
@@ -95,7 +96,16 @@ class AssetsController < ApplicationController
 protected
 
   def authorized?
-    logged_in? && current_user.is_admin?
+    case params[:action]
+    when "edit","update"
+      @object.can_update?(current_user)
+    when "destroy"
+      @object.can_delete?(current_user)
+    when "new", "create"
+      can_create?(asset_obj)
+    else
+      false
+    end
   end
   
   def before_retrieve; end

@@ -13,6 +13,9 @@ module ActiveRecord
           polymorph_name = configuration[:name].to_s.downcase
           polymorph_table_name = polymorph_name.pluralize
           
+          before_save     :check_update_create_access
+          before_destroy  :check_destroy_access
+          
           # Control finders that can be chained (they are really scope methods)
           has_finder :published_in, lambda {|publication| { :conditions => ["assets.publications & ?", publication.bit_id], :include => :asset } }
           has_finder :viewable_by, lambda { |user| 
@@ -30,7 +33,7 @@ module ActiveRecord
           has_finder :conditions, lambda {|where| { :conditions => where } }
           has_finder :order,      lambda {|order| { :order => order } }
           has_finder :limit,      lambda {|limit| { :limit => limit } }
-          has_finder  :with_category, lambda {|cat| 
+          has_finder :with_category, lambda {|cat| 
               unless cat.blank?
                 {:conditions => "#{table_name}.id in (select #{table_name}.id \
                     from articles join assets on articles.id = assets.content_id and assets.content_type = '#{self.name}' \
@@ -41,7 +44,7 @@ module ActiveRecord
                 {:conditions => "1 = 1" }
               end
             }
-          
+                
                               
           def find_by_name_or_id(param)
              find_by_name(param) || find_by_id(param)
@@ -64,7 +67,7 @@ module ActiveRecord
           end
           
           def can_create?(user)
-            AssetPermission.can_create?(self.class.name, user)
+            AssetPermission.can_create?(self.class, user)
           end
 
           # Calculate the tag counts for all tags.
@@ -146,6 +149,17 @@ module ActiveRecord
         
         def can_delete?(user)
           self.asset.can_delete?(user)
+        end
+        
+        def check_update_create_access
+          return false if !user = User.current_user
+          return self.class.can_create?(user) if self.new_record?
+          return self.can_edit?(user)
+        end
+            
+        def check_destroy_access
+          return false if !user = User.current_user
+          return self.can_delete?(user)
         end
       end
     end

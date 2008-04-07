@@ -42,7 +42,7 @@ class Asset < ActiveRecord::Base
       "and (:user_content_rating >= assets.content_rating)",
       {:user_id => current_user.id,
       :owner_group => AssetPermission::GROUP["owner"],
-      :other_groups => AssetPermission.group_others(current_user),
+      :other_groups => AssetPermission.non_owner_groups(current_user),
       :user_content_rating => current_user.content_rating} ]
   end
   
@@ -89,6 +89,19 @@ class Asset < ActiveRecord::Base
       write_attribute(:content_rating, rating)
     else
       logger.warn("Asset: ContentRating: '#{c.to_s}' not found. Attribute not set.")
+    end
+  end
+  
+  def permissions
+    ["read_permissions", "update_permissions", "delete_permissions"].each do |p|
+      perms = self.send(p)
+      perm_string = []
+      AssetPermission::GROUP.each do |g, v|
+        if perms & AssetPermission::GROUP[g] > 0
+          perm_string << g
+        end
+      end
+      puts "#{self.name}: #{p}: #{perm_string.join(',')}"
     end
   end
 
