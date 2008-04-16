@@ -45,7 +45,7 @@ class Article < ActiveRecord::Base
       article.set_options(options)
       article.publications |= Publication.viewable_by(user).find_by_name(blog_id).bit_id
       article.created_by = user
-      article.save!
+      raise Hermes::CannotSave unless article.save
       return article
     else
       raise Hermes::CreateNotPermitted

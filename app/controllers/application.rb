@@ -19,11 +19,8 @@ class ApplicationController < ActionController::Base
   def set_publication
     # Publications are determined by the name of the host by which we were requested
     # If there is no such publication then use the default
-    # If still nothing then use the application default
     @publication = Publication.find_by_domain(request.host) || Publication.find_by_default_publication(true)
-    unless @publication
-      raise Hermes::NoPublicationFound
-    end
+    raise Hermes::NoPublicationFound unless @publication
   end
   
   def save_environment
@@ -39,19 +36,5 @@ class ApplicationController < ActionController::Base
   def current_layout
     ["rss","xml","atom"].include?(params[:format]) ? nil : @publication.theme
   end
-  
-  def rescue_action(exception)
-    super
-    if exception.class.to_s == 'ActionController::RoutingError'
-      # bb_log "Dumping call stack at 404: #{request.env['REQUEST_URI']}\n"+caller.join("\n    ")
-    else
-      #log_error(exception)
-      #if ENV['RAILS_ENV'] == 'production' or local_request? == false
-      #  ExceptionMailer.deliver_kaboom(exception, self, request)
-      #end
-      #message = '500 Internal error: Support has been notified'
-      #redirect_to '/500.html'
-    end
-  end
-  
+    
 end

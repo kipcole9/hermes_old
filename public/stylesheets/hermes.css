@@ -503,6 +503,7 @@ div#_form div._formField {
 	/* border-bottom: 1px solid #333; */
 	padding:0px 0px;
 	vertical-align:top;
+	clear: both;
 	} /* For master record information */
 
 div#_form div._formDetail {
@@ -512,7 +513,7 @@ div#_form div._formDetail {
 	} /* For detail records of master record in form processing */
 	
 div#_form form label {
-	width:145px; 
+	width:175px; 
 	margin: 0;
 	padding: 0;
 	padding-top: 3px;

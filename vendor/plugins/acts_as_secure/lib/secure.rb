@@ -17,8 +17,8 @@ module ActiveRecord
           before_destroy  :check_destroy_access
           
           # Control finders that can be chained (they are really scope methods)
-          has_finder :published_in, lambda {|publication| { :conditions => ["assets.publications & ?", publication.bit_id], :include => :asset } }
-          has_finder :viewable_by, lambda { |user| 
+          named_scope :published_in, lambda {|publication| { :conditions => ["assets.publications & ?", publication.bit_id], :include => :asset } }
+          named_scope :viewable_by, lambda { |user| 
             if user
               { :conditions => Asset.access_policy(user), :include => :asset }
             else
@@ -26,14 +26,14 @@ module ActiveRecord
             end
           }   
 
-          has_finder :published,  lambda { {:conditions => Asset.published_policy} }
-          has_finder :popular,    lambda {|num| {:order => "view_count DESC", :limit => num, :include => :asset } }
-          has_finder :unpopular,  lambda {|num| {:order => "created_at ASC", :limit => num, :include => :asset } }
-          has_finder :recent,     lambda {|num| {:order => "created_at DESC", :limit => num, :include => :asset } }
-          has_finder :conditions, lambda {|where| { :conditions => where } }
-          has_finder :order,      lambda {|order| { :order => order } }
-          has_finder :limit,      lambda {|limit| { :limit => limit } }
-          has_finder :with_category, lambda {|cat| 
+          named_scope :published,  lambda { {:conditions => Asset.published_policy} }
+          named_scope :popular,    lambda {|num| {:order => "view_count DESC", :limit => num, :include => :asset } }
+          named_scope :unpopular,  lambda {|num| {:order => "created_at ASC", :limit => num, :include => :asset } }
+          named_scope :recent,     lambda {|num| {:order => "created_at DESC", :limit => num, :include => :asset } }
+          named_scope :conditions, lambda {|where| { :conditions => where } }
+          named_scope :order,      lambda {|order| { :order => order } }
+          named_scope :limit,      lambda {|limit| { :limit => limit } }
+          named_scope :with_category, lambda {|cat| 
               unless cat.blank?
                 {:conditions => "#{table_name}.id in (select #{table_name}.id \
                     from articles join assets on articles.id = assets.content_id and assets.content_type = '#{self.name}' \
@@ -152,14 +152,34 @@ module ActiveRecord
         end
         
         def check_update_create_access
-          return false if !user = User.current_user
-          return self.class.can_create?(user) if self.new_record?
-          return self.can_edit?(user)
+          self.new_record? ? check_create_access : check_update_access
         end
-            
+        
+        def check_create_access
+          if self.class.can_create?(User.current_user)
+            true
+          else
+            self.errors.add("Create", "is not authorised")
+            false
+          end
+        end
+        
+        def check_update_access
+          if self.can_update?(User.current_user)
+            true
+          else
+            self.errors.add("Update", "is not authorised")
+            false
+          end          
+        end
+        
         def check_destroy_access
-          return false if !user = User.current_user
-          return self.can_delete?(user)
+          if self.can_delete?(User.current_user)
+            true
+          else
+            self.errors.add("Delete", "is not authorised")
+            false
+          end
         end
       end
     end

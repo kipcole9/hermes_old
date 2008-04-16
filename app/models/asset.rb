@@ -25,18 +25,18 @@ class Asset < ActiveRecord::Base
   
   # Control finders that can be chained (they are really scope methods)
   # TODO DRY up this part with the one in acts_as_secure - especially the :published finder string
-  has_finder :published_in, lambda {|publication| { :conditions => ["publications & ?", publication.bit_id] } }
-  has_finder :order, lambda {|order| {:order => order} }
-  has_finder :viewable_by, lambda { |user| 
+  named_scope :published_in, lambda {|publication| { :conditions => ["publications & ?", publication.bit_id] } }
+  named_scope :order, lambda {|order| {:order => order} }
+  named_scope :viewable_by, lambda { |user| 
     if user
       { :conditions => Asset.access_policy(user) }
     else
       nil
     end
   }   
-  has_finder :published, lambda { {:conditions => Asset.published_policy} }
+  named_scope :published, lambda { {:conditions => Asset.published_policy} }
   
-  # All scoping methods and has_finders leverage this access policy
+  # All scoping methods and named_scopes leverage this access policy
   def self.access_policy(current_user)
     ["((assets.created_by = :user_id and assets.read_permissions & :owner_group) or (assets.read_permissions & :other_groups)) " + 
       "and (:user_content_rating >= assets.content_rating)",
@@ -167,7 +167,7 @@ private
   end
   
   def set_created_by
-    self.created_by ||= User.admin
+    self.created_by ||= User.current_user
   end
     
 end

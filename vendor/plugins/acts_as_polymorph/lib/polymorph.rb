@@ -128,11 +128,12 @@ module ActiveRecord
             def save(f = true)
               # Save on a new record will also automatically save the Asset record
               acts_as_polymorph_class.transaction do
+                is_new = self.new_record?
                 if result = super
-                  result = self.#{polymorph_name}.save(f)
+                  result = self.#{polymorph_name}.save(f) unless is_new
                   self.#{polymorph_name}.errors.each {|e, m| self.errors.add(e, m)} if !result
                 end
-                raise "Bad polymorphic save" if !result
+                raise "Bad polymorphic save" if !result # Raise forces rollback
                 true
               end
             rescue

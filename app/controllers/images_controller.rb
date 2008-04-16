@@ -57,7 +57,7 @@ class ImagesController < AssetsController
   end
   
   def serve
-    if image = Image.published_in(publication).viewable_by(current_user).find_by_name(params[:id])
+    if image = Image.published_in(publication).published.viewable_by(current_user).find_by_name(params[:id])
       params[:type] = "slide" unless params[:type]
       path_name = image.send("#{params[:type]}_path_name")
     end
@@ -70,7 +70,13 @@ class ImagesController < AssetsController
         headers['Content-Description'] = image.description
         headers['Last-Modified'] = image.updated_at.httpdate
         expires_in 8.hours, :private => false
-        send_file path_name, :disposition => 'inline', :x_sendfile => true
+        
+        # Mongrel dones't support x-sendfile, and thats what we use in development
+        if RAILS_ENV == "production"
+          send_file path_name, :disposition => 'inline', :x_sendfile => true
+        else
+          send_file path_name, :disposition => 'inline'
+        end
       end
     else
       head :status => 404

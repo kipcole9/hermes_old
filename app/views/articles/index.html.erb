@@ -9,6 +9,7 @@
 	<%= auto_discovery_link_tag(:rss, formatted_articles_url(params.merge(:format => "rss"))) %>
 	<%= auto_discovery_link_tag(:atom, formatted_articles_url(params.merge(:format => "atom"))) %>
 <% end %>
+
 <% if @articles %>
 	<% for article in @articles -%>
 	    <div id="<%= 'article_' + article.id.to_s -%>" class="_article" >

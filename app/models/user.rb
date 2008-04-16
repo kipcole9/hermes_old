@@ -33,6 +33,10 @@ class User < ActiveRecord::Base
     u = find_by_login(login) # need to get the salt
     u && u.authenticated?(password) ? u : nil
   end
+  
+  def self.authenticate_and_set(login, password)
+    self.current_user = authenticate(login, password)
+  end
 
   # Encrypts some data with the salt.
   def self.encrypt(password, salt)
@@ -82,16 +86,18 @@ class User < ActiveRecord::Base
   end
   
   def self.admin
-    User.find_by_login("Admin")
+    @admin_user ||= find_by_login("Admin")
+    raise Hermes::NoAdminUserDefined unless @admin_user
   end
   
   def self.anonymous
-    User.find_by_login("Anon")
+    @anon_user ||= find_by_login("Anon")
+    raise Hermes::NoAnonymousUserDefined unless @anon_user
   end
   
   # set in before filter of ApplicationController
   def self.current_user
-    @current_user
+    @current_user || self.anonymous
   end
   
   def self.current_user=(user)

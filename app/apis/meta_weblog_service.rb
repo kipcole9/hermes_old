@@ -5,29 +5,29 @@ class MetaWeblogService < ActionWebService::Base
   web_service_api MetaWeblogAPI
 
   def newPost(blog_id, user, password, struct, publish)
-    raise "Not authorised" unless (user = User.authenticate(user, password))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
     if (article = Article.add_post(user, blog_id, post_options(struct, publish)))
       return article.name
     end
-    raise "Could not be saved."
+    raise Hermes::CannotCreateArticle
   end
 
   def editPost(post_id, user, pw, struct, publish)
-    raise "Not authorised" unless (user = User.authenticate(user, pw))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, pw))
     if Article.update_post(user, post_id, post_options(struct, publish)) 
       return true
     end
-    raise "Could not be saved."
+    raise Hermes::CannotUpdateArticle
   end
 
   def getPost(post_id, user, password)
-    raise "Not authorised" unless (user = User.authenticate(user, password))
-    raise "Not found" unless (post = Article.get_post(user, post_id))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
+    raise Hermes::ArticleNotFound unless (post = Article.get_post(user, post_id))
     return blogify_post(post)
   end
 
   def getCategories(id, user, password)
-    raise "Not authorised" unless (user = User.authenticate(user, password))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
     categories = []
     Category.find(:all, :order => 'name').map(&:name).each do |c|
       categories << Blog::Category.new(
@@ -39,13 +39,13 @@ class MetaWeblogService < ActionWebService::Base
   end
 
   def getRecentPosts(blog_id, user, password, num)
-    raise "Not authorised" unless (user = User.authenticate(user, password))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
     return blogify_posts(Article.published_in(Publication.current_publication).published.viewable_by(user).recent(num))
   end
   
   def newMediaObject(blogid, user, password, struct)
-    raise "Not authorised" unless (user = User.authenticate(user, password))
-    raise "Only jpeg files supported" unless [".jpeg", ".jpg"].include?(File.extname(struct.name))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
+    raise Hermes::OnlyJpegSupported unless [".jpeg", ".jpg"].include?(File.extname(struct.name))
     filename = "#{Blog::UPLOAD_DIR}#{File.basename(struct.name)}"
     File.open(filename, File::CREAT|File::TRUNC|File::RDWR, 0644) do |f|
       f.write(struct.bits)
@@ -65,7 +65,7 @@ private
   def blogify_post(article)
     Blog::Post.new(:title => article.title, :mt_excerpt => article.description, 
           :dateCreated => article.dont_publish_before ? article.dont_publish_before.utc.strftime(Blog::ISO8601) : nil,
-          :postid => article.name, :mt_keywords => (Tag.minus_categories(article.tag_list)).join(','), :description => article.content,
+          :postid => article.name, :mt_keywords => article.tag_list.join(','), :description => article.content,
           :mt_allow_comments => article.allow_comments)
   end
 

@@ -1,6 +1,7 @@
 class AssetsController < ApplicationController
   include HermesControllerExtensions
-
+  
+  before_filter :set_time_zone
   before_filter :before_retrieve
   before_filter :retrieve_parent_assets
   before_filter :retrieve_this_asset, :only => [:edit, :update, :show, :destroy]
@@ -180,6 +181,10 @@ private
     
     def remember_location
       store_location
+    end
+    
+    def set_time_zone
+      Time.zone = current_user.time_zone
     end
     
 end

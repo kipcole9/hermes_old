@@ -6,20 +6,16 @@ class Image < ActiveRecord::Base
   include HermesPrintOrder
   acts_as_polymorph  
   acts_as_secure
-  #acts_as_ferret :fields => {:title => {:store => :yes},
-  #                          :description => {:store => :yes}, :location => {:store => :yes},
-  #                          :city => {:store => :yes}, :state => {:store => :yes}, :country => {:store => :yes},
-  #                          :tag_list => {:store => :yes}, :aperture => {:store => :yes}, :shutter => {:store => :yes}, 
-  #                          :camera_mode => {:store => :yes}, :lens => {:store => :yes}, :photographer => {:store => :yes}
-  #                        }
                                         
-  has_finder :portrait,   :conditions => "orientation = 'p'"
-  has_finder :landscape,  :conditions => "orientation = 'l'"
-  has_finder :square,     :conditions => "orientation = 's'"
-  has_finder :any
+  named_scope :portrait,   :conditions => "orientation = 'p'"
+  named_scope :landscape,  :conditions => "orientation = 'l'"
+  named_scope :square,     :conditions => "orientation = 's'"
+  named_scope :any
                                         
   has_many :slides, :order => "position"
   has_many :galleries, :through => :slides
+  
+  self.skip_time_zone_conversion_for_attributes = [:taken_at]
 
   Location_pattern  = /(\d{1,3}) deg (\d{1,2})\' (\d{1,2}\.\d{1,2})\"/
   THUMBNAIL_SUFFIX  = "-thumb"

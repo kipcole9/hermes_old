@@ -9,8 +9,8 @@ class Comment < ActiveRecord::Base
     comment.check_content
   end
   
-  has_finder :published, lambda { {:conditions => ["status = ?", Asset::STATUS["published"]]} }
-  has_finder :draft, lambda { {:conditions => ["status = ?", Asset::STATUS["draft"]]} }
+  named_scope :published, lambda { {:conditions => ["status = ?", Asset::STATUS["published"]]} }
+  named_scope :draft, lambda { {:conditions => ["status = ?", Asset::STATUS["draft"]]} }
   
   # Defensio spam protection service attributes
   def author_name
