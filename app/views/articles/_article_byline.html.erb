@@ -1,0 +1,14 @@
+<h3>
+	<%= "by #{article.created_by.full_name} on #{article.created_at.strftime("%A, %B %d %Y at %H:%M %Z")}" -%>
+	<% if (@comment_count ||= article.comments.published.count) > 0 %>
+		<%= "(#{pluralize(@comment_count, "comment")})" %>
+	<% end %>
+	<% links = [] %>
+	<% if article.can_update?(current_user) %>
+		<% links << link_to("Edit", edit_article_url(article)) %>
+	<% end %>
+	<% if article.can_delete?(current_user) %>
+		<% links << link_to("Delete", article_url(article), :confirm => "Are you sure?", :method => :delete) %>
+	<% end %>
+	<%= links.join(" | ")%>
+</h3>

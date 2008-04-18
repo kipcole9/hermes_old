@@ -35,7 +35,8 @@ class ImagesController < AssetsController
   end
 
   def popular
-    @images = Image.published_in(publication).published.viewable_by(current_user).order('view_count DESC').limit(30).pager(unescape(params[:tags]), params[:page], page_size)
+    @images = Image.published_in(publication).published.viewable_by(current_user) \
+      .order('view_count DESC').limit(30).pager(unescape(params[:tags]), params[:page], page_size)
     @heading = "Popular Image Index"
     respond_to do |format|
       format.html {render :action => :index}
@@ -46,7 +47,8 @@ class ImagesController < AssetsController
   end
   
   def roulette
-    @images = Image.published_in(publication).published.viewable_by(current_user).order('rand()').limit(30).pager(unescape(params[:tags]), params[:page], page_size)
+    @images = Image.published_in(publication).published.viewable_by(current_user) \
+      .order('rand()').limit(30).pager(unescape(params[:tags]), params[:page], page_size)
     @heading = "Random Image Index"
     respond_to do |format|
       format.html {render :action => :index}
@@ -58,7 +60,7 @@ class ImagesController < AssetsController
   
   def serve
     if image = Image.published_in(publication).published.viewable_by(current_user).find_by_name(params[:id])
-      params[:type] = "slide" unless params[:type]
+      params[:type] ||= "slide"
       path_name = image.send("#{params[:type]}_path_name")
     end
     if path_name

@@ -57,7 +57,7 @@ class Asset < ActiveRecord::Base
   end
   
   def can_delete?(user)
-    AssetPermission.can_delete(self.user)
+    AssetPermission.can_delete?(self, user)
   end
 
   def set_created_by(user)

@@ -1,7 +1,7 @@
 <% images = @gallery.images.viewable_by(current_user) %>
 <div id='gallery_links' style='display:none' >
 	<% images.each do |i| %>
-		<a id='<%= "gallery_#{i.id}" -%>' href='<%= "#{i.catalog.link_as}#{i.folder}#{i.filename}" -%>'
+		<a id='<%= "gallery_#{i.id}" -%>' href='<%= serve_image_url(i.name, :type => :full) -%>'
 			 class='lightview' title='<%= i.title -%>' rel='gallery[myset]' >
 			<%= i.title -%>
 		</a>
@@ -9,7 +9,7 @@
 </div>
 <p>
 	
-<%= link_to_function "Start slideshow" do |page|
+<%= link_to_function image_tag("/images/slideshow.gif") do |page|
 		page << "Lightview.show('gallery_#{images.first.id}')"
 	end
 %>

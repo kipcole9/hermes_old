@@ -86,13 +86,13 @@ class User < ActiveRecord::Base
   end
   
   def self.admin
-    @admin_user ||= find_by_login("Admin")
-    raise Hermes::NoAdminUserDefined unless @admin_user
+    raise Hermes::NoAdminUserDefined unless @admin_user ||= find_by_login("Admin")
+    @admin_user
   end
   
   def self.anonymous
-    @anon_user ||= find_by_login("Anon")
-    raise Hermes::NoAnonymousUserDefined unless @anon_user
+    raise Hermes::NoAnonymousUserDefined unless @anon_user ||= find_by_login("Anon")
+    @anon_user
   end
   
   # set in before filter of ApplicationController
