@@ -1,0 +1,10 @@
+<ul title="Articles" selected="true" >
+<div id="<%= "article_#{@article.id}" %>" class="_article" >
+	<h2><%= @article.title -%></h2>
+	<%= render :partial => "article_byline", :locals => {:article => @article} -%>
+	<%= render :inline => @article.full_content -%> 
+	<%= render :partial => "article_footer", :locals => {:article => @article } -%>
+</div>
+
+<%= render :partial => "comments/show", :object => @article %>
+</ul>

@@ -5,7 +5,9 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   before_filter :set_publication
   before_filter :save_environment
-
+  before_filter :adjust_format_for_iphone 
+  helper_method :iphone_user_agent?
+  
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '48b39a42fb4d72f8cdda67e5e38315ff'
@@ -15,6 +17,24 @@ class ApplicationController < ActionController::Base
   helper SimpleSidebarHelper  
   
   layout :current_layout
+  
+  def publication
+    @publication
+  end
+  
+protected
+ 
+  def adjust_format_for_iphone 
+    # Detect from iPhone user-agent 
+    request.format = :iphone if iphone_user_agent?
+  end 
+  
+  # Request from an iPhone or iPod touch? 
+  # (Mobile Safari user agent) 
+  def iphone_user_agent? 
+    request.env["HTTP_USER_AGENT"] && 
+    request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari)/] 
+  end 
   
   def set_publication
     # Publications are determined by the name of the host by which we were requested
@@ -29,9 +49,7 @@ class ApplicationController < ActionController::Base
     Publication.current_publication = @publication
   end
     
-  def publication
-    @publication
-  end
+
   
   def current_layout
     ["rss","xml","atom"].include?(params[:format]) ? nil : @publication.theme

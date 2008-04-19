@@ -18,13 +18,17 @@ class AssetsController < ApplicationController
   # Normally nothing is required (the correct template will get rendered)
   # and the before filter will do the retrieval
   def index
-
+    respond_to do |format|
+      format.html
+      format.iphone
+    end
   end
 
   def show
     respond_to do |format|
       format.html { render :action => :edit if !File.exist?(view_path) }
       format.xml  { render :xml => @object.to_xml }
+      format.iphone { render :layout => false }
     end
   end
   
