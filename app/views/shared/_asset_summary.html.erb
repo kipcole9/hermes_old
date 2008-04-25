@@ -4,7 +4,7 @@
 <%= form.text_field :tag_list, :disabled => is_show?, :size => 40 %>
 
 <% if is_show? %>
-	<%= form.text_field ContentRating.find_by_rating(:content_rating), :disabled => is_show?, :size => 8 %>
+	<%= form.text_field "Content Rating", :content_rating_description,  :disabled => is_show?, :size => 8 %>
 <% else %>	
 	<%= form.select :content_rating, ContentRating.find(:all, :select => "name, rating").collect!{|c| [c.name, c.rating] } %>
 <% end %>
@@ -24,7 +24,7 @@
 
 <h3>Publishing Data</h3>
 <% if is_show? %>
-	<%= form.text_field Asset::STATUS[:status], :disabled => is_show?, :size => 10 %>
+	<%= form.text_field "Status", :status_description, :disabled => is_show?, :size => 10 %>
 <% else %>
 	<%= form.select :status, Asset::STATUS %>
 <% end %>

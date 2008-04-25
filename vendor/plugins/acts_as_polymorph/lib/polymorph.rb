@@ -209,7 +209,15 @@ module ActiveRecord
                 return self.allow_comments
               end
             end
-
+            
+            def content_rating_description
+              self.#{polymorph_name}.content_rating_description
+            end
+            
+            def status_description
+              self.#{polymorph_name}.status_description
+            end
+            
           END_EVAL
         end
       end

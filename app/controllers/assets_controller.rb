@@ -165,7 +165,7 @@ private
       @object = target_obj.viewable_by(user).find_by_name_or_id(target_id)
       if !@object
         flash[:notice] = "#{target_obj.name} '#{target_id}' not found!"
-        redirect back_or_default('/')
+        redirect_back_or_default('/')
       else
         @asset = @object.asset if target_obj.respond_to?("polymorph_class")        
       end

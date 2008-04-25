@@ -101,6 +101,14 @@ class Asset < ActiveRecord::Base
     super(STATUS[s]) if s.is_a?(String)
   end
   
+  def content_rating_description
+    ContentRating.find_by_rating(self.content_rating).name
+  end
+  
+  def status_description
+    STATUS.index(self.status)
+  end
+  
   def permissions
     ["read_permissions", "update_permissions", "delete_permissions"].each do |p|
       perms = self.send(p)

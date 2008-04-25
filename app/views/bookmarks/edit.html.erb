@@ -1,0 +1,8 @@
+<div id="_form">
+<%= render :partial => "shared/form_heading", :locals => {:asset => @bookmark} %>
+<% hermes_form_for :bookmark, :url => get_url(@bookmark), :html => {:method => get_method, :id => "_formEdit"} do |form| %>
+	<h3>Bookmark Content</h3>
+	<%= form.text_field :url, :disabled => is_show?, :size => 50 %>
+	<%= render :partial => "shared/asset_summary", :locals => {:form => form} -%>
+<% end %>
+</div>
