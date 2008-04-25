@@ -89,7 +89,7 @@ module HermesControllerExtensions
       sql_text = []
       params.each do |k, v|
         if is_column?(k)
-          sql_text << "#{k.capitalize} is #{v}"
+          sql_text << "#{k.humanize} is #{v}"
         end
       end
       sql_params = " with " + sql_text.join(" and ") if sql_text.length > 0

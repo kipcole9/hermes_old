@@ -1,12 +1,14 @@
-require 'rmagick'
+require 'RMagick'
 module HermesImageImport
+  IMAGE_SUBDIR = "gallery"
+  IMAGE_FILE_TYPES = ['.jpg']
   
   # Recursively scan the image library
   # => Create destination directory
   # => Convert the  image into 4 types (large, standard, slide and thumb) and save
   # => Add to the database
-  def import
-    @catalog = Catalog.default_catalog
+  def import_images
+    @catalog = Catalog.default
     import_folder(@catalog.source)
   end
   
@@ -19,10 +21,10 @@ module HermesImageImport
           if File.exist?(e_path + ".no_image_import") 
             puts "Directory '#{e_path}' marked to not import images"
           else
-            if File.directory?(e_path + "gallery/jpeg")
-              image_import_one_folder(e_path, options)
-            else 
-              image_import(e_path, options)
+            if File.directory?(e_path + IMAGE_SUBDIR)
+              image_import_one_folder(e_path)
+            else
+              import_folder(e_path)
             end unless e.match(/^\./) or e == "Recycle Bin"
           end
         end
@@ -35,17 +37,18 @@ module HermesImageImport
   
   def image_import_one_folder(folder)
     # Check to see if the image has changed before importing
-    puts "Importing images from '#{folder}'."
+    # puts "Processing images in '#{folder}'."
     destination = "#{@catalog.directory}#{File.basename(folder)}"
-    @file_types ||= ['.jpg']
     if !File.exist?(destination)
       puts "Making destination folder '#{destination}'."
       FileUtils.mkdir_p(destination)
     end
     
-    Dir.entries(folder + "gallery/jpeg").each do |f|
-      if @file_types.include?(File.extname(f).downcase) && !f.match(/^\./)
-        Image.import(full_file)   
+    puts "Importing images from folder '#{folder}'"
+    gallery_folder = folder + IMAGE_SUBDIR
+    Dir.glob(gallery_folder.with_slash + "**/*.jpg").each do |f|
+      if IMAGE_FILE_TYPES.include?(File.extname(f).downcase) && !f.match(/^\./)
+        Image.import(f, File.basename(folder))   
       end
     end
   end

@@ -17,7 +17,10 @@ module ActiveRecord
           before_destroy  :check_destroy_access
           
           # Control finders that can be chained (they are really scope methods)
-          named_scope :published_in, lambda {|publication| { :conditions => ["assets.publications & ?", publication.bit_id], :include => :asset } }
+          named_scope :published_in, lambda {|publication| 
+            { :conditions => ["assets.publications & ?", publication.bit_id], :include => :asset }
+          }
+          
           named_scope :viewable_by, lambda { |user| 
             if user
               { :conditions => Asset.access_policy(user), :include => :asset }

@@ -15,4 +15,16 @@ class String
     self.match(EMAIL)
   end
   
+  def is_integer?
+    self =~ /\A-?\d+\Z/
+  end
+
+  def with_slash
+   self =~ /\/\Z/ ? self : self + "/"
+  end
+  
+  def without_slash
+    self.sub(/\/\Z/,'')
+  end    
+  
 end

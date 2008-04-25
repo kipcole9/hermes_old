@@ -61,7 +61,8 @@ class AssetsController < ApplicationController
     respond_to do |format|
       format.html do
         before_update
-        if @object.update_attributes(params[param_name])
+        @object.attributes = params[param_name]
+        if @object.save
           after_update
           flash[:notice] = "#{asset_obj.name} updated successfully."
           redirect_back_or_default("/")
@@ -83,7 +84,8 @@ class AssetsController < ApplicationController
   # Ajax-based search
   def live_search
     unless params[:tags].blank?
-      @assets = Asset.published_in(publication).published.viewable_by(current_user).order('assets.content_type').find_tagged_with(params[:tags])
+      @assets = Asset.published_in(publication).published.viewable_by(current_user) \
+          .order('assets.content_type').find_tagged_with(params[:tags])
     else
       @assets = []
     end
@@ -101,14 +103,18 @@ class AssetsController < ApplicationController
 protected
 
   def authorized?
-    case params[:action]
-    when "edit","update"
-      @object.can_update?(current_user)
-    when "destroy"
-      @object.can_delete?(current_user)
-    when "new", "create"
-      can_create?(asset_obj)
-    else
+    begin
+      case params[:action]
+      when "edit","update"
+        @object.can_update?(current_user)
+      when "destroy"
+        @object.can_delete?(current_user)
+      when "new", "create"
+        can_create?(asset_obj)
+      else
+        false
+      end
+    rescue
       false
     end
   end
@@ -159,6 +165,7 @@ private
       @object = target_obj.viewable_by(user).find_by_name_or_id(target_id)
       if !@object
         flash[:notice] = "#{target_obj.name} '#{target_id}' not found!"
+        redirect back_or_default('/')
       else
         @asset = @object.asset if target_obj.respond_to?("polymorph_class")        
       end

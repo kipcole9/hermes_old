@@ -1,7 +1,7 @@
 class Catalog < ActiveRecord::Base
   has_many :images
   
-  def self.default_catalog
+  def self.default
     @default_catalog ||= find(:first)
   end
   

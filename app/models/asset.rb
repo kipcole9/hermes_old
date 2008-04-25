@@ -14,7 +14,7 @@ class Asset < ActiveRecord::Base
   
   validates_presence_of     :name 
   validates_presence_of     :created_by
-  validates_uniqueness_of   :name, :scope => :content_type
+  validates_uniqueness_of   :name, :scope => :content_type, :message => 'Name already taken'
   validates_numericality_of :latitude, :allow_nil => true,
                             :greater_than => -90, :less_than => 90,
                             :message => "Must be a number between -90 and 90"
@@ -22,6 +22,9 @@ class Asset < ActiveRecord::Base
   validates_numericality_of :longitude, :allow_nil => true,
                             :greater_than => -180, :less_than => 180,
                             :message => "Must be a number between -180 and 180"
+                            
+  validates_numericality_of :content_rating, :allow_nil => true,
+                            :message => "Content_rating must be an integer"
   
   # Control finders that can be chained (they are really scope methods)
   # TODO DRY up this part with the one in acts_as_secure - especially the :published finder string
@@ -84,9 +87,10 @@ class Asset < ActiveRecord::Base
   end
   
   def content_rating=(c)
-    rating = c.is_a?(Fixnum) ? ContentRating.find_by_rating(c) : ContentRating.find_by_name(c)
-    if rating
-      write_attribute(:content_rating, rating)
+    return if c.blank?
+    content_rating = ContentRating.find_by_rating(c) || ContentRating.find_by_name(c)
+    if content_rating
+      write_attribute(:content_rating, content_rating.rating)
     else
       logger.warn("Asset: ContentRating: '#{c.to_s}' not found. Attribute not set.")
     end
@@ -146,7 +150,6 @@ class Asset < ActiveRecord::Base
         self.longitude = results[0].longitude
         self.geocode_accuracy = results[0].accuracy
         self.google_geocoded = true
-        self.save!
       else
         puts "Asset: Could not geocode '#{self.name}' with '#{geocode_string}'. Result was #{results.status}"
       end

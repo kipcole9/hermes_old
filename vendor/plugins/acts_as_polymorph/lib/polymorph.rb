@@ -150,10 +150,13 @@ module ActiveRecord
             end                     
 
             def save!
-              is_new = self.#{polymorph_name}.new_record?
+              is_new = self.new_record?
+              puts "New record" if is_new
               acts_as_polymorph_class.transaction do
+                puts "About to save! on main record"
                 if result = super
-                  result = self.#{polymorph_name}.save! if result
+                  puts "About to save! on polymorph record" unless is_new
+                  result = self.#{polymorph_name}.save! unless is_new
                   self.#{polymorph_name}.errors.each {|e, m| self.errors.add(e, m)} if !result
                 end
               end
@@ -177,6 +180,10 @@ module ActiveRecord
             
             def asset_id
               self.#{polymorph_name}.id
+            end
+            
+            def geocode
+              self.#{polymorph_name}.geocode
             end
             
             def mappable?

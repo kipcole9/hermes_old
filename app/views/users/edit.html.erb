@@ -2,7 +2,7 @@
 
 <h2><%= params[:action].capitalize %> profile</h2>
 
-<% hermes_form_for :user, :url => user_url, :html => {:method => :put, :id => "_formEdit"} do |form| %>
+<% hermes_form_for :user, :url => user_url, :html => {:method => :put, :id => "_formEdit", :multipart => true } do |form| %>
 	<h3>Name and profile</h3>
 	<%= error_message_on(:user, :login) %>
 	<%= form.text_field :login, :disabled => is_show?, :size => 20 %>
@@ -66,8 +66,7 @@
 		<%= form.text_field :time_zone, :disabled => is_show?, :size => 20 %>
 	<% else %>
 		<%= error_message_on(:user, :time_zone) %>
-		<%= form.select :time_zone, TimeZone.all.to_a.collect {|z| "(UTC" + (z.utc_offset/3600).to_s + ") " + z.name},
-			:disabled => is_show?, :size => 20 %>
+		<%= form.tz_select :time_zone, :disabled => is_show?, :size => 20 %>
 	<% end %>
 
 	<%= error_message_on(:user, :locale) %>

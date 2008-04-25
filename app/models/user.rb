@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   acts_as_polymorph
   acts_as_secure
   before_create :set_groups, :set_publication
+  USERS_DIR    = "Users"
   
   # The assets we created
   has_many    :my_assets, :class_name => 'Asset', :foreign_key => :created_by
@@ -20,7 +21,7 @@ class User < ActiveRecord::Base
   validates_length_of       :login,    :within => 3..40
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :login, :email, :case_sensitive => false
-  before_save               :encrypt_password, :set_asset_name
+  before_save               :encrypt_password, :set_asset_name, :set_photo
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
@@ -81,6 +82,23 @@ class User < ActiveRecord::Base
     [given_name, family_name].join(' ')
   end
   
+  def time_zone
+    tz = read_attribute(:time_zone)
+    tz.blank? ? "UTC" : tz
+  end
+  
+  # Set the photo directly, or if it is an uploaded file, defer until
+  # save time.  This is because the file name we use is based upon the
+  # login name of the User and we need make sure that is set before
+  # we set the photo.
+  def photo=(temp_file)
+    if temp_file.is_a?(Image)
+      super(temp_file)
+    else
+      @temp_photo_file = temp_file
+    end
+  end
+  
   def is_admin?
     AssetPermission.is_admin?(self)
   end
@@ -131,6 +149,17 @@ protected
   
   def set_groups
     self.groups ||= AssetPermission.default_user_groups
+  end
+  
+  def set_photo
+    if @temp_photo_file
+      user_photo_file_name = "#{RAILS_ROOT}/tmp/uploads/#{self.login}.jpg"
+      content = @temp_photo_file.read
+      f2 = File.open(user_photo_file_name,"wb")
+      f2.write(content)
+      f2.close
+      self.photo = Image.import(user_photo_file_name, USERS_DIR))
+    end
   end
   
   def set_publication

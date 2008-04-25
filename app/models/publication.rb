@@ -9,14 +9,14 @@ class Publication < ActiveRecord::Base
   validates_uniqueness_of       :domain
   
   def self.default
-    find(:first, :conditions => ["default_publication = ?", true])
+    @@default ||= find(:first, :conditions => ["default_publication = ?", true])
   end
   
-  def self.current_publication
+  def self.current
     @current_publication
   end
   
-  def self.current_publication=(pub)
+  def self.current=(pub)
     @current_publication = pub
   end
 

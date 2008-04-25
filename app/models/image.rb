@@ -166,24 +166,34 @@ class Image < ActiveRecord::Base
     return @exif
   end
   
-  def self.import(file)
+  # Import an image into the Image catalog if the image has not been imported, or if has
+  # been updated/edited since last import
+  def self.import(file, destination_folder)
     if File.exist?(file) then
-      file = make_image_files(file)
       image_filename = File.basename(file)
-      image = find_by_filename(image_filename) || Image.new
-      image.filename = image_filename
-      image.catalog = Catalog.default_catalog
-      image.folder = File.dirname(file).sub(image.catalog.directory,"") + '/'
-      image.import_metadata
-      image.save!
+      if !image = find_by_filename(image_filename)
+        image = Image.new
+        image.filename = image_filename
+        image.catalog = Catalog.default
+        image.folder = destination_folder.with_slash
+      end
+      if image.updated_at.nil? || image.updated_at < File.mtime(file)
+        make_image_files(file, destination_folder) 
+        image.import_metadata
+        image.geocode
+        image.save!
+      else
+        # puts "Image '#{file}' already imported (and up-to-date)"
+      end
       image
     else
+      puts "Requested file #{file} does not exist - not imported."
       return nil
     end
   end
   
   def import_metadata
-    puts "Import metadata for '#{self.full_path_name}'"
+    # puts "Import metadata for '#{self.full_path_name}'"
     image_exif = MiniExiftool.new(self.full_path_name)
     MAP.each do |k, v|
       if k == :GPSLatitude
@@ -194,7 +204,8 @@ class Image < ActiveRecord::Base
         send("#{v.to_s}=", image_exif[k.to_s])
       end
     end
-    created_by = User.find_by_email(image_exif["CreatorContactInfoCiEmailWork"])
+    created_by = User.find_by_email(image_exif["CreatorContactInfoCiEmailWork"]) || User.current_user
+    check_attributes
     true
   end
   
@@ -205,7 +216,8 @@ class Image < ActiveRecord::Base
   
   def self.tag_cloud(current_user)
     # Top tags sorted alphabetically by name
-    return viewable_by(current_user).tag_counts(:all, :order => "count desc", :limit => TAG_CLOUD_LIMIT).sort{|a, b| a.name <=> b.name}
+    return viewable_by(current_user).tag_counts(:all, :order => "count desc", :limit => TAG_CLOUD_LIMIT) \
+      .sort{|a, b| a.name <=> b.name}
   end
   
   def url
@@ -226,10 +238,12 @@ class Image < ActiveRecord::Base
 
 private  
   def check_attributes
+    puts "Image: In check_attributes"
     make_title
     make_name
     calculate_orientation
     set_catalog
+    set_publication_and_status
   end
 
   def make_name
@@ -247,13 +261,12 @@ private
   end
   
   def make_title
-    self.title ||= self.filename.remove_file_suffix.gsub(/-/," ")
+    self.title = self.title.blank? ? self.filename.remove_file_suffix.gsub(/-/," ") : self.title
   end
   
   def set_catalog
     self.catalog ||= Catalog.default_catalog
   end
-  
   
   def set_latitude(image_exif)
     if image_exif["GPSLatitude"] && (lat = image_exif["GPSLatitude"].match(Location_pattern))
@@ -274,32 +287,37 @@ private
       send("longitude=", lon_decimal)
     end
   end
+  
+  def set_publication_and_status
+    self.publications ||= Publication.default
+    self.status ||= Asset::STATUS["published"]
+  end
  
-  def self.make_image_files(filename)
-    folder = File.basename(File.dirname(filename)) + "/"
-    destination = Catalog.default_catalog.directory + folder + '/'
+  def self.make_image_files(filename, destination_folder)
+    puts "Making catalog image files from #{filename}"
+    destination = Catalog.default.directory + destination_folder.with_slash
     file_root = File.basename(filename, '.*')
     thumbnail_file = destination + file_root + THUMBNAIL_SUFFIX + ".jpg"
     slide_file = destination + file_root + SLIDE_SUFFIX + ".jpg"
     display_file = destination + file_root + DISPLAY_SUFFIX + ".jpg"
     full_file = destination + file_root + ".jpg"
-    
-    image = Magick::ImageList.new(filename) 
+
+    image = Magick::ImageList.new(filename)
     
     # Thumbnail
-    new_image = image.resize_to_fit(Catalog.default_catalog.max_thumbnail_dimension, Catalog.default_catalog.max_thumbnail_dimension )
+    new_image = image.resize_to_fit(Catalog.default.max_thumbnail_dimension, Catalog.default.max_thumbnail_dimension )
     new_image.write(thumbnail_file)
   
     # Slide
-    new_image = image.resize_to_fit(Catalog.default_catalog.max_slide_dimension, Catalog.default_catalog.max_slide_dimension )
+    new_image = image.resize_to_fit(Catalog.default.max_slide_dimension, Catalog.default.max_slide_dimension )
     new_image.write(slide_file)
   
     # Display
-    new_image = image.resize_to_fit(Catalog.default_catalog.max_display_dimension, Catalog.default_catalog.max_display_dimension )
+    new_image = image.resize_to_fit(Catalog.default.max_display_dimension, Catalog.default.max_display_dimension )
     new_image.write(display_file)
     
     # Full
-    new_image = image.resize_to_fit(Catalog.default_catalog.max_image_dimension, Catalog.default_catalog.max_image_dimension )
+    new_image = image.resize_to_fit(Catalog.default.max_image_dimension, Catalog.default.max_image_dimension )
     new_image.write(full_file)
 
     image.destroy!

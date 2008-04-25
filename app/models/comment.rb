@@ -39,7 +39,7 @@ class Comment < ActiveRecord::Base
 
 private  
   def set_comment_status
-    if Publication.current_publication.moderate_comments
+    if Publication.current.moderate_comments
       self.status = Asset::STATUS["draft"]
     else
       self.status = Asset::STATUS["published"]

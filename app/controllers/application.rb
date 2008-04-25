@@ -46,7 +46,7 @@ protected
   def save_environment
     User.current_user = logged_in? ? current_user : nil
     User.environment = request.env
-    Publication.current_publication = @publication
+    Publication.current = @publication
   end
     
 

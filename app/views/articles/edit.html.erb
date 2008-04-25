@@ -1,43 +1,8 @@
 <div id="_form">
 <%= render :partial => "shared/form_heading", :locals => {:asset => @article} %>
 <% hermes_form_for :article, :url => get_url(@article), :html => {:method => get_method, :id => "_formEdit"} do |form| %>
-	<h3>Content Summary</h3>
-	<%= form.text_field :title, :disabled => is_show?, :size => 50 %>
-	<%= form.text_area :leader, :disabled => is_show?, :size => "40x5" %>
-	<%= form.text_field :tag_list, :disabled => is_show?, :size => 40 %>
-	<%= form.text_field :content_rating, :disabled => is_show?, :size => 8 %>	
-
-	<h3>Location</h3>
-	<%= form.text_field :city, :disabled => is_show?, :size => 30 %>
-	
-	<% if is_show? %>
-		<%= form.text_field :country, :disabled => is_show?, :size => 30 %>
-	<% else %>
-		<%= form.select :country, Country.find(:all, :select => "name").collect!{|c| c.name}, 
-			:include_blank => true  %>
-	<% end %>
-	
-	<%= form.text_field :latitude, :disabled => is_show?, :size => 10 %>	
-	<%= form.text_field :longitude, :disabled => is_show?, :size => 10 %>
-	
-	<h3>Publishing Data</h3>
-	<%= form.text_field :status, :disabled => is_show?, :size => 10 %>
-	<% if is_show? %>
-		<%= form.text_field :dont_publish_before, :disabled => is_show?, :size => 30 %>
-	<% else %>
-		<%= form.datetime_select :dont_publish_before  %>
-	<% end %>
-	
-	<% if is_show? %>
-		<%= form.text_field :dont_publish_after, :disabled => is_show?, :size => 30 %>
-	<% else %>
-		<%= form.datetime_select :dont_publish_after  %>
-	<% end %>
-	
-	<% if !is_show? %>
-		<%= submit_tag "Save changes" %>
-	<% end %>
-	
+	<h3>Article Content</h3>
+	<%= form.text_area :content, :disabled => is_show?, :size => "50x20" %>
+	<%= render :partial => "shared/asset_summary", :locals => {:form => form} -%>
 <% end %>
-
 </div>

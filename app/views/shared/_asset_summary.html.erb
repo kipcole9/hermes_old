@@ -1,0 +1,46 @@
+<h3>Content Summary</h3>
+<%= form.text_field :title, :disabled => is_show?, :size => 50 %>
+<%= form.text_area :description, :disabled => is_show?, :size => "40x5" %>
+<%= form.text_field :tag_list, :disabled => is_show?, :size => 40 %>
+
+<% if is_show? %>
+	<%= form.text_field ContentRating.find_by_rating(:content_rating), :disabled => is_show?, :size => 8 %>
+<% else %>	
+	<%= form.select :content_rating, ContentRating.find(:all, :select => "name, rating").collect!{|c| [c.name, c.rating] } %>
+<% end %>
+
+<h3>Location</h3>
+<%= form.text_field :city, :disabled => is_show?, :size => 30 %>
+
+<% if is_show? %>
+	<%= form.text_field :country, :disabled => is_show?, :size => 30 %>
+<% else %>
+	<%= form.select :country, Country.find(:all, :select => "name").collect!{|c| c.name}, 
+		:include_blank => true  %>
+<% end %>
+
+<%= form.text_field :latitude, :disabled => is_show?, :size => 10 %>	
+<%= form.text_field :longitude, :disabled => is_show?, :size => 10 %>
+
+<h3>Publishing Data</h3>
+<% if is_show? %>
+	<%= form.text_field Asset::STATUS[:status], :disabled => is_show?, :size => 10 %>
+<% else %>
+	<%= form.select :status, Asset::STATUS %>
+<% end %>
+
+<% if is_show? %>
+	<%= form.text_field :dont_publish_before, :disabled => is_show?, :size => 30 %>
+<% else %>
+	<%= form.datetime_select :dont_publish_before, :include_blank => true  %>
+<% end %>
+
+<% if is_show? %>
+	<%= form.text_field :dont_publish_after, :disabled => is_show?, :size => 30 %>
+<% else %>
+	<%= form.datetime_select :dont_publish_after, :include_blank => true  %>
+<% end %>
+
+<% if !is_show? %>
+	<%= submit_tag "Save changes" %>
+<% end %>

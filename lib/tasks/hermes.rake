@@ -4,7 +4,8 @@ namespace :hermes do
   task(:import_images => :environment) do
     require "hermes_image_import"
     include HermesImageImport
-    import
+    User.current_user = User.admin
+    import_images
   end
   
   desc "Geocode all assets"
@@ -16,30 +17,33 @@ namespace :hermes do
   end
   
   desc "Create or Update Galleries from metadata"
-  task(:create_or_update_galleries => :environment) do
+  task(:update_galleries => :environment) do
     require 'find'
-    catalog = Catalog.find(:first)
+    catalog = Catalog.default
     if catalog then
-      RAILS_DEFAULT_LOGGER.info "Updating Galleries from catalog."
-      Find.find(catalog.directory) do |f|
-        if File.file?(f) && File.fnmatch('*.xml', f) then
-          RAILS_DEFAULT_LOGGER.info "Creating or updating gallery from file '#{f}'"
-          case Gallery.create_or_update_from_xml(f)
-            when :no_metadata     then RAILS_DEFAULT_LOGGER.warn "No metadata found for #{f}"
-            when :bad_metadata    then RAILS_DEFAULT_LOGGER.error "Metadata file found but malformed for #{f}. Ignoring it."
-            when :bad_update      then RAILS_DEFAULT_LOGGER.error "Could not update Gallery in the database for #{f}"
+      puts "Updating Galleries from catalog."
+      User.current_user = User.admin
+      find_pattern = "#{catalog.source}places/**/#{Gallery::METADATA_FILENAME}"
+      puts "Looking for gallery metadata file in '#{find_pattern}'"
+      Dir.glob(find_pattern) do |f|
+        if File.file?(f) then
+          puts "Creating or updating gallery from file '#{f}'"
+          case retcode = Gallery.create_or_update_from_xml(f)
+            when :no_metadata     then puts "No metadata found for #{f}"
+            when :bad_metadata    then puts "Metadata file found but malformed for #{f}. Ignoring it."
+            when :bad_update      then puts "Could not update Gallery in the database for #{f}"
+            else puts "Update returned '#{retcode}'"
           end
         end
       end
     else
-      # Woops - no catalog found by that name
-      RAILS_DEFAULT_LOGGER.error "Gallery: The catalog '#{catalog}' was not found to update galleries."
+      puts "Gallery: The catalog '#{catalog}' was not found to update galleries."
     end
   end
   
   desc "Create gallery metadata templates"
   task(:create_gallery_metadata_templates => :environment) do
-    catalog = Catalog.find(:first)
+    catalog = Catalog.default
     if catalog then
       RAILS_DEFAULT_LOGGER.info "Creating Gallery metadata templates."
       galleries = Gallery.find(:all, :include => :asset)
@@ -74,5 +78,11 @@ namespace :hermes do
     require 'hermes_keywords_import'
     include HermesKeywordsImport
     import_keywords
+  end
+  
+  desc "Clear images and galleries"
+  task(:clear_images => :environment) do
+    Gallery.clear_galleries
+    Image.find(:all).each {|i| i.delete}
   end
 end
