@@ -158,7 +158,7 @@ protected
       f2 = File.open(user_photo_file_name,"wb")
       f2.write(content)
       f2.close
-      self.photo = Image.import(user_photo_file_name, USERS_DIR))
+      self.photo = Image.import(user_photo_file_name, USERS_DIR)
     end
   end
   

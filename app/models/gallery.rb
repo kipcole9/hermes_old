@@ -2,8 +2,9 @@ class Gallery < ActiveRecord::Base
   include HermesModelExtensions
   acts_as_polymorph
   acts_as_secure
-  has_many :slides, :order => "position"
-  has_many :images, :through => :slides
+  has_many      :slides, :order => "position"
+  has_many      :images, :through => :slides
+  before_save   :try_geocode 
   
   METADATA_FILENAME         = "gallery_metadata.xml"
   GALLERY_SIGNATURE         = "gallery"
@@ -23,9 +24,6 @@ class Gallery < ActiveRecord::Base
   def to_xml(options = {})
     gallery_xml = Builder::XmlMarkup.new(:indent => 2)
     gallery_xml.gallery(:name => self.name, :created_by => self.created_by.email) do |xml|
-      xml.title(self.title)
-      xml.description(self.description)
-      xml.tag_list(self.tag_list)
       xml.gallery_of(self.gallery_of)
       asset_xml(self, xml)
     end
@@ -102,6 +100,10 @@ class Gallery < ActiveRecord::Base
   
   def self.gallery_name_from_folder(folder)
     parts = folder.sub(/\/$/,'')
+  end
+  
+  def try_geocode
+    self.geocode
   end
 
 end

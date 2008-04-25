@@ -96,6 +96,11 @@ class Asset < ActiveRecord::Base
     end
   end
   
+  def status=(s)
+    super(s) if s.is_integer?
+    super(STATUS[s]) if s.is_a?(String)
+  end
+  
   def permissions
     ["read_permissions", "update_permissions", "delete_permissions"].each do |p|
       perms = self.send(p)

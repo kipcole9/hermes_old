@@ -5,10 +5,10 @@
 	<% end %>
 	<% links = [] %>
 	<% if article.can_update?(current_user) %>
-		<% links << link_to("Edit", edit_article_url(article)) %>
+		<% links << link_to("Edit", edit_url(article)) %>
 	<% end %>
 	<% if article.can_delete?(current_user) %>
-		<% links << link_to("Delete", article_url(article), :confirm => "Are you sure?", :method => :delete) %>
+		<% links << link_to("Delete", show_url(article), :confirm => "Are you sure?", :method => :delete) %>
 	<% end %>
 	<%= links.join(" | ")%>
 </h3>

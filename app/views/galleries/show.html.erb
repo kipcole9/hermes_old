@@ -1,6 +1,7 @@
 <%
     sidebar_clear  
 	sidebar :gallery_slideshow
+	sidebar :asset_map if (@asset.latitude && @asset.longitude)
 %>
 
 <% content_for :javascripts do %>
@@ -9,7 +10,9 @@
 <% end %>
 
 <div class='_article clearfix'>
-	<h2><%= @gallery.title %> Gallery</h2>
+	<h2><%= @gallery.title %></h2>
+	<%= render :partial => 'articles/article_byline', :locals => {:article => @gallery} -%>
+	<p><%= @gallery.description -%>
 	<% images = @gallery.images.published_in(publication).published.viewable_by(current_user) \
 		.find(:all, :page => {:size => controller.page_size, :current => params[:page]}) %>
 	<%= render :partial => "shared/page_numbers", :locals => {:collection => images} %>

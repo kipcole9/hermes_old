@@ -61,6 +61,14 @@ module ApplicationHelper
     controller.page_title
   end
   
+  def edit_url(asset)
+    send("edit_#{asset.class.name.downcase}_url", asset)
+  end
+  
+  def show_url(asset)
+    send("#{asset.class.name.downcase}_url", asset)    
+  end
+  
   def get_method
     case params[:action]
   	when "new", "create" 	# go to create action
