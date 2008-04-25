@@ -1,0 +1,7 @@
+<div class='_article'>
+	<h2>List of Bookmarks</h2>
+	<% for bookmark in @bookmarks %>
+		<p><%= link_to bookmark.title, bookmark_url(bookmark) %></p>
+		<%= render :partial => "articles/article_byline", :locals => {:article => bookmark} %>
+	<% end %>
+</div>

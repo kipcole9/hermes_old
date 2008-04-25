@@ -101,7 +101,8 @@ module HermesControllerExtensions
   def is_column?(column)
     return "#{asset_obj.table_name}.#{column}" if asset_obj.columns.map(&:name).include?(column)
     if asset_obj.respond_to?("polymorph_class")
-      return "#{asset_obj.polymorph_class.table_name}.#{column}" if asset_obj.polymorph_class.columns.map(&:name).include?(column)
+      return "#{asset_obj.polymorph_class.table_name}.#{column}" \
+          if asset_obj.polymorph_class.columns.map(&:name).include?(column)
     end
     false
   end

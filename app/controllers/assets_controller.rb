@@ -103,19 +103,15 @@ class AssetsController < ApplicationController
 protected
 
   def authorized?
-    begin
-      case params[:action]
-      when "edit","update"
-        @object.can_update?(current_user)
-      when "destroy"
-        @object.can_delete?(current_user)
-      when "new", "create"
-        can_create?(asset_obj)
-      else
-        false
-      end
-    rescue
-      false
+    case params[:action]
+    when "edit","update"
+      @object.can_update?(current_user)
+    when "destroy"
+      @object.can_delete?(current_user)
+    when "new", "create"
+      AssetPermission.can_create?(asset_obj.class.name, current_user)
+    else
+      raise "Unknown action '#{params[:action]}' found in authorized?"
     end
   end
   
@@ -129,6 +125,7 @@ protected
 private
     def create_asset
       @object = asset_obj.new
+      instance_variable_set(instance_variable_singular, @object)
     end
 
     # Retrieve the asset relating to this request
@@ -138,7 +135,7 @@ private
     
     # Make sure foreign keys are in place at create time
     def update_parent_attributes
-      @object.asset.set_created_by(current_user) if asset_obj.respond_to?("polymorph_class")
+      @object.asset.created_by = current_user if asset_obj.respond_to?("polymorph_class")
       @parent_attributes.each do |k, v|
         @object.send("#{k}=", v)
       end

@@ -10,7 +10,7 @@ class Asset < ActiveRecord::Base
   
   before_save                 :set_permissions
   before_validation_on_create :set_name
-  before_validation_on_create :set_created_by
+  before_validation_on_create :set_default_created_by
   
   validates_presence_of     :name 
   validates_presence_of     :created_by
@@ -61,10 +61,6 @@ class Asset < ActiveRecord::Base
   
   def can_delete?(user)
     AssetPermission.can_delete?(self, user)
-  end
-
-  def set_created_by(user)
-    self.created_by ||= user
   end
   
   def mappable?
@@ -182,7 +178,7 @@ private
     self.name = self.name.blank? ? self.title.remove_file_suffix.permalink : self.name 
   end
   
-  def set_created_by
+  def set_default_created_by
     self.created_by ||= User.current_user
   end
     

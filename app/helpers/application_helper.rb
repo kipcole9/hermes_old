@@ -17,7 +17,7 @@ module ApplicationHelper
   def bookmark(name, options = {})
     if b = Bookmark.viewable_by(current_user).find_by_name(name)
       u = b.url
-      t = options[:text].blank? ? b.description : options[:text]
+      t = options[:text].blank? ? b.title : options[:text]
     else
       u = '#'
       t = "{Bookmark '#{name}' not found}"

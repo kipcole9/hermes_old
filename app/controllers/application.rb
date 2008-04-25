@@ -49,8 +49,6 @@ protected
     Publication.current = @publication
   end
     
-
-  
   def current_layout
     ["rss","xml","atom"].include?(params[:format]) ? nil : @publication.theme
   end
