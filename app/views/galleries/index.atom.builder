@@ -5,8 +5,10 @@ atom_feed(:url => formatted_galleries_url(:atom), :root_url => galleries_url, :s
   for gallery in @galleries
     feed.entry(gallery) do |entry|
       entry.title(gallery.title)
-      entry.content(gallery.description, :type => 'text')
-
+      entry.content(
+        render_to_string(:partial => "images/thumbnail_rss.html.erb", 
+          :locals => {:image => gallery.popular_image(current_user), :caption => gallery.title, :gallery => gallery}) + 
+				render_description(gallery), :type => 'html')
       entry.author do |author|
         author.name(gallery.created_by.full_name)
         author.email(gallery.created_by.email)

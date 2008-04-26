@@ -93,8 +93,7 @@ class Asset < ActiveRecord::Base
   end
   
   def status=(s)
-    super(s) if s.is_integer?
-    super(STATUS[s]) if s.is_a?(String)
+    s.is_a?(Fixnum) || s.is_integer? ? super(s) : super(STATUS[s])
   end
   
   def content_rating_description
@@ -105,6 +104,7 @@ class Asset < ActiveRecord::Base
     STATUS.index(self.status)
   end
   
+  # Convenience method to show human readable form of permissions for an object
   def permissions
     ["read_permissions", "update_permissions", "delete_permissions"].each do |p|
       perms = self.send(p)
@@ -159,8 +159,10 @@ class Asset < ActiveRecord::Base
         self.longitude = results[0].longitude
         self.geocode_accuracy = results[0].accuracy
         self.google_geocoded = true
+        true
       else
         puts "Asset: Could not geocode '#{self.name}' with '#{geocode_string}'. Result was #{results.status}"
+        false
       end
     end
   end

@@ -5,7 +5,7 @@ atom_feed(:url => formatted_articles_url(:atom), :root_url => articles_url, :sch
   for article in @articles
     feed.entry(article) do |entry|
       entry.title(article.title)
-      entry.content(controller.render_description(article), :type => 'html')
+      entry.content(render_description(article), :type => 'html')
 
       entry.author do |author|
         author.name(article.created_by.full_name)

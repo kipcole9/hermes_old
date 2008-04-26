@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
   before_filter :save_environment
   before_filter :adjust_format_for_iphone 
   helper_method :iphone_user_agent?
+  helper_method :render_to_string
+  helper_method :sidebar, :sidebar_clear
   
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store

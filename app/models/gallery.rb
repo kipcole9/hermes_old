@@ -4,7 +4,7 @@ class Gallery < ActiveRecord::Base
   acts_as_secure
   has_many      :slides, :order => "position"
   has_many      :images, :through => :slides
-  before_save   :try_geocode 
+  before_save   :set_geocode 
   
   METADATA_FILENAME         = "gallery_metadata.xml"
   GALLERY_SIGNATURE         = "gallery"
@@ -28,15 +28,6 @@ class Gallery < ActiveRecord::Base
       asset_xml(self, xml)
     end
   end
-  
-  def create_metadata_template(catalog_directory)
-    filename = self.gallery_of ? catalog_directory + self.gallery_of + METADATA_FILENAME : catalog_directory + METADATA_FILENAME
-    if !File.exist?(filename) || File.mtime(filename) < self.updated_at
-      metafile = File.open(filename, File::WRONLY|File::TRUNC|File::CREAT)
-      metafile.puts self.to_xml
-      metafile.close
-    end
-  end
 
   def self.create_or_update_from_xml(file_xml)
     data = {}
@@ -57,24 +48,17 @@ class Gallery < ActiveRecord::Base
     
     # Extract attributes from the XML file and update the Gallery record
     gallery.name = gallery_name
-    creator_email = xml.root.attributes["email"]
-    gallery.created_by = User.find_by_email(creator_email) unless creator_email.blank?
+    creator = xml.root.attributes["author"]
+    gallery.created_by = User.find_by_email(creator) || User.find_by_login(creator) unless creator.blank?
     xml.root.elements.each do |e|
       data[e.name.to_sym] = e.text
     end  
     retcode = gallery.new_record? ? :inserted_metatdata : :updated_metadata
+    gallery.images = Image.find_all_by_folder(gallery.gallery_of) if gallery.gallery_of
     if !gallery.update_attributes(data)
       puts gallery.errors.inspect 
       return :bad_update
     end
-    
-    # Add images to the gallery and geocode its location
-    if gallery.gallery_of
-      # Slide.delete_all(["gallery_id = ?", gallery.id])
-      gallery.images = Image.find_all_by_folder(gallery.gallery_of)
-    end
-    gallery.geocode
-    gallery.save!
     retcode
   end
   
@@ -85,24 +69,13 @@ class Gallery < ActiveRecord::Base
     end
     true
   end
-  
-  def self.create_default_galleries
-    galleries = Image.find(:all, :select => "DISTINCT folder")
-    galleries.each do |g|
-      name = gallery_name_from_folder(g.folder)
-      gallery = Gallery.new(:name => name, :title => name.gsub(/-/,' '), :gallery_of => g.folder)
-      images = Image.find(:all, :conditions => ["folder = ?", g.folder])
-      puts "Found #{images.size} images for gallery #{name}."
-      gallery.images << images
-      gallery.save!
-    end
-  end
-  
+
+private  
   def self.gallery_name_from_folder(folder)
-    parts = folder.sub(/\/$/,'')
+    folder.without_slash
   end
   
-  def try_geocode
+  def set_geocode
     self.geocode
   end
 

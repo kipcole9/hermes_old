@@ -20,6 +20,8 @@ class AssetsController < ApplicationController
   def index
     respond_to do |format|
       format.html
+      format.rss
+      format.atom
       format.iphone
     end
   end

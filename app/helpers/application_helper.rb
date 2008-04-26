@@ -2,16 +2,16 @@
 module ApplicationHelper
   include HermesHelper
   
-  def format_content(content)
-    auto_link(sanitize(content))
-  end
-
-  def sidebar(name, options = {})
-    controller.sidebar(name, options)
+  def render_description(asset)
+    return "" unless asset.description
+    description = asset.description.sub(/<%= *image/,"<%= image_rss")
+    description = description.sub(/<%= *thumb/,"<%= image_rss")
+    description = description.sub(/<%= *gallery/,"<%= gallery_rss")
+    render_to_string :inline => description
   end
   
-  def sidebar_clear
-    controller.sidebar_clear
+  def format_content(content)
+    auto_link(sanitize(content))
   end
   
   def bookmark(name, options = {})

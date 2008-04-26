@@ -10,6 +10,10 @@ xml.rss "version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1" do
         xml.title image.title
         xml.link image_url(image)
         xml.description h(image.description)
+        xml.description do
+          xml << h(render_to_string(:partial => "images/thumbnail_rss.html.erb", :locals => {:image => image}))
+          xml << h(render_description(image))
+        end
         xml.pubDate image.updated_at.to_s(:rfc822)
         xml.guid image_url(image)
         xml.author h(image.created_by.full_name)

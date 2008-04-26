@@ -5,8 +5,9 @@ atom_feed(:url => formatted_images_url(:atom), :root_url => images_url, :schema_
   for image in @images
     feed.entry(image) do |entry|
       entry.title(image.title)
-      entry.content(image.description, :type => 'html')
-
+      entry.content(
+        render_to_string(:partial => "images/thumbnail_rss.html.erb", :locals => {:image => image}) + 
+			  h(render_description(image)), :type => 'html')
       entry.author do |author|
         author.name(image.created_by.full_name)
         author.email(image.created_by.email)
