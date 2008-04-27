@@ -93,14 +93,7 @@ private
   
   def encode_allow_comments(allow_comments)
     # None = 0, Closed = 2, Open = 1
-    case allow_comments
-    when "2"
-      false
-    when "1"
-      true
-    when "0"
-      nil
-    end
+    return allow_comments.to_i rescue 0
   end
   
 end

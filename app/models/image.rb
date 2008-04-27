@@ -177,7 +177,7 @@ class Image < ActiveRecord::Base
         image.catalog = Catalog.default
         image.folder = destination_folder.with_slash
       end
-      if image.updated_at.nil? || image.updated_at < File.mtime(file)
+      if image.updated_at.nil? || (File.mtime(file).utc > image.updated_at.utc)
         make_image_files(file, destination_folder) 
         image.import_metadata
         image.geocode

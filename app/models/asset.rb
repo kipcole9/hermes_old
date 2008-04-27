@@ -6,9 +6,10 @@ class Asset < ActiveRecord::Base
   has_many                    :comments  
   acts_as_taggable
   
-  STATUS = AssetStatus.status_array
+  STATUS                      = AssetStatus.status_array
+  ALLOW_COMMENTS              = {:none => 0, :open => 1, :closed => 2}
   
-  before_save                 :set_permissions
+  before_save                 :set_permissions, :set_allow_comments
   before_validation_on_create :set_name
   before_validation_on_create :set_default_created_by
   
@@ -183,5 +184,8 @@ private
   def set_default_created_by
     self.created_by ||= User.current_user
   end
-    
+  
+  def set_allow_comments
+    self.allow_comments ||= ALLOW_COMMENTS[:open]
+  end  
 end

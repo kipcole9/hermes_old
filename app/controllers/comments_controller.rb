@@ -12,13 +12,16 @@ class CommentsController < ApplicationController
   end
   
   def destroy
-    comment = Comment.find(params[:id])
-    respond_to do |format|
-      format.js do
-        render :update do |page| 
-            page["comment_#{comment.id.to_s}"].hide
+    if Comment.delete(params[:id])
+      respond_to do |format|
+        format.js do
+          render :update do |page| 
+              page["comment_#{params[:id].to_s}"].hide
+          end
         end
       end
+    else
+      flash[:notice] = "Could not delete the comment"
     end
   end
   

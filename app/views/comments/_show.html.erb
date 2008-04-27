@@ -1,9 +1,11 @@
-<% @comments = show.comments.published %>
-<% if (@comments.count > 0 rescue nil) %>
-	<%= render :partial => "comments/comments", :object => @comments %>
+<% if show.comments_open? || show.comments_closed? %>
+	<% @comments = show.comments.published %>
+	<% if (@comments.count > 0 rescue nil) %>
+		<%= render :partial => "comments/comments", :object => @comments %>
+	<% end %>
 <% end %>
 
-<% if show.allow_comments?(publication) %>
+<% if show.comments_open? %>
 	<%= render :partial => "comments/comment_form", :object => show %>
 <% end %>
 

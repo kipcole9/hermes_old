@@ -197,20 +197,27 @@ module ActiveRecord
               self.#{polymorph_name}.category_ids
             end
             
-            def category_ids=(val)
-              self.#{polymorph_name}.category_ids = val
+            def category_ids=(ids)
+              self.#{polymorph_name}.category_ids = ids
             end
             
             def categories
               self.#{polymorph_name}.categories
             end
             
-            def allow_comments?(publication)
-              if self.allow_comments.nil?
-                return publication.allow_comments
-              else
-                return self.allow_comments
-              end
+            def comments_open?
+              Publication.default.allow_comments == Asset::ALLOW_COMMENTS[:open] && 
+                self.#{polymorph_name}.allow_comments == Asset::ALLOW_COMMENTS[:open]
+            end
+            
+            def comments_closed?
+              Publication.default.allow_comments == Asset::ALLOW_COMMENTS[:closed] || 
+                self.#{polymorph_name}.allow_comments == Asset::ALLOW_COMMENTS[:closed]
+            end            
+            
+            def comments_none?              
+              Publication.default.allow_comments == Asset::ALLOW_COMMENTS[:none] || 
+                self.#{polymorph_name}.allow_comments == Asset::ALLOW_COMMENTS[:none]
             end
             
             def content_rating_description

@@ -6,4 +6,4 @@
 	</a>
 	<p><%= image.display_caption %></p>
 </div>
-<p><%= render_description(image) %></p>
+<p><%= render :inline => image.description -%></p>
