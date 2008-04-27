@@ -174,7 +174,9 @@ private
     # Called from index action, invoke query parameters if any
     def retrieve_assets
       user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
-      @objects = asset_obj.viewable_by(user).conditions(marshall_params).with_category(params[:category]) \
+      @objects = asset_obj.viewable_by(user).conditions(marshall_params) \
+                    .with_category(params[:category]) \
+                    .order('assets.created_at DESC') \
                     .pager(unescape(params[:tags]), params[:page], page_size)  
       if @objects.blank?
         flash[:notice] = "#{class_name}: Query '#{format_query_params}' found no items!"

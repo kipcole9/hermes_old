@@ -54,10 +54,12 @@ class Gallery < ActiveRecord::Base
       data[e.name.to_sym] = e.text
     end  
     retcode = gallery.new_record? ? :inserted_metatdata : :updated_metadata
-    gallery.images = Image.find_all_by_folder(gallery.gallery_of) if gallery.gallery_of
     if !gallery.update_attributes(data)
       puts gallery.errors.inspect 
+      puts gallery.asset.errors.inspect
       return :bad_update
+    else
+      gallery.images = Image.find_all_by_folder(gallery.gallery_of) if gallery.gallery_of
     end
     retcode
   end
@@ -77,6 +79,7 @@ private
   
   def set_geocode
     self.geocode
+    true
   end
 
 end

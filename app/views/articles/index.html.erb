@@ -6,8 +6,8 @@
 	sidebar :image_random
 %>
 <% content_for :head do %>
-	<%= auto_discovery_link_tag(:rss, formatted_articles_url(params.merge(:format => "rss"))) %>
-	<%= auto_discovery_link_tag(:atom, formatted_articles_url(params.merge(:format => "atom"))) %>
+	<%= auto_discovery_link_tag(:rss, formatted_articles_url(params.remove("page").merge(:format => "rss"))) %>
+	<%= auto_discovery_link_tag(:atom, formatted_articles_url(params.remove("page").merge(:format => "atom"))) %>
 <% end %>
 
 <% if @articles %>

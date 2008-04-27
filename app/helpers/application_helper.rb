@@ -10,6 +10,15 @@ module ApplicationHelper
     render_to_string :inline => description
   end
   
+  def link_to_image(filename, options = {})
+    if i = Image.viewable_by(current_user).find_by_filename(filename)
+      t = options[:text] || i.title
+      link_to t, image_url(i)
+    else
+      t = options[:text] || filename
+    end
+  end
+  
   def format_content(content)
     auto_link(sanitize(content))
   end

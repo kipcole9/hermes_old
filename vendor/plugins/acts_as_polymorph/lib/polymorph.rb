@@ -132,6 +132,9 @@ module ActiveRecord
                 if result = super
                   result = self.#{polymorph_name}.save(f) unless is_new
                   self.#{polymorph_name}.errors.each {|e, m| self.errors.add(e, m)} if !result
+                else
+                  # for cases where the polymorph save is automatic
+                  self.#{polymorph_name}.errors.each {|e, m| self.errors.add(e, m)}
                 end
                 raise "Bad polymorphic save" if !result # Raise forces rollback
                 true

@@ -204,13 +204,18 @@ class Image < ActiveRecord::Base
         send("#{v.to_s}=", image_exif[k.to_s])
       end
     end
-    created_by = User.find_by_email(image_exif["CreatorContactInfoCiEmailWork"]) || User.current_user
+    self.created_by = User.find_by_email(image_exif["CreatorContactInfoCiEmailWork"]) || User.current_user
     check_attributes
     true
   end
   
   def self.import_metadata
-    find(:all).each {|i| i.import_metadata; i.save! }
+    puts "Importing metadata with current user #{User.current_user.full_name}"
+    find(:all).each do |i|
+       puts "Importing metadata for #{i.filename}"
+       i.import_metadata
+       i.save!
+    end
     true
   end
   
@@ -238,7 +243,6 @@ class Image < ActiveRecord::Base
 
 private  
   def check_attributes
-    puts "Image: In check_attributes"
     make_title
     make_name
     calculate_orientation

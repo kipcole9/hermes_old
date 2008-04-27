@@ -79,4 +79,11 @@ class String #:nodoc:
   include HermesExtensions::CoreExtensions::String::TextHelper
 end
 
+class Hash
+  def remove(key)
+    self.reject {|k, v| k == key }
+  end
+end
+
+
 

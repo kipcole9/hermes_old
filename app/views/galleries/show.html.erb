@@ -9,14 +9,15 @@
 	<%= javascript_include_tag "lightview.js" %>
 <% end %>
 
-<div class='_article clearfix'>
+<div class='_article'>
 	<h2><%= @gallery.title %></h2>
 	<%= render :partial => 'articles/article_byline', :locals => {:article => @gallery} -%>
-	<p><%= render :inline => @gallery.description -%></p>
+	<%= render :inline => @gallery.description -%>
 	<% images = @gallery.images.published_in(publication).published.viewable_by(current_user) \
 		.find(:all, :page => {:size => controller.page_size, :current => params[:page]}) %>
 	<%= render :partial => "shared/page_numbers", :locals => {:collection => images} %>
-	<div id="_thumbnailList" class="_thumbnailList">
+	<p></p>
+	<div id="_thumbnailList" class="_thumbnailList clearfix">
 		<% images.each do |i| %>
 			<%= render :partial => "images/slide", :locals => {:image => i} %>
 		<% end %>
