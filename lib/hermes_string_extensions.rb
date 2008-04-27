@@ -1,4 +1,3 @@
-# Make a permalink name from a string
 FILE_EXTENSIONS = /\.(JPG|GIF|TIF|TIFF|JPEG|DOC|PPT|XLS|PNG)$/i
 EMAIL = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i
 class String

@@ -178,7 +178,7 @@ private
   end
   
   def set_name
-    self.name = self.name.blank? ? self.title.remove_file_suffix.permalink : self.name 
+    self.name = self.name.blank? ? self.title.remove_file_suffix.permalink : self.name.permalink
   end
   
   def set_default_created_by

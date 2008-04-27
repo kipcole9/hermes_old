@@ -253,8 +253,8 @@ private
   def make_name
     # 'name' is derived from the xmp item 'title'
      self.name ||= self.title.remove_file_suffix.permalink
-     if new_record? && Asset.find(:first, :conditions => ["name = ? and content_type = ?", self.name, "Image"])
-       self.name = self.name + "-" + self.filename.remove_file_suffix.last(5)
+     if new_record? && Asset.find(:first, :conditions => ["name = ? and content_type = ?", self.name, self.class.name])
+       self.name = self.name + "-" + self.filename.remove_file_suffix.last(4)
      end
   end
   
@@ -265,7 +265,7 @@ private
   end
   
   def make_title
-    self.title = self.title.blank? ? self.filename.remove_file_suffix.gsub(/-/," ") : self.title
+    self.title = self.title.blank? ? self.filename.remove_file_suffix.titilize : self.title
   end
   
   def set_catalog
