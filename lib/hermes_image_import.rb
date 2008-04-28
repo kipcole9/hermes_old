@@ -9,10 +9,17 @@ module HermesImageImport
   # => Add to the database
   def import_images
     @catalog = Catalog.default
-    import_folder(@catalog.source)
+    proc = lambda {|file, folder| Image.import(file, folder) }
+    process_folder(@catalog.source, proc)
   end
   
-  def import_folder(folder)
+  def changed_images
+    @catalog = Catalog.default
+    proc = lambda {|file, folder| puts "#{file} has changed since last import." if Image.file_changed?(file) }
+    process_folder(@catalog.source, proc)
+  end   
+  
+  def process_folder(folder, proc)
     if File.directory?(folder)
       # puts "Importing images from '#{folder}'."
       Dir.entries(folder).each do |e|
@@ -22,9 +29,11 @@ module HermesImageImport
             puts "Directory '#{e_path}' marked to not import images"
           else
             if File.directory?(e_path + IMAGE_SUBDIR)
-              image_import_one_folder(e_path)
+              process_one_folder(e_path) do |file, folder|
+                proc.call file, folder
+              end
             else
-              import_folder(e_path)
+              process_folder(e_path, proc)
             end unless e.match(/^\./) or e == "Recycle Bin"
           end
         end
@@ -35,7 +44,7 @@ module HermesImageImport
     true
   end
   
-  def image_import_one_folder(folder)
+  def process_one_folder(folder)
     # Check to see if the image has changed before importing
     # puts "Processing images in '#{folder}'."
     destination = "#{@catalog.directory}#{File.basename(folder)}"
@@ -44,11 +53,11 @@ module HermesImageImport
       FileUtils.mkdir_p(destination)
     end
     
-    puts "Importing images from folder '#{folder}'"
+    puts "Processing images from folder '#{folder}'"
     gallery_folder = folder + IMAGE_SUBDIR
     Dir.glob(gallery_folder.with_slash + "**/*.jpg").each do |f|
       if IMAGE_FILE_TYPES.include?(File.extname(f).downcase) && !f.match(/^\./)
-        Image.import(f, File.basename(folder))   
+        yield f, File.basename(folder)
       end
     end
   end

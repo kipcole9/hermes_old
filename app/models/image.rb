@@ -192,6 +192,16 @@ class Image < ActiveRecord::Base
     end
   end
   
+  def self.file_changed?(file)
+    image_filename = File.basename(file)
+    if image = find_by_filename(image_filename)
+      if image.updated_at.nil? || (File.mtime(file).utc > image.updated_at.utc)
+        return true
+      end      
+    end
+    return false
+  end
+  
   def import_metadata
     # puts "Import metadata for '#{self.full_path_name}'"
     image_exif = MiniExiftool.new(self.full_path_name)

@@ -56,6 +56,14 @@ class Asset < ActiveRecord::Base
         "AND (assets.status = #{Asset::STATUS["published"]})"
   end
   
+  def moderate_comments?
+    unless self == Publication.default
+      super || Publication.default.moderate_comments?
+    else
+      super
+    end
+  end
+  
   def can_update?(user)
     AssetPermission.can_update?(self, user)
   end

@@ -8,6 +8,14 @@ namespace :hermes do
     import_images
   end
   
+  desc "List changed images"
+  task(:changed_images => :environment) do
+    require "hermes_image_import"
+    include HermesImageImport
+    User.current_user = User.admin    
+    changed_images
+  end
+  
   desc "Geocode all assets"
   task(:geocode_assets => :environment) do
     assets = Asset.find(:all)

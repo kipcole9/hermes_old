@@ -4,6 +4,8 @@ class CommentsController < ApplicationController
   
   def create
     comment = Comment.new(params[:comment])
+    asset = comment.asset
+    comment.status = Asset::STATUS[:draft] if asset.moderate_comments?
     comment.created_by = current_user if logged_in?
     if !comment.save
       flash[:notice] = flash_errors("Could not create comment", comment)
