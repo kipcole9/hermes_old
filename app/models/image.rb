@@ -202,6 +202,14 @@ class Image < ActiveRecord::Base
     return false
   end
   
+  def self.file_new?(file)
+    image_filename = File.basename(file)
+    if !image = find_by_filename(image_filename)
+      return true
+    end      
+    return false
+  end
+  
   def import_metadata
     # puts "Import metadata for '#{self.full_path_name}'"
     image_exif = MiniExiftool.new(self.full_path_name)
@@ -257,7 +265,6 @@ private
     make_name
     calculate_orientation
     set_catalog
-    set_publication_and_status
   end
 
   def make_name
@@ -300,11 +307,6 @@ private
       #puts "Longitude decimal: '#{lon_decimal}'"
       send("longitude=", lon_decimal)
     end
-  end
-  
-  def set_publication_and_status
-    self.publications ||= Publication.default
-    self.status ||= Asset::STATUS["published"]
   end
  
   def self.make_image_files(filename, destination_folder)

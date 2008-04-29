@@ -3,8 +3,8 @@
 <% hermes_form_for :publication, :url => get_url(@publication), :html => {:method => get_method, :id => "_formEdit"} do |form| %>
 
 	<h3>Profile</h3>
-	<%= form.text_field :title, :disabled => is_show?, :size => 60 %>
-	<%= form.text_area :description, :disabled => is_show?, :size => "58x5" %>
+	<%= form.text_field :title, :disabled => is_show?, :size => 55 %>
+	<%= form.text_area :description, :disabled => is_show?, :size => "53x5" %>
 	<%= form.text_field :tag_list, :disabled => is_show?, :size => 50 %>
 		
 	<h3>Publication domain</h3>
@@ -14,12 +14,12 @@
 	<h3>Options</h3>
 	<%= form.text_field :articles_per_page, :disabled => is_show?, :size => 20%>
 	<%= form.text_field :theme, :disabled => is_show?, :size => 20%>
-	<%= form.check_box :allow_comments, :disabled => is_show? %>
+	<%= form.select :allow_comments, Asset::ALLOW_COMMENTS, {}, :disabled => is_show? %>
 	<%= form.check_box :moderate_comments, :disabled => is_show? %>
 
 	<h3>Status</h3>
-	<%= form.text_field "status", :publish_status, :disabled => is_show?, :size => 20  %>
-	<%= form.text_field "status description", :publish_status_description, :disabled => is_show?, :size => 60 %>	
+	<%= form.select "status", :publish_status, Asset::STATUS, {:size => 20}, {:disabled => is_show?} %>
+	<%= form.text_field "status description", :publish_status_description, :disabled => is_show?, :size => 55 %>	
 	
 	<h3>EMail submission</h3>
 	<%= form.text_field :pop_server, :disabled => is_show?, :size => 40 %>

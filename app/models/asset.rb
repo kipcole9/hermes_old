@@ -7,9 +7,9 @@ class Asset < ActiveRecord::Base
   acts_as_taggable
   
   STATUS                      = AssetStatus.status_array
-  ALLOW_COMMENTS              = {:none => 0, :open => 1, :closed => 2}
+  ALLOW_COMMENTS              = {"none" => 0, "open" => 1, "closed" => 2}
   
-  before_save                 :set_permissions, :set_allow_comments
+  before_save                 :set_permissions, :set_allow_comments, :set_publication, :set_status
   before_validation_on_create :set_name
   before_validation_on_create :set_default_created_by
   
@@ -194,6 +194,18 @@ private
   end
   
   def set_allow_comments
-    self.allow_comments ||= ALLOW_COMMENTS[:open]
-  end  
+    self.allow_comments ||= ALLOW_COMMENTS["open"]
+  end
+  
+  def set_publication
+    if self.publications
+      publications = Publication.current.bit_id
+    else
+      publications ||= Publication.current.bit_id
+    end
+  end
+  
+  def set_status
+    self.status ||= STATUS["published"]
+  end
 end

@@ -206,18 +206,18 @@ module ActiveRecord
             end
             
             def comments_open?
-              Publication.default.allow_comments == Asset::ALLOW_COMMENTS[:open] && 
-                self.#{polymorph_name}.allow_comments == Asset::ALLOW_COMMENTS[:open]
+              Publication.default.allow_comments == Asset::ALLOW_COMMENTS["open"] && 
+                self.#{polymorph_name}.allow_comments == Asset::ALLOW_COMMENTS["open"]
             end
             
             def comments_closed?
-              Publication.default.allow_comments == Asset::ALLOW_COMMENTS[:closed] || 
-                self.#{polymorph_name}.allow_comments == Asset::ALLOW_COMMENTS[:closed]
+              Publication.default.allow_comments == Asset::ALLOW_COMMENTS["closed"] || 
+                self.#{polymorph_name}.allow_comments == Asset::ALLOW_COMMENTS["closed"]
             end            
             
             def comments_none?              
-              Publication.default.allow_comments == Asset::ALLOW_COMMENTS[:none] || 
-                self.#{polymorph_name}.allow_comments == Asset::ALLOW_COMMENTS[:none]
+              Publication.default.allow_comments == Asset::ALLOW_COMMENTS["none"] || 
+                self.#{polymorph_name}.allow_comments == Asset::ALLOW_COMMENTS["none"]
             end
             
             def content_rating_description

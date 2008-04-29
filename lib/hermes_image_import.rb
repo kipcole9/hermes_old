@@ -15,7 +15,10 @@ module HermesImageImport
   
   def changed_images
     @catalog = Catalog.default
-    proc = lambda {|file, folder| puts "#{file} has changed since last import." if Image.file_changed?(file) }
+    proc = lambda { |file, folder| 
+      puts "#{file} has changed since last import." if Image.file_changed?(file)
+      puts "#{file} is new since last import." if Image.file_new?(file)
+    }
     process_folder(@catalog.source, proc)
   end   
   
