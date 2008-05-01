@@ -40,7 +40,7 @@ class MetaWeblogService < ActionWebService::Base
 
   def getRecentPosts(blog_id, user, password, num)
     raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
-    return blogify_posts(Article.published_in(Publication.current_publication).published.viewable_by(user).recent(num))
+    return blogify_posts(Article.published_in(Publication.current).published.viewable_by(user).recent(num))
   end
   
   def newMediaObject(blogid, user, password, struct)

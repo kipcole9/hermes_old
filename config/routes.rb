@@ -51,8 +51,8 @@ ActionController::Routing::Routes.draw do |map|
   map.index     ':year/:month/:day', :controller => 'articles', :action => 'date',
                 :month => nil, :day => nil,
                 :requirements => {:year => /\d{4}/, :day => /\d{1,2}/, :month => /\d{1,2}/}
-               
-  map.category  'articles/:category', :controller => 'articles', :action => 'category', :category => '[SECTIONS]'  
+                
+  map.xmlrpc    'xmlrpc/api', :controller => 'xmlrpc', :action => 'api'
   
   # Install the default routes as the lowest priority.
   map.connect ':controller/:action/:id'

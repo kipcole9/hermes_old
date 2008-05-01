@@ -5,14 +5,12 @@
 <%= stylesheet_link_tag("#{@publication.theme}.css") %>
 <%= stylesheet_link_tag('lightview.css') %>
 <%= yield :head %>
-
 <title><%= page_title rescue @publication.title -%></title>
+<%= javascript_include_tag :defaults %>
+<%= yield :javascripts %>
 </head>
 
 <body>
-<%= javascript_include_tag :defaults %>
-<%= yield :javascripts %>
-
 <div id="_wrapper">
   <div id="_header">
      <h1><%= @publication.title -%></h1> 

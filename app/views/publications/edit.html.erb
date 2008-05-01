@@ -13,7 +13,7 @@
 		
 	<h3>Options</h3>
 	<%= form.text_field :articles_per_page, :disabled => is_show?, :size => 20%>
-	<%= form.text_field :theme, :disabled => is_show?, :size => 20%>
+	<%= form.text_field :theme, :disabled => is_show?, :size => 20 %>
 	<%= form.select :allow_comments, Asset::ALLOW_COMMENTS, {}, :disabled => is_show? %>
 	<%= form.check_box :moderate_comments, :disabled => is_show? %>
 

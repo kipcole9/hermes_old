@@ -57,11 +57,7 @@ class Asset < ActiveRecord::Base
   end
   
   def moderate_comments?
-    unless self == Publication.default
-      super || Publication.default.moderate_comments?
-    else
-      super
-    end
+    super || Publication.default.moderate_comments?
   end
   
   def can_update?(user)
@@ -199,9 +195,9 @@ private
   
   def set_publication
     if self.publications
-      publications = Publication.current.bit_id
+      self.publications |= Publication.current_publication.bit_id
     else
-      publications ||= Publication.current.bit_id
+      self.publications = Publication.current_publication.bit_id
     end
   end
   

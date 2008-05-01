@@ -162,11 +162,4 @@ protected
     end
   end
   
-  def set_publication
-    if self.publications
-      self.publications |= Publication.current_publication.bit_id
-    else
-      self.publications = Publication.current_publication.bit_id
-    end
-  end
 end

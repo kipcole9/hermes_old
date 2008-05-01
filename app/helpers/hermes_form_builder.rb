@@ -82,6 +82,8 @@ class HermesFormBuilder < ActionView::Helpers::FormBuilder
       label, attribute, options, checked_value, unchecked_value = label.to_s, label, args[0], args[1], args[2]
     end
     options = default_options.merge(options)
+    checked_value = "1" unless checked_value
+    unchecked_value = "0" unless checked_value
    
     @template.content_tag("div",
       @template.content_tag("label", format_label(label,:suffix => '?'), 
@@ -136,7 +138,8 @@ class HermesFormBuilder < ActionView::Helpers::FormBuilder
       label, attribute, options, html_options = label.to_s, label, args[0], args[1]
     end
     html_options = default_options.merge(html_options)
-    
+    options = {} unless options
+        
     @template.content_tag("div",
       @template.content_tag("label", format_label(label,:suffix => ':'), 
         :for => "#{object_name}_#{attribute}") + super(attribute, options, html_options),
@@ -154,6 +157,7 @@ class HermesFormBuilder < ActionView::Helpers::FormBuilder
       label, attribute, priority_zones, options, html_options = label.to_s, label, args[0], args[1], args[2]
     end
     html_options = default_options.merge(html_options)
+    options = {} unless options
     
     @template.content_tag("div",
       @template.content_tag("label", format_label(label,:suffix => ':'), 
