@@ -11,6 +11,7 @@ class Image < ActiveRecord::Base
   named_scope :landscape,  :conditions => "orientation = 'l'"
   named_scope :square,     :conditions => "orientation = 's'"
   named_scope :any
+
                                         
   has_many :slides, :order => "position"
   has_many :galleries, :through => :slides
@@ -27,6 +28,10 @@ class Image < ActiveRecord::Base
   belongs_to :catalog
   
   before_save :check_attributes
+  
+  def self.find_by_name_or_filename(name)
+    find :first, :conditions => ['assets.name = ? OR filename = ?', name, name]
+  end
   
   def self.random(current_user, orient = :any, num = 1)
     case orient

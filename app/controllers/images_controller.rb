@@ -20,7 +20,7 @@ class ImagesController < AssetsController
     else
       @images = []
     end
-    render :partial => "live_search"
+    render :partial => "live_search", :locals => {:images => @images}
   end
 
   def recent

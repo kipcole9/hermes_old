@@ -7,10 +7,11 @@ module HermesImageImport
   # => Create destination directory
   # => Convert the  image into 4 types (large, standard, slide and thumb) and save
   # => Add to the database
-  def import_images
+  def import_images(dir = nil)
     @catalog = Catalog.default
     proc = lambda {|file, folder| Image.import(file, folder) }
-    process_folder(@catalog.source, proc)
+    directory = dir ? dir : @catalog.source
+    process_folder(directory, proc)
   end
   
   def changed_images
@@ -24,16 +25,15 @@ module HermesImageImport
   
   def process_folder(folder, proc)
     if File.directory?(folder)
-      # puts "Importing images from '#{folder}'."
       Dir.entries(folder).each do |e|
-        e_path = folder + e + "/"
-        if File.directory?(e_path) 
+        e_path = folder.with_slash + e     
+        if File.directory?(e_path)
           if File.exist?(e_path + ".no_image_import") 
             puts "Directory '#{e_path}' marked to not import images"
           else
-            if File.directory?(e_path + IMAGE_SUBDIR)
-              process_one_folder(e_path) do |file, folder|
-                proc.call file, folder
+            if File.directory?(e_path.with_slash + IMAGE_SUBDIR)
+              process_one_folder(e_path) do |file, folder_name|
+                proc.call file, folder_name
               end
             else
               process_folder(e_path, proc)
@@ -55,10 +55,8 @@ module HermesImageImport
       puts "Making destination folder '#{destination}'."
       FileUtils.mkdir_p(destination)
     end
-    
-    puts "Processing images from folder '#{folder}'"
-    gallery_folder = folder + IMAGE_SUBDIR
-    Dir.glob(gallery_folder.with_slash + "**/*.jpg").each do |f|
+    gallery_folder = folder.with_slash + IMAGE_SUBDIR + "/**/*.jpg"
+    Dir.glob(gallery_folder).each do |f|
       if IMAGE_FILE_TYPES.include?(File.extname(f).downcase) && !f.match(/^\./)
         yield f, File.basename(folder)
       end

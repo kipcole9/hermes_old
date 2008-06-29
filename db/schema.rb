@@ -1,5 +1,5 @@
 # This file is auto-generated from the current state of the database. Instead of editing this file, 
-# please use the migrations feature of ActiveRecord to incrementally modify your database, and
+# please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
 # Note that this schema.rb definition is the authoritative source for your database schema. If you need
@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define() do
+ActiveRecord::Schema.define(:version => 0) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -26,12 +26,12 @@ ActiveRecord::Schema.define() do
 
   create_table "asset_statuses", :force => true do |t|
     t.string  "name",        :limit => 50
-    t.integer "description"
+    t.integer "description", :limit => 11
   end
 
   create_table "asset_views", :force => true do |t|
-    t.integer  "asset_id"
-    t.integer  "user_id"
+    t.integer  "asset_id",     :limit => 11
+    t.integer  "user_id",      :limit => 11
     t.string   "ip_address",   :limit => 50
     t.string   "browser_type"
     t.datetime "created_at"
@@ -40,13 +40,13 @@ ActiveRecord::Schema.define() do
   create_table "assets", :force => true do |t|
     t.string   "name"
     t.string   "title"
-    t.string   "description"
-    t.integer  "created_by"
+    t.text     "description"
+    t.integer  "created_by",          :limit => 11
     t.datetime "created_at"
-    t.integer  "updated_by"
+    t.integer  "updated_by",          :limit => 11
     t.datetime "updated_at"
-    t.integer  "view_count",                        :default => 0
-    t.integer  "status",              :limit => 1,  :default => 0
+    t.integer  "view_count",          :limit => 11, :default => 0
+    t.integer  "status",              :limit => 1
     t.integer  "content_rating",      :limit => 1,  :default => 5
     t.string   "sublocation"
     t.string   "location"
@@ -59,9 +59,9 @@ ActiveRecord::Schema.define() do
     t.float    "longitude"
     t.integer  "geocode_accuracy",    :limit => 2
     t.boolean  "google_geocoded",                   :default => false
-    t.boolean  "allow_comments"
+    t.integer  "allow_comments",      :limit => 1
     t.boolean  "moderate_comments"
-    t.integer  "content_id"
+    t.integer  "content_id",          :limit => 11
     t.string   "content_type"
     t.datetime "dont_publish_before"
     t.datetime "dont_publish_after"
@@ -74,8 +74,8 @@ ActiveRecord::Schema.define() do
   add_index "assets", ["name", "content_type"], :name => "index_on_name_and_content_type", :unique => true
 
   create_table "assets_categories", :id => false, :force => true do |t|
-    t.integer "asset_id"
-    t.integer "category_id"
+    t.integer "asset_id",    :limit => 11
+    t.integer "category_id", :limit => 11
   end
 
   add_index "assets_categories", ["asset_id", "category_id"], :name => "asset_id", :unique => true
@@ -85,14 +85,14 @@ ActiveRecord::Schema.define() do
   end
 
   create_table "catalogs", :force => true do |t|
-    t.string  "catalog_type",            :default => "Image"
+    t.string  "catalog_type",                          :default => "Image"
     t.string  "source"
     t.string  "directory"
     t.string  "link_as"
-    t.integer "max_image_dimension",     :default => 800
-    t.integer "max_thumbnail_dimension", :default => 160
-    t.integer "max_slide_dimension"
-    t.integer "max_display_dimension"
+    t.integer "max_image_dimension",     :limit => 11, :default => 800
+    t.integer "max_thumbnail_dimension", :limit => 11, :default => 160
+    t.integer "max_slide_dimension",     :limit => 11
+    t.integer "max_display_dimension",   :limit => 11
     t.string  "upload_directory"
   end
 
@@ -105,21 +105,21 @@ ActiveRecord::Schema.define() do
   add_index "categories", ["name"], :name => "name", :unique => true
 
   create_table "comments", :force => true do |t|
-    t.integer  "asset_id"
+    t.integer  "asset_id",         :limit => 11
     t.text     "content"
-    t.integer  "created_by"
+    t.integer  "created_by",       :limit => 11
     t.string   "created_by_email"
     t.string   "created_by_name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "status"
+    t.integer  "status",           :limit => 11
     t.boolean  "spam"
     t.float    "spaminess"
     t.string   "signature"
   end
 
   create_table "content_ratings", :force => true do |t|
-    t.integer "rating"
+    t.integer "rating",         :limit => 11
     t.string  "name",           :limit => 20
     t.string  "description"
     t.boolean "default_rating"
@@ -132,8 +132,8 @@ ActiveRecord::Schema.define() do
   add_index "countries", ["name"], :name => "name", :unique => true
 
   create_table "country_alternates", :force => true do |t|
-    t.string  "alternate_name", :default => "", :null => false
-    t.integer "country_id",                     :null => false
+    t.string  "alternate_name",               :default => "", :null => false
+    t.integer "country_id",     :limit => 11,                 :null => false
   end
 
   add_index "country_alternates", ["alternate_name"], :name => "index_alternate_country_name", :unique => true
@@ -146,8 +146,8 @@ ActiveRecord::Schema.define() do
   create_table "images", :force => true do |t|
     t.string   "filename"
     t.string   "folder"
-    t.integer  "width"
-    t.integer  "height"
+    t.integer  "width",                 :limit => 11
+    t.integer  "height",                :limit => 11
     t.string   "owner",                 :limit => 25
     t.datetime "taken_at"
     t.string   "scene"
@@ -176,7 +176,7 @@ ActiveRecord::Schema.define() do
     t.string   "flash",                 :limit => 10
     t.string   "white_balance",         :limit => 10
     t.string   "orientation",           :limit => 1
-    t.integer  "catalog_id"
+    t.integer  "catalog_id",            :limit => 11
   end
 
   add_index "images", ["filename"], :name => "index_images_on_filename", :unique => true
@@ -188,8 +188,8 @@ ActiveRecord::Schema.define() do
     t.float   "latitude_center"
     t.float   "longitude_center"
     t.integer "zoom",             :limit => 2
-    t.integer "map_type"
-    t.integer "object_id"
+    t.integer "map_type",         :limit => 11
+    t.integer "object_id",        :limit => 11
     t.string  "object_type"
     t.string  "track_filename"
     t.text    "javascript"
@@ -199,14 +199,14 @@ ActiveRecord::Schema.define() do
     t.binary  "server_url"
     t.string  "handle"
     t.binary  "secret"
-    t.integer "issued"
-    t.integer "lifetime"
+    t.integer "issued",     :limit => 11
+    t.integer "lifetime",   :limit => 11
     t.string  "assoc_type"
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
     t.string  "nonce"
-    t.integer "created"
+    t.integer "created", :limit => 11
   end
 
   create_table "open_id_authentication_settings", :force => true do |t|
@@ -215,9 +215,9 @@ ActiveRecord::Schema.define() do
   end
 
   create_table "pages", :force => true do |t|
-    t.integer  "article_id"
+    t.integer  "article_id", :limit => 11
     t.string   "name"
-    t.integer  "position"
+    t.integer  "position",   :limit => 11
     t.string   "heading"
     t.text     "content"
     t.string   "markup",     :limit => 50
@@ -226,15 +226,15 @@ ActiveRecord::Schema.define() do
   end
 
   create_table "paper_sizes", :force => true do |t|
-    t.integer "short_side_imperial"
-    t.integer "short_side_metric"
+    t.integer "short_side_imperial", :limit => 11
+    t.integer "short_side_metric",   :limit => 11
   end
 
   add_index "paper_sizes", ["short_side_metric"], :name => "key_metric_size", :unique => true
 
   create_table "publication_assets", :force => true do |t|
-    t.integer "publication_id"
-    t.integer "article_id"
+    t.integer "publication_id", :limit => 11
+    t.integer "article_id",     :limit => 11
   end
 
   add_index "publication_assets", ["publication_id", "article_id"], :name => "index_publication_articles_on_publication_id_and_article_id"
@@ -243,28 +243,28 @@ ActiveRecord::Schema.define() do
     t.integer "bit_id",                     :limit => 20
     t.string  "theme"
     t.string  "domain"
-    t.integer "articles_per_page",                        :default => 10
-    t.integer "comments_disabled_after",                  :default => 0
+    t.integer "articles_per_page",          :limit => 11, :default => 10
+    t.integer "comments_disabled_after",    :limit => 11, :default => 0
     t.boolean "default_publication",                      :default => false
-    t.integer "publish_status",                           :default => 1
+    t.integer "publish_status",             :limit => 11, :default => 1
     t.text    "publish_status_description"
     t.string  "pop_server"
-    t.integer "port_number",                              :default => 110
+    t.integer "port_number",                :limit => 11, :default => 110
     t.string  "email_userid"
     t.string  "email_password"
   end
 
   create_table "related_assets", :force => true do |t|
-    t.integer "article_id"
-    t.integer "related_article_id"
+    t.integer "article_id",         :limit => 11
+    t.integer "related_article_id", :limit => 11
     t.string  "title"
     t.string  "url"
   end
 
   create_table "slides", :force => true do |t|
-    t.integer "gallery_id"
-    t.integer "image_id"
-    t.integer "position"
+    t.integer "gallery_id", :limit => 11
+    t.integer "image_id",   :limit => 11
+    t.integer "position",   :limit => 11
   end
 
   add_index "slides", ["gallery_id", "image_id"], :name => "index_slides_on_gallery_id_and_image_id", :unique => true
@@ -278,8 +278,8 @@ ActiveRecord::Schema.define() do
   add_index "synonyms", ["name"], :name => "index_synonyms_on_category"
 
   create_table "taggings", :force => true do |t|
-    t.integer  "tag_id"
-    t.integer  "taggable_id"
+    t.integer  "tag_id",        :limit => 11
+    t.integer  "taggable_id",   :limit => 11
     t.string   "taggable_type"
     t.datetime "created_at"
   end
@@ -289,17 +289,17 @@ ActiveRecord::Schema.define() do
 
   create_table "tags", :force => true do |t|
     t.string  "name",      :limit => 50
-    t.integer "parent_id"
-    t.integer "lft"
-    t.integer "rgt"
+    t.integer "parent_id", :limit => 11
+    t.integer "lft",       :limit => 11
+    t.integer "rgt",       :limit => 11
   end
 
   add_index "tags", ["name"], :name => "index_categories_on_name"
 
   create_table "unknown_tags", :force => true do |t|
-    t.integer "position"
+    t.integer "position",     :limit => 11
     t.string  "name"
-    t.integer "tag_count",    :default => 0
+    t.integer "tag_count",    :limit => 11, :default => 0
     t.string  "add_to"
     t.string  "synonym_of"
     t.text    "found_in"
@@ -319,7 +319,7 @@ ActiveRecord::Schema.define() do
     t.string   "display_theme"
     t.string   "crypted_password",          :limit => 40
     t.string   "salt",                      :limit => 40
-    t.integer  "photo"
+    t.integer  "photo",                     :limit => 11
     t.integer  "show_photo",                :limit => 4
     t.boolean  "disabled",                                 :default => false
     t.string   "time_zone",                 :limit => 100

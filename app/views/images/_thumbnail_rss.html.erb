@@ -8,6 +8,6 @@
 	<% link_as = image.catalog.link_as %>
 	<a href="<%= url -%>" >
 		<img alt="<%= long_caption -%>"  title="<%= long_caption -%>"
-			src="<%= serve_image_url(image, :type => :thumbnail) -%>" />
+			src="<%= serve_image_url(image, :type => :thumbnail) -%>" style="float:left" />
 	</a>
 <% end %>

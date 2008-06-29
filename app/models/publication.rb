@@ -13,7 +13,7 @@ class Publication < ActiveRecord::Base
   end
   
   def self.current
-    @current_publication
+    @current_publication || default
   end
   
   def self.current=(pub)

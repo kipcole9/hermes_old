@@ -35,7 +35,7 @@ module ApplicationHelper
   end
   
   def image(name)
-    if i = Image.viewable_by(current_user).find_by_name(name)
+    if i = Image.viewable_by(current_user).find_by_name_or_filename(name)
       render :partial => "images/thumbnail.html.erb", :locals => {:image => i}
     else
       "{image '#{name}' not found}"

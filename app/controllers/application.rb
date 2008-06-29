@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def rescue_action(exception)
+  def rescue_action_in_public(exception)
     case exception.class.name
     when "ActionController::RoutingError"
       flash[:notice] = "Sorry, the page you requested is unknown."

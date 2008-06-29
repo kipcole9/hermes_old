@@ -1,8 +1,4 @@
-<ol>
-<% @assets.each_with_index do |asset, index|  %>
-	<li><%= asset.content_type %>: <%= asset.title %></li>
-	<% if index == 20 %>
-		<% break %>
-	<% end %>
+<% @assets.group_by(&:content_type).each do |asset_type, assets|  %>
+	<h4><%= asset_type.pluralize %></h4>
+	<%= render :partial => "#{asset_type.pluralize.downcase}/live_search", :locals => {:assets => assets.map(&:content)} rescue "<p>No #{asset_type.pluralize} can be displayed.</p>" %>
 <% end %>
-</ol>

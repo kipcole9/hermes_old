@@ -1,4 +1,5 @@
-<% @images.each_with_index do |image, index|  %>
+<% images = assets unless local_assigns[:assets].nil? %>
+<% images.each_with_index do |image, index|  %>
 	<div class="_thumbsmall"> 
 		<%= render :partial => "images/thumbnail", :locals => {:image => image}  %>
 	</div>

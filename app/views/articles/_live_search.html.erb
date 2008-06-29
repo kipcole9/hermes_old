@@ -1,0 +1,9 @@
+<% articles = assets unless local_assigns[:assets].nil? %>
+<ol> 
+<% articles.each_with_index do |article, index|  %>
+	<li>
+		<%= link_to article.title, article_url(article) %>
+	</li>	
+	<% break if index == 20 %>	
+<% end %>
+</ol>
