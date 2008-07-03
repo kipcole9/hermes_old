@@ -1,5 +1,5 @@
 set :application, "hermes"
-set :repository,  "git://kip-macbook.refuge.noexpectations.com.au/users/kip/development/hermes.git"
+set :repository,  "git@github.com:kipcole9/hermes.git"
 set :port, 6000
 set :password, "crater123"
 set :runner, "kip"
