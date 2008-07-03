@@ -59,7 +59,7 @@ class ImagesController < AssetsController
   end
   
   def serve
-    if splits = params[:id].match(/(.+)-(thumbnail|slide|display)$/)
+    if splits = params[:id].match(/(.+)-(thumbnail|slide|display|full)$/)
       image_name = splits[1]
       image_type = splits[2]
     else

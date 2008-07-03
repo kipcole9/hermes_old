@@ -41,9 +41,10 @@ class Article < ActiveRecord::Base
   #
   def self.add_post(user, blog_id, options = {})
     if Article.can_create?(user)
+      raise(Hermes::NoPublication, blog_id) unless publication = Publication.viewable_by(user).find_by_name(blog_id)
       article = self.new
       article.set_options(options)
-      article.publications |= Publication.viewable_by(user).find_by_name(blog_id).bit_id
+      article.publications |= publication.bit_id
       article.created_by = user
       raise Hermes::CannotSave unless article.save
       return article

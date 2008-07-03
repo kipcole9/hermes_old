@@ -13,6 +13,7 @@ module Hermes
   class CannotDeleteArticle < Error; end
   class CannotCreateArticle < Error; end
   class CannotUpdateArticle < Error; end
+  class NoPublication < Error; end
   
 end
 
