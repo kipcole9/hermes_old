@@ -1,9 +1,13 @@
 set :application, "hermes"
 set :repository,  "git@github.com:kipcole9/hermes.git"
-set :port, 6000
+#set :port, 6000
+
 set :password, "crater123"
+set :user, "kip"
 set :runner, "kip"
 
+set :run_method, :run
+set :ssh_options, { :forward_agent => true }
 
 # If you aren't deploying to /u/apps/#{application} on the target
 # servers (which is the default), you can specify the actual location
