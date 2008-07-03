@@ -2,6 +2,13 @@
 module ApplicationHelper
   include HermesHelper
   
+  def serve_image_link(image, options = {})
+    image_name = image.class.name == Image.name ? image.name : image
+    image_filename = "#{image_name}-#{options[:type].to_s}" if options[:type]
+    image_link = image_filename || image_name
+    serve_image_url(image_link)
+  end
+  
   def render_description(asset)
     return "" unless asset.description
     description = asset.description.sub(/<%= *image/,"<%= image_rss")
@@ -10,14 +17,14 @@ module ApplicationHelper
     render_to_string :inline => description
   end
   
-  def link_to_image(filename, options = {})
-    if i = Image.viewable_by(current_user).find_by_filename(filename)
-      t = options[:text] || i.title
-      link_to t, image_url(i)
-    else
-      t = options[:text] || filename
-    end
-  end
+  #def link_to_image(filename, options = {})
+  #  if i = Image.viewable_by(current_user).published.find_by_filename(filename)
+  #    t = options[:text] || i.title
+  #    link_to t, image_url(i)
+  #  else
+  #    t = options[:text] || filename
+  #  end
+  #end
   
   def format_content(content)
     auto_link(sanitize(content))

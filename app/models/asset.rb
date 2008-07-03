@@ -42,6 +42,7 @@ class Asset < ActiveRecord::Base
   
   # All scoping methods and named_scopes leverage this access policy
   def self.access_policy(current_user)
+    raise "Current_user is nil" unless current_user
     ["((assets.created_by = :user_id and assets.read_permissions & :owner_group) or (assets.read_permissions & :other_groups)) " + 
       "and (:user_content_rating >= assets.content_rating)",
       {:user_id => current_user.id,

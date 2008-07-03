@@ -4,7 +4,7 @@
 <% end %>
 	<a href="<%= image_url(image) -%>" >
 		<img alt="<%= image.caption -%>" title="<%= image.title -%>"
-			src="<%= serve_image_url(image, :type => :display) -%>" />
+			src="<%= serve_image_link(image, :type => :display) -%>" />
 	</a>
 	<h6><%= image.title %></h6>
 <% if !(ajax rescue nil) %>

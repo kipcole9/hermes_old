@@ -59,17 +59,25 @@ class ImagesController < AssetsController
   end
   
   def serve
-    if image = Image.published_in(publication).published.viewable_by(current_user).find_by_name(params[:id])
-      params[:type] ||= "slide"
-      path_name = image.send("#{params[:type]}_path_name")
+    if splits = params[:id].match(/(.+)-(thumbnail|slide|display)$/)
+      image_name = splits[1]
+      image_type = splits[2]
+    else
+      image_name = params[:id]
+      image_type = "full"
     end
+    
+    if image = Image.published_in(publication).published.viewable_by(current_user).find_by_name(image_name)
+      path_name = image.send("#{image_type}_path_name")
+    end
+    
     if path_name
       minTime = Time.rfc2822(request.env["HTTP_IF_MODIFIED_SINCE"]) rescue nil
       if minTime and image.updated_at <= minTime
         # use cached version
         head :status => 304
       else
-        headers['Content-Description'] = image.description
+        headers['Content-Description'] = params[:id]
         headers['Last-Modified'] = image.updated_at.httpdate
         expires_in 8.hours, :private => false
         
