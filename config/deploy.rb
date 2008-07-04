@@ -1,8 +1,6 @@
 set :application, "hermes"
 set :repository,  "git@github.com:kipcole9/hermes.git"
-#set :port, 6000
 
-set :password, "crater123"
 set :user, "kip"
 set :runner, "kip"
 
