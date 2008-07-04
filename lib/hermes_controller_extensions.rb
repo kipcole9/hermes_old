@@ -6,13 +6,13 @@ module HermesControllerExtensions
   end
   
   def page_title(title = nil)
-    if !title
+    unless title
       case params[:action]
       when "index"
         category = params[:category] ? "#{params[:category].capitalize} " : ""
         args = display_params ? " #{display_params}" : ""
         tags = params[:tags] ? " (tagged with #{params[:tags]})" : ""
-        heading = "#{publication.title} - #{category}#{class_name.pluralize}#{args}#{tags}"
+        heading = "#{publication.title} - #{formatted_index_heading}"
       when "show"
         heading = "#{publication.title} #{class_name}"
       else
@@ -22,10 +22,19 @@ module HermesControllerExtensions
       # heading << " with criteria '#{format_query_params}'" if format_query_params
       heading
     else
-      "#{@publication.title}: " + title
+      "#{publication.title}: " + title
     end
   end
   
+  def formatted_index_heading
+    unless @formatted_index_heading
+      category = params[:category] ? "#{params[:category].capitalize} " : ""
+      args = display_params ? " #{display_params}" : ""
+      tags = params[:tags] ? " (tagged with #{params[:tags]})" : ""
+      @formatted_index_heading = "#{category}#{class_name.pluralize}#{args}#{tags}"
+    end
+    @formatted_index_heading
+  end
 
   # Displays ActiveRecord error messages as first sidebar
   def set_error_sidebar
@@ -68,7 +77,7 @@ module HermesControllerExtensions
   # Transform parameters into SQL conditions.  Apply only for parameters that 
   # are columns in either the base table or the asset table.
   def marshall_params
-    if !@marshall_params
+    unless @marshall_params
       sql_text = []
       sql_params = []
       sql_params[0] = nil
@@ -85,7 +94,7 @@ module HermesControllerExtensions
   end
   
   def display_params
-    if !@display_params
+    unless @display_params
       sql_text = []
       params.each do |k, v|
         if is_column?(k)

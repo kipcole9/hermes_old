@@ -3,7 +3,7 @@
 	<div id="_random_image">
 <% end %>
 	<a href="<%= image_url(image) -%>" >
-		<img alt="<%= image.title -%>" title="<%= image.title -%>"
+		<img alt="<%= h(image.title) -%>" title="<%= h(image.title) -%>"
 			src="<%= serve_image_link(image, :type => :display) -%>" />
 	</a>
 	<h6><%= image.title %></h6>
