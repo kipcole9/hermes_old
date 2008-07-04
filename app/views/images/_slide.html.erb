@@ -9,7 +9,7 @@
 	<div id="image_<%= image.id -%>" class="_thumbnail" >
 		<a href="<%= url -%>" >
 			<img alt="<%= long_caption -%>" title="<%= long_caption -%>"
-				src="<%= serve_image_url(image, :type => :slide) -%>" />
+				src="<%= serve_image_link(image, :type => :slide) -%>" />
 		</a>
 		<p><%= display_caption %></p>
 	</div>
