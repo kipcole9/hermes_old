@@ -9,7 +9,7 @@ end
 
 desc "Symlink the nginx_streaming plugin into the plugins directory - used only for ngix deployment." 
 task :symlink_ngnix_streaming do 
-  run "ln -nsf #{release_path}/vendor/plugins/deployment_plugins/nginx_streaming #{release_path}/vendor/plugins/ngix_streaming" 
+  run "ln -nsf #{release_path}/vendor/deployment_plugins/nginx_streaming #{release_path}/vendor/plugins/ngix_streaming" 
 end
 
 desc "Restart mongrel_cluster" 
