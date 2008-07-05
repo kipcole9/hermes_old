@@ -18,4 +18,5 @@ javascripts:
 stylesheets: 
 - base: 
   - hermes
+- lightview:  
   - lightview
