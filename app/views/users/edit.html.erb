@@ -17,7 +17,7 @@
 	<%= form.text_field :email, :disabled => is_show?, :size => 40 %>
 	
 	<%= error_message_on(:user, :profile) %>
-	<%= form.text_area :profile, :disabled => is_show?, :size => "50x3" %>
+	<%= form.text_area :profile, :disabled => is_show?, :size => "40x5" %>
 	
 	<% if is_show? %>
 		<%= form.text_field :birthday, :disabled => is_show?, :size => 30 %>
