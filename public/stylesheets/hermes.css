@@ -567,8 +567,7 @@ div#_form select {
   	color:#ccc;
 	background: #333;
 	border: 1px solid #555;
-  	font-size/* */:/**/small;
-  	font-size: /**/small;
+  	font-size: small;
 	}
 	
 div#_form fieldset {
@@ -586,10 +585,7 @@ div#_form fieldset {
   	color:#ccc;
 	background: #333;
 	border: 1px solid #555;
-	resize: none;
-	font-family: Tahoma, Arial, Helv;
-  	font-size/* */:/**/small;
-  	font-size: /**/small;
+	font-size: small;
 	}
 	
 
