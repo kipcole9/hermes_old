@@ -10,7 +10,8 @@ body {
   letter-spacing: 0.1em;
   text-align:left;
   color:#ccc;
-  font-size: medium;
+  font-size/* */:/**/medium;
+  font-size: /**/medium;
   }
   
 a:link {
