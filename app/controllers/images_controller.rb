@@ -79,7 +79,7 @@ class ImagesController < AssetsController
       else
         headers['Content-Description'] = params[:id]
         headers['Last-Modified'] = image.updated_at.httpdate
-        expires_in 8.hours, :private => false
+        expires_in 10.years, :private => false
         
         # Mongrel dones't support x-sendfile, and thats what we use in development
         if RAILS_ENV == "production"
