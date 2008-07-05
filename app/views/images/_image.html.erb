@@ -1,6 +1,6 @@
 <!-- This partial formulates the html for an image view -->
 <div id="image_<%= image.id -%>" class="_articleImage">
-	<a href="<%= serve_image_link(image, :type => :display) -%>" class='lightview' title="<%= image.title -%>" >
+	<a href="<%= serve_image_link(image, :type => :full) -%>" class='lightview' title="<%= image.title -%>" >
 		<img alt="<%= h(image.title) -%>" title="<%= h(image.title) -%>"
 			src="<%= serve_image_link(image, :type => :display) -%>" />
 	</a>

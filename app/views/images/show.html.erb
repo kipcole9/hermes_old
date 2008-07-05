@@ -5,8 +5,7 @@
 	sidebar :asset_map if (@asset.latitude && @asset.longitude)
 %>
 <% content_for :javascripts do %>
-	<%= javascript_include_tag "scriptaculous.js" %>
-	<%= javascript_include_tag "lightview.js" %>
+	<%= javascript_include_merged :lightview %>
 <% end %>
 
 <div class="_article clearfix">

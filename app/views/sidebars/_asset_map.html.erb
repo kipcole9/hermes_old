@@ -1,4 +1,7 @@
 <% if @asset %>
+	<div id="_sidebarMap" class="_smallMap">
+	</div>
+
 	<%
 		@map = GMap.new("_sidebarMap")
 		@map.control_init(:small_map => true)
@@ -6,13 +9,12 @@
 		@map.overlay_init(GMarker.new([@asset.latitude,@asset.longitude]))
 	%>
 
-	<%= GMap.header :host => request.host, :with_vml => false %>
+	<%= GMap.header :host => request.host, :with_vml => false -%>
 	<script type="text/javascript">
 	//<![CDATA[
-	<%= @map.to_html(:no_script_tag => true) -%>
+		<%= @map.to_html(:no_script_tag => true) -%>
 	//]]>
 	</script>
+	
 
-	<div id="_sidebarMap" class="_smallMap">
-	</div>
 <% end %>	

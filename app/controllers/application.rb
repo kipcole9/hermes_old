@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   helper_method :iphone_user_agent?
   helper_method :render_to_string
   helper_method :sidebar, :sidebar_clear
+  helper_method :publication
   
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
@@ -44,7 +45,7 @@ class ApplicationController < ActionController::Base
   end
   
   def publication
-    @publication
+    @current_publication
   end
   
   # The browsers give the # of minutes that a local time needs to add to
@@ -75,18 +76,18 @@ protected
   def set_publication
     # Publications are determined by the name of the host by which we were requested
     # If there is no such publication then use the default
-    @publication = Publication.find_by_domain(request.host) || Publication.find_by_default_publication(true)
-    raise Hermes::NoPublicationFound, "Publication for '#{request.host}' not found and no default publication." unless @publication
+    @current_publication = Publication.find_by_domain(request.host) || Publication.find_by_default_publication(true)
+    raise Hermes::NoPublicationFound, "Publication for '#{request.host}' not found and no default publication." unless @current_publication
   end
   
   def save_environment
     User.current_user = logged_in? ? current_user : nil
     User.environment = request.env
-    Publication.current = @publication
+    Publication.current = publication
   end
     
   def current_layout
-    ["rss","xml","atom"].include?(params[:format]) ? nil : @publication.theme
+    ["rss","xml","atom"].include?(params[:format]) ? nil : publication.theme
   end
   
   def set_timezone

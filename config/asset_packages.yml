@@ -1,0 +1,22 @@
+--- 
+javascripts: 
+- base: 
+  - prototype
+  - effects
+  - dragdrop
+  - controls 
+  - application
+- lightview:
+  - scriptaculous    
+  - lightview
+- map:  
+  - ym4r-gm
+  - wms-gs
+- optional:  
+  - markerGroup
+  - geoRssOverlay  
+stylesheets: 
+- base: 
+  - hermes
+  - hermes_iphone
+  - lightview

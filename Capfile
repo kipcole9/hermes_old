@@ -17,7 +17,15 @@ namespace(:deploy) do
   task :restart do 
     run "/etc/init.d/mongrel_cluster restart" 
   end
+  
+  desc "Create asset packages for production" 
+  task :create_asset_packages, :roles => [:web] do
+    run <<-EOF
+      cd #{release_path} && rake RAILS_ENV=production asset:packager:build_all
+    EOF
+  end
 
+  after 'deploy:update_code', 'deploy:create_asset_packages'
   after 'deploy:update_code', 'deploy:symlink_database_yml'
   after 'deploy:update_code', 'deploy:symlink_nginx_streaming'
 end
