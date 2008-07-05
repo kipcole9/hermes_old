@@ -18,5 +18,4 @@ javascripts:
 stylesheets: 
 - base: 
   - hermes
-  - hermes_iphone
   - lightview
