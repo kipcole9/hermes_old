@@ -28,8 +28,6 @@ Rails::Initializer.run do |config|
   config.gem 'actionpack', :version => '>= 2.1'
   config.gem "hpricot", :version => '>= 0.6', :source => "http://code.whytheluckystiff.net"
   config.gem "mini_exiftool"
-  config.gem "ferret"
-  config.gem "acts_as_ferret"
 
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.

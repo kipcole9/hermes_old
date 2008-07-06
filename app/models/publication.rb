@@ -19,10 +19,6 @@ class Publication < ActiveRecord::Base
   def self.current=(pub)
     @current_publication = pub
   end
-  
-  #def moderate_comments?
-  #  self.moderate_comments == 1
-  #end
 
 private
   def set_name

@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
       flash[:notice] = "Sorry, the page you requested is unknown."
       redirect_back_or_default('/')
     else
-      redirect "/500.html"
+      redirect_to "/500.html"
     end
   end
   
