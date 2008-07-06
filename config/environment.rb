@@ -25,6 +25,11 @@ Rails::Initializer.run do |config|
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
+  config.gem 'actionpack', :version => '>= 2.1'
+  config.gem "hpricot", :version => '>= 0.6', :source => "http://code.whytheluckystiff.net"
+  config.gem "mini_exiftool"
+  config.gem "ferret"
+  config.gem "acts_as_ferret"
 
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
@@ -42,7 +47,7 @@ Rails::Initializer.run do |config|
   # Make Time.zone default to the specified zone, and make ActiveRecord store time values
   # in the database in UTC, and return them converted to the specified local zone.
   # Run `rake -D time` for a list of tasks for finding time zone names. Uncomment to use default local time.
-  config.time_zone = 'Sydney'
+  config.time_zone = 'UTC'
 
   # Your secret key for verifying cookie session data integrity.
   # If you change this key, all old sessions will become invalid!

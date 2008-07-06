@@ -58,7 +58,26 @@ class Asset < ActiveRecord::Base
   end
   
   def moderate_comments?
-    super || Publication.default.moderate_comments?
+    Publication.current.moderate_comments || attributes['moderate_comments']
+  end
+  
+  def comments_open?
+    Publication.current.allow_comments == ALLOW_COMMENTS["open"] && 
+      attributes['allow_comments'] == ALLOW_COMMENTS["open"]
+  end
+  
+  def comments_closed?
+    Publication.current.allow_comments == ALLOW_COMMENTS["closed"] || 
+      attributes['allow_comments'] == ALLOW_COMMENTS["closed"]
+  end            
+  
+  def comments_none?              
+    Publication.current.allow_comments == ALLOW_COMMENTS["none"] || 
+      attributes['comments_none'] == ALLOW_COMMENTS["none"]
+  end
+  
+  def comments_require_login?
+    Publication.current.comments_require_login || attributes['comments_require_login']
   end
   
   def can_update?(user)

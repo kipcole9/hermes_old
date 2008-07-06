@@ -13,16 +13,16 @@ class Publication < ActiveRecord::Base
   end
   
   def self.current
-    @current_publication || default
+    @current_publication || raise(Hermes::NoPublicationFound, "No current publication set in Publication class.")
   end
   
   def self.current=(pub)
     @current_publication = pub
   end
   
-  def moderate_comments?
-    self.moderate_comments == 1
-  end
+  #def moderate_comments?
+  #  self.moderate_comments == 1
+  #end
 
 private
   def set_name

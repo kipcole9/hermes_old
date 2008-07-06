@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(:version => 20080706103031) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -41,34 +41,35 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "name"
     t.string   "title"
     t.text     "description"
-    t.integer  "created_by",          :limit => 11
+    t.integer  "created_by",             :limit => 11
     t.datetime "created_at"
-    t.integer  "updated_by",          :limit => 11
+    t.integer  "updated_by",             :limit => 11
     t.datetime "updated_at"
-    t.integer  "view_count",          :limit => 11, :default => 0
-    t.integer  "status",              :limit => 1
-    t.integer  "content_rating",      :limit => 1,  :default => 5
+    t.integer  "view_count",             :limit => 11, :default => 0
+    t.integer  "status",                 :limit => 1
+    t.integer  "content_rating",         :limit => 1,  :default => 5
     t.string   "sublocation"
     t.string   "location"
     t.string   "city"
     t.string   "state"
     t.string   "country"
-    t.string   "language",            :limit => 20
+    t.string   "language",               :limit => 20
     t.float    "altitude"
     t.float    "latitude"
     t.float    "longitude"
-    t.integer  "geocode_accuracy",    :limit => 2
-    t.boolean  "google_geocoded",                   :default => false
-    t.integer  "allow_comments",      :limit => 1
+    t.integer  "geocode_accuracy",       :limit => 2
+    t.boolean  "google_geocoded",                      :default => false
+    t.integer  "allow_comments",         :limit => 1
     t.boolean  "moderate_comments"
-    t.integer  "content_id",          :limit => 11
+    t.integer  "content_id",             :limit => 11
     t.string   "content_type"
     t.datetime "dont_publish_before"
     t.datetime "dont_publish_after"
-    t.integer  "read_permissions",    :limit => 20
-    t.integer  "update_permissions",  :limit => 20
-    t.integer  "delete_permissions",  :limit => 20
-    t.integer  "publications",        :limit => 20
+    t.integer  "read_permissions",       :limit => 20
+    t.integer  "update_permissions",     :limit => 20
+    t.integer  "delete_permissions",     :limit => 20
+    t.integer  "publications",           :limit => 20
+    t.boolean  "comments_require_login",               :default => false, :null => false
   end
 
   add_index "assets", ["name", "content_type"], :name => "index_on_name_and_content_type", :unique => true

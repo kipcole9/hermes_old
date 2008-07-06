@@ -205,21 +205,6 @@ module ActiveRecord
               self.#{polymorph_name}.categories
             end
             
-            def comments_open?
-              Publication.default.allow_comments == Asset::ALLOW_COMMENTS["open"] && 
-                self.#{polymorph_name}.allow_comments == Asset::ALLOW_COMMENTS["open"]
-            end
-            
-            def comments_closed?
-              Publication.default.allow_comments == Asset::ALLOW_COMMENTS["closed"] || 
-                self.#{polymorph_name}.allow_comments == Asset::ALLOW_COMMENTS["closed"]
-            end            
-            
-            def comments_none?              
-              Publication.default.allow_comments == Asset::ALLOW_COMMENTS["none"] || 
-                self.#{polymorph_name}.allow_comments == Asset::ALLOW_COMMENTS["none"]
-            end
-            
             def content_rating_description
               self.#{polymorph_name}.content_rating_description
             end
@@ -228,6 +213,25 @@ module ActiveRecord
               self.#{polymorph_name}.status_description
             end
             
+            def moderate_comments?
+              self.#{polymorph_name}.moderate_comments?
+            end
+            
+            def comments_open?
+              self.#{polymorph_name}.comments_open?
+            end
+          
+            def comments_closed?
+              self.#{polymorph_name}.comments_closed?
+            end
+          
+            def comments_none?
+              self.#{polymorph_name}.comments_none?
+            end
+            
+            def comments_require_login?
+              self.#{polymorph_name}.comments_require_login?
+            end
           END_EVAL
         end
       end

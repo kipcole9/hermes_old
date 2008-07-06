@@ -2,7 +2,7 @@
 	sidebar_clear
 	sidebar :image_data
 	sidebar :image_gallery_list
-	sidebar :asset_map if (@asset.latitude && @asset.longitude)
+	sidebar :asset_map if @asset.mappable?
 %>
 <% content_for :javascripts do %>
 	<%= javascript_include_merged :lightview %>

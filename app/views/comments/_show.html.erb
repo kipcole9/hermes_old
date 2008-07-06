@@ -1,11 +1,11 @@
-<% if show.comments_open? || show.comments_closed? %>
+<% unless show.comments_none? %>
 	<% @comments = show.comments.published %>
 	<% if (@comments.count > 0 rescue nil) %>
 		<%= render :partial => "comments/comments", :object => @comments %>
 	<% end %>
 <% end %>
 
-<% if show.comments_open? %>
+<% if (logged_in? ? show.comments_open? : show.comments_open? && !show.comments_require_login? ) %>
 	<%= render :partial => "comments/comment_form", :object => show %>
 <% end %>
 

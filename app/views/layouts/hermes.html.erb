@@ -5,7 +5,7 @@
 	<%= stylesheet_link_merged :base %>
 	<%= stylesheet_link_merged :lightview %>
 	<%= yield :head %>
-	<title><%= page_title rescue @publication.title -%></title>
+	<title><%= page_title rescue publication.title -%></title>
 	<%= javascript_include_merged :base %>
 	<%= yield :javascripts %>
 </head>
