@@ -22,7 +22,7 @@ class AssetsController < ApplicationController
       format.html
       format.rss
       format.atom
-      format.iphone
+      # format.iphone
     end
   end
 
@@ -30,7 +30,7 @@ class AssetsController < ApplicationController
     respond_to do |format|
       format.html { render :action => :edit if !File.exist?(view_path) }
       format.xml  { render :xml => @object.to_xml }
-      format.iphone { render :layout => false }
+      # format.iphone { render :layout => false }
     end
   end
   
