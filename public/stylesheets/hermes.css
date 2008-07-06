@@ -319,7 +319,6 @@ div._comment {
 ----------------------------------------------*/
 ._thumbnailList {
 	padding: 0;
-
 	}
 
 ._thumbnail {
@@ -350,7 +349,7 @@ div._comment {
   color:#777;
   }
   
-/* For out lightbox and search results */
+/* For lightbox and search results */
 ._thumbsmallList {
 	padding-left: 0px;
 }
@@ -361,7 +360,7 @@ div._comment {
   height: 86px;
   background: #222;
   float: left;
-  margin: 2px;
+  margin: 2px 6px 2px 2px;
   padding: 2px;
   line-height: 86px;
   text-align: center;
