@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080706103031) do
+ActiveRecord::Schema.define(:version => 20080706134608) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -184,6 +184,17 @@ ActiveRecord::Schema.define(:version => 20080706103031) do
   add_index "images", ["taken_at"], :name => "index_images_on_taken_at"
   add_index "images", ["photographer"], :name => "index_images_on_photographer"
   add_index "images", ["folder"], :name => "index_images_on_folder"
+
+  create_table "logged_exceptions", :force => true do |t|
+    t.string   "exception_class"
+    t.string   "controller_name"
+    t.string   "action_name"
+    t.text     "message"
+    t.text     "backtrace"
+    t.text     "environment"
+    t.text     "request"
+    t.datetime "created_at"
+  end
 
   create_table "maps", :force => true do |t|
     t.float   "latitude_center"

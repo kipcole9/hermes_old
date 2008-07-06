@@ -48,6 +48,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :publications
   map.resources :users
 
+  map.connect "logged_exceptions/:action/:id", :controller => "logged_exceptions"
+
   map.index     ':year/:month/:day', :controller => 'articles', :action => 'date',
                 :month => nil, :day => nil,
                 :requirements => {:year => /\d{4}/, :day => /\d{1,2}/, :month => /\d{1,2}/}

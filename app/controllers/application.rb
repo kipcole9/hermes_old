@@ -17,6 +17,7 @@ class ApplicationController < ActionController::Base
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '48b39a42fb4d72f8cdda67e5e38315ff'
   
+  include ExceptionLoggable
   include AuthenticatedSystem
   include SimpleSidebar
   helper SimpleSidebarHelper  
