@@ -42,6 +42,16 @@ namespace(:web) do
     run "/etc/init.d/nginx restart"
   end
   
+  desc "Stop nginx server"
+  task :stop do
+    run "/etc/init.d/nginx stop"
+  end
+  
+  desc "Start nginx server"
+  task :start do
+    run "/etc/init.d/nginx start"
+  end
+  
   desc "Reconfigure nginx server"
   task :reconfigure do
     run "/etc/init.d/nginx reconfigure"
