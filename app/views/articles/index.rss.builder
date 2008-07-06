@@ -4,7 +4,7 @@ xml.rss "version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1" do
     xml.title page_title
     xml.link formatted_articles_url(:rss)
     xml.pubDate Asset.last_updated("Article").rfc822
-    xml.description @publication.description
+    xml.description publication.description
     @articles.each do |article|
       xml.item do
         xml.title article.title
