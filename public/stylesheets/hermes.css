@@ -15,6 +15,7 @@ body {
   color:#ccc;
   font-size: medium;
   }
+* html body { letter-spacing: 0.1em; }
   
 a:link {
   color:#9ad;
