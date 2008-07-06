@@ -24,6 +24,11 @@ class ApplicationController < ActionController::Base
   
   layout :current_layout
   
+  def unrecognized?
+    flash[:notice] = "The page \"#{request.env['PATH_INFO']}\" you requested was not found."
+    redirect_back_or_default('/')
+  end
+  
   def publication
     @current_publication
   end
