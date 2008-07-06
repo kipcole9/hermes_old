@@ -23,25 +23,14 @@ class ApplicationController < ActionController::Base
   
   layout :current_layout
   
-  rescue_from do
-    respond_to do |format|
-      format.html do
-         flash[:notice] = "Sorry, the page you requested could not be found."
-         redirect_back_or_default('/')
-      end
-      format.xml {head :status => 404}
-      format.js  {head :status => 404}
-    end
-  end
-  
   def rescue_action_in_public(exception)
     case exception.class.name
     when "ActionController::RoutingError"
       flash[:notice] = "Sorry, the page you requested is unknown."
+      redirect_back_or_default('/')
     else
-      flash[:notice] = "An internal error '#{exception}' was detected.  We have been notified."
+      redirect "/500.html"
     end
-    redirect_back_or_default('/')
   end
   
   def publication
