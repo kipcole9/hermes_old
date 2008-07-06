@@ -24,16 +24,6 @@ class ApplicationController < ActionController::Base
   
   layout :current_layout
   
-  def rescue_action_in_public(exception)
-    case exception.class.name
-    when "ActionController::RoutingError"
-      flash[:notice] = "Sorry, the page you requested is unknown."
-      redirect_back_or_default('/')
-    else
-      redirect_to "/500.html"
-    end
-  end
-  
   def publication
     @current_publication
   end
