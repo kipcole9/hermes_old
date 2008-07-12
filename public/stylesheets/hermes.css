@@ -550,7 +550,7 @@ div#_form fieldset {
 /* Content in the sidebar.  Can be multiples of these.
 -------------------------------------------------------*/
 
-#_sidebarList {
+#_sidebarList {       /* The list of sidebars */
   padding-left: 0;
   padding-top: 0;
   margin-top: 0;
@@ -558,26 +558,53 @@ div#_form fieldset {
   list-style: none;
   }
 
-._sidebarContent {
+._sidebarContent {    /* One sidebar */
   border: 1px solid #333;
   color: #999;
   padding: 4px;
   margin-bottom: 0.5em
   }
 
-/* Bullet lists */
-._sidebarContent li {
-  list-style-image: url(/images/icons/bullet_orange.png); 
-  color: #777;
+._sidebarContent ul {
+	list-style-type:none;
+	padding:0;
+	margin:0;
+	font-size:medium;
+	color: #555;
 }
-._sidebarContent li a:visited { 
-  color: #777; 
+
+._sidebarContent ul a,
+._sidebarContent ul a:visited {
+  display:block;
+  padding:1px 7px;
+  color:#555;
+  xbackground-color:#fff;
+  text-decoration:none;
 }
-._sidebarContent li a:hover { 
-  color: #777;
-} 
+
+._sidebarContent ul a:hover
+{
+	background:#666;
+	color:white;
+}
+
+._sidebarContent ul a.selected,
+._sidebarContent ul a.selected:visited,
+._sidebarContent ul a:active {
+  color:gold;
+  background-color:#333;
+  text-decoration:none;
+}
+
+._sidebarContent ul li {
+	color: #555;
+	padding:0;
+	margin:0;
+	font-size:0.9em;
+}
+ 
 ._sidebarContent h4 {
-	font-size: small;
+	font-size: 0.75em;
 	font-weight: normal;
 	margin: 0;
 	margin-top: 0.3em;

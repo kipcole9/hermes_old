@@ -2,8 +2,7 @@
 	<% gallery = gallery rescue nil %>
 	<% caption = caption rescue nil %>
 	<% url = gallery ? gallery_url(gallery) : image_url(image) %>
-	<% long_caption = (caption ? caption : image.title) %>
-	<% display_caption = long_caption.truncate(23) %>
+	<% display_caption = (caption || image.title).truncate(23) %>
 	<% description = gallery ? gallery.description : image.description %>
 	<% link_as = image.catalog.link_as %>
 	<div id="image_<%= image.id -%>" class="_thumbnail" >
@@ -11,11 +10,6 @@
 			<img alt="<%= h(image.title) -%>" title="<%= h(image.title) -%>"
 				src="<%= serve_image_link(image, :type => :slide) -%>" />
 		</a>
-		<p><%= display_caption %></p>
-	</div>
-<% else %>	
-	<div id="image_<%= image.id -%>" class="_thumbnail" >
-		<a href="<%= url -%>" >Not found</a>
 		<p><%= display_caption %></p>
 	</div>
 <% end %>	
