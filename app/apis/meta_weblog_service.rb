@@ -5,29 +5,26 @@ class MetaWeblogService < ActionWebService::Base
   web_service_api MetaWeblogAPI
 
   def newPost(blog_id, user, password, struct, publish)
-    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
-    if (article = Article.add_post(user, blog_id, post_options(struct, publish)))
-      return article.name
-    end
-    raise Hermes::CannotCreateArticle
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
+    raise(Hermes::NoPublicationFound, blog_id) unless publication = Publication.viewable_by(user).find_by_name(blog_id)
+    raise Hermes::CannotCreateArticle unless (article = Article.add_post(user, publication, post_options(struct, publish)))
+    return article.name
   end
 
   def editPost(post_id, user, pw, struct, publish)
-    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, pw))
-    if Article.update_post(user, post_id, post_options(struct, publish)) 
-      return true
-    end
-    raise Hermes::CannotUpdateArticle
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, pw))
+    raise Hermes::CannotUpdateArticle unless Article.update_post(user, post_id, post_options(struct, publish)) 
+    return true
   end
 
   def getPost(post_id, user, password)
-    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
     raise Hermes::ArticleNotFound unless (post = Article.get_post(user, post_id))
     return blogify_post(post)
   end
 
   def getCategories(id, user, password)
-    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
     categories = []
     Category.find(:all, :order => 'name').map(&:name).each do |c|
       categories << Blog::Category.new(
@@ -39,7 +36,7 @@ class MetaWeblogService < ActionWebService::Base
   end
 
   def getRecentPosts(blog_id, user, password, num)
-    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
     return blogify_posts(Article.published_in(Publication.current).published.viewable_by(user).recent(num))
   end
   
@@ -64,13 +61,12 @@ private
   
   def blogify_post(article)
     Blog::Post.new(:title => article.title, :mt_excerpt => article.description, 
-          :dateCreated => article.dont_publish_before ? article.dont_publish_before.utc.strftime(Blog::ISO8601) : nil,
-          :postid => article.name, :mt_keywords => article.tag_list.join(','), :description => article.content,
-          :mt_allow_comments => article.allow_comments)
+      :dateCreated => article.dont_publish_before ? article.dont_publish_before.utc.strftime(Blog::ISO8601) : nil,
+      :postid => article.name, :mt_keywords => article.tag_list.join(','), :description => article.content,
+      :mt_allow_comments => article.allow_comments)
   end
 
   def post_options(struct, publish)
-    # gsub(/^(.*)$/m, '<p>\1</p>') => Convert line breaks
     {:title => struct.title, :description => struct.mt_excerpt, :content => struct.description, 
       :author => struct.author, :category => struct.category, :publishDate => parse_date(struct.dateCreated), 
       :keywords => struct.mt_keywords, :allow_comments => encode_allow_comments(struct.mt_allow_comments),

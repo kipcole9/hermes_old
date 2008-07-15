@@ -26,6 +26,12 @@ class Asset < ActiveRecord::Base
                             
   validates_numericality_of :content_rating, :allow_nil => true,
                             :message => "Content_rating must be an integer"
+                            
+  @@polymorph_readers =     :comments_open?, :comments_closed?, :comments_none?, :comments_require_login?,
+                            :moderate_comments?, :status_description, :content_rating_description,
+                            :categories, :category_ids, :mappable?, :geocode, :asset_id, :comments, :tag_list
+                            
+  @@polymorph_writers =     :tag_list, :category_ids                          
   
   # Control finders that can be chained (they are really scope methods)
   # TODO DRY up this part with the one in acts_as_secure - especially the :published finder string
@@ -42,8 +48,9 @@ class Asset < ActiveRecord::Base
   
   # All scoping methods and named_scopes leverage this access policy
   def self.access_policy(current_user)
-    raise "Current_user is nil" unless current_user
-    ["((assets.created_by = :user_id and assets.read_permissions & :owner_group) or (assets.read_permissions & :other_groups)) " + 
+    raise(Hermes::NoCurrentUser, "No Current User defined") unless current_user
+    ["((assets.created_by = :user_id and assets.read_permissions & :owner_group) " +
+      "or (assets.read_permissions & :other_groups)) " + 
       "and (:user_content_rating >= assets.content_rating)",
       {:user_id => current_user.id,
       :owner_group => AssetPermission::GROUP["owner"],
@@ -57,6 +64,7 @@ class Asset < ActiveRecord::Base
         "AND (assets.status = #{Asset::STATUS["published"]})"
   end
   
+  # Comments flags
   def moderate_comments?
     Publication.current.moderate_comments || attributes['moderate_comments']
   end
@@ -80,6 +88,7 @@ class Asset < ActiveRecord::Base
     Publication.current.comments_require_login || attributes['comments_require_login']
   end
   
+  # Authorisation methods
   def can_update?(user)
     AssetPermission.can_update?(self, user)
   end
@@ -172,7 +181,7 @@ class Asset < ActiveRecord::Base
         geocode_keys << self.country if self.country
         geocode_new_string = geocode_keys.join(", ")
         if geocode_new_string != geocode_string
-          puts "Asset: Address for '#{geocode_string}' unknown, trying with '#{geocode_new_string}'"
+          logger.info "Asset: Address for '#{geocode_string}' unknown, trying with '#{geocode_new_string}'"
           results = Geocoding::get(geocode_new_string, :host => host)
           geocode_string = geocode_new_string
         end
@@ -186,10 +195,18 @@ class Asset < ActiveRecord::Base
         self.google_geocoded = true
         true
       else
-        puts "Asset: Could not geocode '#{self.name}' with '#{geocode_string}'. Result was #{results.status}"
+        logger.info "Asset: Could not geocode '#{self.name}' with '#{geocode_string}'. Result was #{results.status}"
         false
       end
     end
+  end
+  
+  def self.polymorph_readers
+    @@polymorph_readers rescue nil
+  end
+  
+  def self.polymorph_writers
+    @@polymorph_writers rescue nil
   end
 
 private

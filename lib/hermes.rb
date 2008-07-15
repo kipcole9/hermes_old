@@ -1,18 +1,25 @@
 module Hermes
   class Error < RuntimeError; end
-  class NoPublicationFound < Error; end
+  class UserNotAuthenticated < Error; end
+  class NoCurrentUser < Error; end
+    
+  class NotFound < Error; end
+  class NoPublicationFound < NotFound; end
+  class ArticleNotFound < NotFound; end
+    
   class UpdateNotPermitted < Error; end
   class CreateNotPermitted < Error; end
   class DeleteNotPermitted < Error; end
+  class CannotDeleteArticle < DeleteNotPermitted; end
+  class CannotCreateArticle < CreateNotPermitted; end
+  class CannotUpdateArticle < UpdateNotPermitted; end  
+  
   class CannotSave < Error; end
-  class UserNotAuthenticated < Error; end
-  class ArticleNotFound < Error; end
+
   class OnlyJpegSupported < Error; end
   class NoAdminUserDefined < Error; end
   class NoAnonUserDefined < Error; end
-  class CannotDeleteArticle < Error; end
-  class CannotCreateArticle < Error; end
-  class CannotUpdateArticle < Error; end
+
 end
 
 # Returns the column object for the named attribute.

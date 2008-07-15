@@ -109,13 +109,33 @@ module ActiveRecord
         # and otherwise update as if they were in this class
         def define_delegate_methods(polymorph_class_name)
           polymorph_name = polymorph_class_name.to_s.downcase
-          polymorph_class_name.content_columns.each do |attr|
+          
+          # Create delegate methods for polymorph class -> should really use only accessible attributes
+          polymorph_class_name.content_columns.map(&:name).each do |attr|
             class_eval <<-END_EVAL
-              def #{attr.name}
-                return self.#{polymorph_name}.#{attr.name}
+              def #{attr}
+                return self.#{polymorph_name}.#{attr}
               end
-              def #{attr.name}= (val)
-                self.#{polymorph_name}.#{attr.name} = val
+              def #{attr}= (val)
+                self.#{polymorph_name}.#{attr} = val
+              end
+            END_EVAL
+          end
+          
+          # Create delegate methods for other polymorphic attributes/methods
+          polymorph_class_name.polymorph_readers.each do |attr|
+            class_eval <<-END_EVAL
+              def #{attr.to_s}
+                return self.#{polymorph_name}.#{attr.to_s}
+              end
+            END_EVAL
+          end
+          
+          # and writers
+          polymorph_class_name.polymorph_writers.each do |attr|
+            class_eval <<-END_EVAL
+              def #{attr.to_s}= (val)
+                self.#{polymorph_name}.#{attr.to_s} = val
               end
             END_EVAL
           end
@@ -167,71 +187,16 @@ module ActiveRecord
             
             def to_param
               self.name
-            end
-            
-            def tag_list
-              self.#{polymorph_name}.tag_list
-            end
+            end            
             
             def tag_list=(t)
               self.#{polymorph_name}.tag_list=(t)
             end
             
-            def comments
-              self.#{polymorph_name}.comments
-            end
-            
-            def asset_id
-              self.#{polymorph_name}.id
-            end
-            
-            def geocode
-              self.#{polymorph_name}.geocode
-            end
-            
-            def mappable?
-              self.#{polymorph_name}.mappable?
-            end
-            
-            def category_ids
-              self.#{polymorph_name}.category_ids
-            end
-            
             def category_ids=(ids)
               self.#{polymorph_name}.category_ids = ids
             end
-            
-            def categories
-              self.#{polymorph_name}.categories
-            end
-            
-            def content_rating_description
-              self.#{polymorph_name}.content_rating_description
-            end
-            
-            def status_description
-              self.#{polymorph_name}.status_description
-            end
-            
-            def moderate_comments?
-              self.#{polymorph_name}.moderate_comments?
-            end
-            
-            def comments_open?
-              self.#{polymorph_name}.comments_open?
-            end
-          
-            def comments_closed?
-              self.#{polymorph_name}.comments_closed?
-            end
-          
-            def comments_none?
-              self.#{polymorph_name}.comments_none?
-            end
-            
-            def comments_require_login?
-              self.#{polymorph_name}.comments_require_login?
-            end
+
           END_EVAL
         end
       end

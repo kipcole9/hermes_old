@@ -25,8 +25,8 @@ Rails::Initializer.run do |config|
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
-  config.gem 'actionpack', :version => '>= 2.1'
   config.gem "hpricot", :version => '>= 0.6', :source => "http://code.whytheluckystiff.net"
+  config.gem "RedCloth", :version => '>= 3.301', :source => "http://code.whytheluckystiff.net"
   config.gem "mini_exiftool"
 
   # Only load the plugins named here, in the order given. By default, all plugins 

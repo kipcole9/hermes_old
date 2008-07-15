@@ -37,34 +37,25 @@ class Article < ActiveRecord::Base
   end
   
   #
-  #  Methods supporting the Movable Type and Metaweblog xmlrpc interfaces
+  #  Methods supporting the MovableType and Metaweblog xmlrpc interfaces
   #
-  def self.add_post(user, blog_id, options = {})
-    if Article.can_create?(user)
-      raise(Hermes::NoPublicationFound, blog_id) unless publication = Publication.viewable_by(user).find_by_name(blog_id)
-      article = self.new
-      article.set_options(options)
-      article.publications |= publication.bit_id
-      article.created_by = user
-      raise Hermes::CannotSave unless article.save
-      return article
-    else
-      raise Hermes::CreateNotPermitted
-    end
+  def self.add_post(user, publication, options = {})
+    raise Hermes::CreateNotPermitted unless Article.can_create?(user)
+    raise Hermes::NoPublicationFound unless publication
+    article = self.new
+    article.set_options(options)
+    article.publications |= publication.bit_id
+    article.created_by = user
+    raise Hermes::CannotSave unless article.save
+    return article
   end
   
   def self.update_post(user, article_id, options = {})
-    if article = self.get_post(user, article_id)
-      if article.can_update?(user)
-        article.set_options(options)
-        article.save!
-      else
-        raise Hermes::UpdateNotPermitted
-      end
-      return article
-    else
-      return nil
-    end
+    return nil unless (article = self.get_post(user, article_id))
+    raise Hermes::UpdateNotPermitted unless article.can_update?(user)
+    article.set_options(options)
+    article.save!
+    return article
   end
 
   def self.get_post(user, article_id)
@@ -72,16 +63,11 @@ class Article < ActiveRecord::Base
   end
   
   def self.delete_post(user, article_id)
-    if article = viewable_by(user).find_by_name(article_id)
-      if article.can_delete?(user)
-        article.status = Asset::STATUS["deleted"]
-        article.save!
-        return true
-      else
-        raise Hermes::DeleteNotPermitted
-      end
-    end
-    return nil
+    return nil unless (article = viewable_by(user).find_by_name(article_id))
+    raise Hermes::DeleteNotPermitted unless article.can_delete?(user)
+    article.status = Asset::STATUS["deleted"]
+    article.save!
+    return true
   end
 
   def set_options(options)
@@ -89,10 +75,11 @@ class Article < ActiveRecord::Base
     self.content = options[:content] || self.content
     self.description = options[:description] || self.description
     self.tag_list = options[:keywords] || self.tag_list
-    self.content = options[:more_text] ? self.content + options[:more_text] : self.content
+    self.content = options[:more_text] || self.content
     self.dont_publish_before = options[:publishDate] || self.dont_publish_before
     self.status = options[:status]
     self.allow_comments = options[:allow_comments]
+    self.markup_type = options[:convert_breaks]
   end
 
 end

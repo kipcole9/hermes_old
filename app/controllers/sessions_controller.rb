@@ -1,6 +1,7 @@
 # This controller handles the login/logout function of the site.  
 class SessionsController < ApplicationController
-  # render new.rhtml
+  ssl_required :new, :create
+  
   def new
     #authenticate_or_request_with_http_basic do |username, passwd|
     #    params[:login] = username

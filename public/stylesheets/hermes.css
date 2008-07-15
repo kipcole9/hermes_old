@@ -380,10 +380,12 @@ div._comment {
 
 ._article > ._thumbsmall_p {
 	margin-right: 6px;
+	margin-left: 0px;
 }
 
 ._article > ._thumbsmall_l {
 	margin-right: 6px;
+	margin-left: 0px;
 }
   
 .fieldWithErrors {
@@ -576,7 +578,6 @@ div#_form fieldset {
 ._sidebarContent ul a,
 ._sidebarContent ul a:visited {
   display:block;
-  padding:1px 7px;
   color:#555;
   xbackground-color:#fff;
   text-decoration:none;
@@ -601,6 +602,13 @@ div#_form fieldset {
 	padding:0;
 	margin:0;
 	font-size:0.9em;
+}
+
+._sidebarContent ul li img {
+	position: relative;
+	top: 3px;
+	height: 16px;
+	width: 16px;
 }
  
 ._sidebarContent h4 {

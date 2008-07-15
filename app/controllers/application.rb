@@ -3,6 +3,7 @@
 
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
+  include SslRequirement
   before_filter :set_publication
   before_filter :save_environment
   before_filter :adjust_format_for_iphone 

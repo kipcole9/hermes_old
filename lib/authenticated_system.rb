@@ -9,7 +9,8 @@ module AuthenticatedSystem
     # Accesses the current user from the session.  Set it to :false if login fails
     # so that future calls do not hit the database.
     def current_user
-      @current_user ||= (login_from_session || login_from_basic_auth || login_from_url || login_from_cookie || User.anonymous)
+      @current_user ||= (login_from_session || login_from_basic_auth || login_from_url || \
+                        login_from_cookie || User.anonymous)
     end
     
     # Store the given user in the session and in the User object -> used by security_system.
@@ -108,6 +109,7 @@ module AuthenticatedSystem
     # Called from #current_user.  Now, attempt to login by basic authentication information.
     def login_from_basic_auth
       username, passwd = get_auth_data
+      logger.info "Logging in from HTTP_BASIC_AUTH with user '#{username}'" if username
       self.current_user = User.authenticate(username, passwd) if username && passwd
     end
     

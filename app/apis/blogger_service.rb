@@ -33,11 +33,7 @@ class BloggerService < ActionWebService::Base
   end
   
   def deletePost(key, post_id, user, password, publish)
-    raise Hermes::UserNotAuthenticated if !(user = User.authenticate_and_set(user, password))
-    if Article.delete_post(user, post_id)
-      true
-    else
-      raise Hermes::CannotDeleteArticle
-    end
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
+    raise Hermes::CannotDeleteArticle unless Article.delete_post(user, post_id)
   end
 end

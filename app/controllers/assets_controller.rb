@@ -17,6 +17,8 @@ class AssetsController < ApplicationController
   # Proxies: implement in concrete Asset sub-class as required
   # Normally nothing is required (the correct template will get rendered)
   # and the before filter will do the retrieval
+  
+  # GET
   def index
     respond_to do |format|
       format.html
@@ -40,6 +42,7 @@ class AssetsController < ApplicationController
     end
   end
   
+  # POST
   def create
     respond_to do |format|
       format.html do
@@ -56,9 +59,12 @@ class AssetsController < ApplicationController
           render :action => :edit
         end
       end
+      format.xml do
+      end
     end
   end
     
+  # PUT
   def update
     respond_to do |format|
       format.html do
@@ -74,13 +80,15 @@ class AssetsController < ApplicationController
           render :action => "edit"
         end
       end
+      format.xml do
+      end
     end
   end
   
   # Edit just renders a form
   def edit; end
   
-  # TODO
+  # DELETE
   def destroy; end
   
   # Ajax-based search

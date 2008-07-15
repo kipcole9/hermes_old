@@ -12,16 +12,13 @@ class MovableTypeService < ActionWebService::Base
   end
   
   def setPostCategories(postid, user, password, structs)
-    raise "Not authorised" if !(user = User.authenticate(user, password))
-    if article = Article.get_post(user, postid)
-      tag_list = categorise(structs)
-      category_ids = Category.find(:all, :conditions => ["name in (?)", tag_list]).map(&:id)
-      article.category_ids = category_ids
-      article.save!
-      true
-    else
-      raise "Post '#{postid}' was not found."
-    end
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
+    raise(Hermes::ArticleNotFound, "Post '#{postid}' was not found.") unless (article = Article.get_post(user, postid))    
+    tag_list = categorise(structs)
+    category_ids = Category.find(:all, :conditions => ["name in (?)", tag_list]).map(&:id)
+    article.category_ids = category_ids
+    article.save!
+    true
   end
   
   def publishPost
@@ -35,20 +32,17 @@ class MovableTypeService < ActionWebService::Base
   end
   
   def getPostCategories(postid, user, password)
-    raise "Not authorised" if !(user = User.authenticate(user, password))
-    post_categories = []
-    if article = Article.get_post(user, postid)
-      article.categories.each do |t|
-        post_categories << Blog::PostCategory.new(:categoryName => t.name, :categoryId => t.id, :isPrimary => false)
-      end
-      return post_categories
-    else
-      raise "Post '#{postid}' was not found."
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
+    raise(Hermes::ArticleNotFound, "Post '#{postid}' was not found.") unless (article = Article.get_post(user, postid))
+    post_categories = []    
+    article.categories.each do |t|
+      post_categories << Blog::PostCategory.new(:categoryName => t.name, :categoryId => t.id, :isPrimary => false)
     end
+    return post_categories
   end
   
   def getCategoryList(blogid, user, password)
-    raise "Not authorised" if !(user = User.authenticate(user, password))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
     categories = []
     Category.find(:all, :order => 'name ASC').each do |c|
       categories << Blog::MtCategory.new(:categoryId => c.id, :categoryName => c.name)
