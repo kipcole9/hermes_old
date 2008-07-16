@@ -25,6 +25,7 @@ class AssetsController < ApplicationController
       format.rss
       format.atom
       format.iphone
+      format.xml  { render :xml => @objects.to_xml }      
     end
   end
 
@@ -171,8 +172,13 @@ private
       user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
       @object = target_obj.viewable_by(user).find_by_name_or_id(target_id)
       if !@object
-        flash[:notice] = "#{target_obj.name} '#{target_id}' not found!"
-        redirect_back_or_default('/')
+        respond_to do |format|
+          format.html do
+            flash[:notice] = "#{target_obj.name} '#{target_id}' not found!"
+            redirect_back_or_default('/')
+          end
+          format.xml {head :status => 404 }
+        end
       else
         @asset = @object.asset if target_obj.respond_to?("polymorph_class")        
       end

@@ -139,6 +139,25 @@ module ActiveRecord
               end
             END_EVAL
           end
+          
+          # define to_xml; including attributes defined for the #{polymorph_name}
+          class_eval <<-END_EVAL
+            alias_method :ar_to_xml, :to_xml
+            def to_xml(options = {})
+              default_except = [:crypted_password, :salt, :remember_token, 
+                                :remember_token_expires_at, :created_at, :updated_at]
+              polymorph_attrs = #{polymorph_class_name}.polymorph_xml_attrs                  
+                                
+              # Need to watch out - when called on an array element, options are acculumated.
+              # Thankfully options are not validated so we can use one to ensure we don't double up.                  
+              unless options[:first_loop_done] == 'yes'
+                options[:except] = (options[:except] ? options[:except] + default_except : default_except)
+                options[:methods] = (options[:methods] ? options[:methods] + polymorph_attrs : polymorph_attrs)
+                options[:first_loop_done] = 'yes'
+              end
+              ar_to_xml(options)
+            end
+          END_EVAL
         end
         
         # Instance methods to synchronise saving between the two classes
@@ -187,15 +206,11 @@ module ActiveRecord
             
             def to_param
               self.name
+            end
+            
+            def asset_id
+              self.#{polymorph_name}.id
             end            
-            
-            def tag_list=(t)
-              self.#{polymorph_name}.tag_list=(t)
-            end
-            
-            def category_ids=(ids)
-              self.#{polymorph_name}.category_ids = ids
-            end
 
           END_EVAL
         end

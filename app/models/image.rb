@@ -3,7 +3,7 @@ class Image < ActiveRecord::Base
   require 'rexml/document'
   require 'mini_exiftool'
   include HermesImageMetadataImport
-  include HermesPrintOrder
+  include ActionController::UrlWriter
   acts_as_polymorph  
   acts_as_secure
                                         
@@ -12,9 +12,9 @@ class Image < ActiveRecord::Base
   named_scope :square,     :conditions => "orientation = 's'"
   named_scope :any
 
-                                        
   has_many :slides, :order => "position"
   has_many :galleries, :through => :slides
+  belongs_to :catalog
   
   self.skip_time_zone_conversion_for_attributes = [:taken_at]
 
@@ -24,9 +24,7 @@ class Image < ActiveRecord::Base
   DISPLAY_SUFFIX    = "-display"
   TAG_CLOUD_LIMIT   = 30
   ITEM_LIMIT        = 100
-  
-  belongs_to :catalog
-  
+
   before_save :check_attributes
   
   def self.find_by_name_or_filename(name)
@@ -192,7 +190,7 @@ class Image < ActiveRecord::Base
       end
       image
     else
-      puts "Requested file #{file} does not exist - not imported."
+      logger.info "Requested Image file #{file} does not exist - not imported."
       return nil
     end
   end
@@ -233,9 +231,9 @@ class Image < ActiveRecord::Base
   end
   
   def self.import_metadata
-    puts "Importing metadata with current user #{User.current_user.full_name}"
-    find(:all).each do |i|
-       puts "Importing metadata for #{i.filename}"
+    logger.info "Importing Image metadata with current user #{User.current_user.full_name}"
+    find.all.each do |i|
+       logger.info "Importing metadata for #{i.filename}"
        i.import_metadata
        i.save!
     end
@@ -249,7 +247,7 @@ class Image < ActiveRecord::Base
   end
   
   def url
-    "image_url_constructor"
+    polymorphic_url(self)
   end
   
   def portrait?
@@ -315,7 +313,7 @@ private
   end
  
   def self.make_image_files(filename, destination_folder)
-    puts "Making catalog image files from #{filename}"
+    logger.info "Making catalog image files from #{filename}"
     destination = Catalog.default.directory + destination_folder.with_slash
     file_root = File.basename(filename, '.*')
     thumbnail_file = destination + file_root + THUMBNAIL_SUFFIX + ".jpg"

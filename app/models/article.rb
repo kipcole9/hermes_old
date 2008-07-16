@@ -1,6 +1,5 @@
 class Article < ActiveRecord::Base
   include ActionController::UrlWriter
-  include HermesModelExtensions
   acts_as_polymorph
   acts_as_secure
   has_many :pages

@@ -31,7 +31,9 @@ class Asset < ActiveRecord::Base
                             :moderate_comments?, :status_description, :content_rating_description,
                             :categories, :category_ids, :mappable?, :geocode, :asset_id, :comments, :tag_list
                             
-  @@polymorph_writers =     :tag_list, :category_ids                          
+  @@polymorph_writers =     :tag_list, :category_ids
+  
+  @@polymorph_xml_attrs =   :name, :title, :latitude, :longitude, :tag_list, :categories, :content_rating                        
   
   # Control finders that can be chained (they are really scope methods)
   # TODO DRY up this part with the one in acts_as_secure - especially the :published finder string
@@ -207,6 +209,10 @@ class Asset < ActiveRecord::Base
   
   def self.polymorph_writers
     @@polymorph_writers rescue nil
+  end
+  
+  def self.polymorph_xml_attrs
+    @@polymorph_xml_attrs rescue ni;
   end
 
 private

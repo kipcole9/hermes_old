@@ -1,5 +1,4 @@
 class Gallery < ActiveRecord::Base
-  include HermesModelExtensions
   acts_as_polymorph
   acts_as_secure
   has_many      :slides, :order => "position"
@@ -21,14 +20,6 @@ class Gallery < ActiveRecord::Base
         :order => "view_count DESC")
   end
     
-  def to_xml(options = {})
-    gallery_xml = Builder::XmlMarkup.new(:indent => 2)
-    gallery_xml.gallery(:name => self.name, :created_by => self.created_by.email) do |xml|
-      xml.gallery_of(self.gallery_of)
-      asset_xml(self, xml)
-    end
-  end
-
   def self.create_or_update_from_xml(file_xml)
     data = {}
     return(:no_metadata) unless File.exist?(file_xml)
