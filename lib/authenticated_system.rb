@@ -9,7 +9,7 @@ module AuthenticatedSystem
     # Accesses the current user from the session.  Set it to :false if login fails
     # so that future calls do not hit the database.
     def current_user
-      @current_user ||= (login_from_session || login_from_basic_auth || login_from_url || \
+      @current_user ||= (login_from_session || login_from_basic_auth || \
                         login_from_cookie || User.anonymous)
     end
     
@@ -109,16 +109,7 @@ module AuthenticatedSystem
     # Called from #current_user.  Now, attempt to login by basic authentication information.
     def login_from_basic_auth
       username, passwd = get_auth_data
-      logger.info "Logging in from HTTP_BASIC_AUTH with user '#{username}'" if username
       self.current_user = User.authenticate(username, passwd) if username && passwd
-    end
-    
-    # Check to see if the user and password are in the url (for use in rss feeds, for example)
-    def login_from_url
-      if request.url.match(/\A.*\/\/(.*):(.*)@/)
-        username, passwd = $1, $2
-        self.current_user = User.authenticate(username, passwd) if username && passwd
-      end
     end
 
     # Called from #current_user.  Finally, attempt to login by an expiring token in the cookie.

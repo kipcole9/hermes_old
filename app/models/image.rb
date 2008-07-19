@@ -25,8 +25,6 @@ class Image < ActiveRecord::Base
   TAG_CLOUD_LIMIT   = 30
   ITEM_LIMIT        = 100
 
-  before_save :check_attributes
-  
   def self.find_by_name_or_filename(name)
     find :first, :conditions => ['assets.name = ? OR filename = ?', name, name]
   end
@@ -262,13 +260,17 @@ class Image < ActiveRecord::Base
     self.orientation == "s"
   end
 
-private  
-  def check_attributes
-    make_title
-    make_name
-    calculate_orientation
-    set_catalog
+protected
+
+  def validate
+    errors.add("Filename", "was not set") unless self.filename
+    errors.add("Title", "was not set") unless make_title
+    errors.add("Image name", "could not be created") unless make_name
+    errors.add("Catalog", "could not be assigned") unless set_catalog
+    errors.add("Orientation", "was not set") unless calculate_orientation
   end
+
+private  
 
   def make_name
     # 'name' is derived from the xmp item 'title'
@@ -285,11 +287,11 @@ private
   end
   
   def make_title
-    self.title = self.title.blank? ? self.filename.remove_file_suffix.titilize : self.title
+    self.title = self.title.blank? ? self.filename.remove_file_suffix.titleize : self.title
   end
   
   def set_catalog
-    self.catalog ||= Catalog.default_catalog
+    self.catalog ||= Catalog.default
   end
   
   def set_latitude(image_exif)

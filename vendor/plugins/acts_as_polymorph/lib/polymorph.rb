@@ -1,3 +1,5 @@
+class BadPolymorphicSave < RuntimeError; end
+
 module ActiveRecord
   module Acts #:nodoc:
     module Polymorph #:nodoc:
@@ -170,16 +172,17 @@ module ActiveRecord
                 is_new = self.new_record?
                 if result = super
                   result = self.#{polymorph_name}.save(f) unless is_new
-                  self.#{polymorph_name}.errors.each {|e, m| self.errors.add(e, m)} if !result
-                else
-                  # for cases where the polymorph save is automatic
-                  self.#{polymorph_name}.errors.each {|e, m| self.errors.add(e, m)}
                 end
-                raise "Bad polymorphic save" if !result # Raise forces rollback
+                self.#{polymorph_name}.errors.each {|e, m| self.errors.add(e, m)}
+                raise BadPolymorphicSave if !result # Raise forces rollback
                 true
               end
-            rescue
+            rescue BadPolymorphicSave
               false
+            end
+            
+            def save!
+              save || raise(RecordNotSaved)
             end
             
             def destroy
@@ -191,18 +194,6 @@ module ActiveRecord
               end
             end                     
 
-            def save!
-              is_new = self.new_record?
-              puts "New record" if is_new
-              acts_as_polymorph_class.transaction do
-                puts "About to save! on main record"
-                if result = super
-                  puts "About to save! on polymorph record" unless is_new
-                  result = self.#{polymorph_name}.save! unless is_new
-                  self.#{polymorph_name}.errors.each {|e, m| self.errors.add(e, m)} if !result
-                end
-              end
-            end 
             
             def to_param
               self.name

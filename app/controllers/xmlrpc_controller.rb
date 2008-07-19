@@ -16,5 +16,4 @@ class XmlrpcController < ApplicationController
   web_service :blogger, BloggerService.new
   web_service :mt, MovableTypeService.new
   
-  
 end

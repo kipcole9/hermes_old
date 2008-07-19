@@ -1,5 +1,4 @@
 class ImagesController < AssetsController
-
   def random
     respond_to do |format|
       format.html
@@ -24,7 +23,8 @@ class ImagesController < AssetsController
   end
 
   def recent
-    @images = Image.published_in(publication).published.viewable_by(current_user).order('created_at DESC').limit(30).pager(unescape(params[:tags]), params[:page], page_size)
+    @images = Image.published_in(publication).published.viewable_by(current_user) \
+      .order('created_at DESC').limit(30).pager(unescape(params[:tags]), params[:page], page_size)
     @heading = "Recent Image Index"
     respond_to do |format|
       format.html {render :action => :index}

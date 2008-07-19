@@ -212,7 +212,7 @@ class Asset < ActiveRecord::Base
   end
   
   def self.polymorph_xml_attrs
-    @@polymorph_xml_attrs rescue ni;
+    @@polymorph_xml_attrs rescue nil
   end
 
 private
@@ -225,7 +225,7 @@ private
   end
   
   def set_name
-    self.name = self.name.blank? ? self.title.remove_file_suffix.permalink : self.name.permalink
+    self.name = (self.name.blank? ? self.title.remove_file_suffix.permalink : self.name.permalink) unless self.name.blank? && self.title.blank?
   end
   
   def set_default_created_by

@@ -19,6 +19,8 @@ module Hermes
   class OnlyJpegSupported < Error; end
   class NoAdminUserDefined < Error; end
   class NoAnonUserDefined < Error; end
+  
+  class BadPolymorphicSave < Error; end
 
 end
 

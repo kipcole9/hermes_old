@@ -45,22 +45,28 @@ class AssetsController < ApplicationController
   
   # POST
   def create
-    respond_to do |format|
-      format.html do
-        @object = asset_obj.new(params[param_name])
-        update_parent_attributes
-        before_create
-        if @object.save
-          after_create
+    @object = asset_obj.new(params[param_name])
+    update_parent_attributes
+    before_create
+    if @object.save
+      after_create
+      respond_to do |format|
+        format.html do
           flash[:notice] = "#{asset_obj.name} created successfully."
           redirect_back_or_default('/')
-        else
+        end
+        format.xml { head :status => 201, :location => polymorphic_url(@object) }
+      end
+    else  
+      respond_to do |format| 
+        format.html do
           flash[:notice] = "Could not create #{asset_obj.name}"
           set_error_sidebar
           render :action => :edit
         end
-      end
-      format.xml do
+        format.xml do
+          render :status => 422, :xml => @object.errors.to_xml
+        end
       end
     end
   end
@@ -101,6 +107,13 @@ class AssetsController < ApplicationController
       @assets = []
     end
     render :partial => "live_search"    
+  end
+  
+  # Serve the api service discovery document
+  def apis
+    respond_to do |format|
+      format.xml
+    end
   end
   
   # Generally implemented in a subclass
@@ -193,7 +206,10 @@ private
                     .order('assets.created_at DESC') \
                     .pager(unescape(params[:tags]), params[:page], page_size)  
       if @objects.blank?
-        flash[:notice] = "#{class_name}: Query '#{format_query_params}' found no items!"
+        respond_to do |format|
+          format.html { flash[:notice] = "#{class_name}: Query '#{format_query_params}' found no items!" }
+          format.xml
+        end
       end
       instance_variable_set(instance_variable_plural, @objects)
     end
