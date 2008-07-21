@@ -159,30 +159,24 @@ module ActiveRecord
         end
         
         def check_create_access
-          if self.class.can_create?(User.current_user)
-            true
-          else
-            self.errors.add("Create", "is not authorised")
-            false
-          end
+          raise Hermes::NoCurrentUser unless User.current_user
+          return true if self.class.can_create?(User.current_user)
+          self.errors.add("Create", "is not authorised")
+          false
         end
         
         def check_update_access
-          if self.can_update?(User.current_user)
-            true
-          else
-            self.errors.add("Update", "is not authorised")
-            false
-          end          
+          raise Hermes::NoCurrentUser unless User.current_user
+          return true if self.can_update?(User.current_user)
+          self.errors.add("Update", "is not authorised")
+          false        
         end
         
         def check_destroy_access
-          if self.can_delete?(User.current_user)
-            true
-          else
-            self.errors.add("Delete", "is not authorised")
-            false
-          end
+          raise Hermes::NoCurrentUser unless User.current_user
+          return true if self.can_delete?(User.current_user)
+          self.errors.add("Delete", "is not authorised")
+          false
         end
       end
     end

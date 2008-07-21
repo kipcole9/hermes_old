@@ -3,7 +3,8 @@ class Asset < ActiveRecord::Base
   belongs_to                  :content, :polymorphic => true
   belongs_to                  :created_by, :class_name => 'User', :foreign_key => "created_by" 
   belongs_to                  :updated_by, :class_name => 'User', :foreign_key => "updated_by"
-  has_many                    :comments  
+  has_many                    :comments, :dependent => :destroy
+  has_many                    :asset_views, :dependent => :destroy
   acts_as_taggable
   
   STATUS                      = AssetStatus.status_array
@@ -15,17 +16,17 @@ class Asset < ActiveRecord::Base
   
   validates_presence_of     :name 
   validates_presence_of     :created_by
-  validates_uniqueness_of   :name, :scope => :content_type, :message => 'Name already taken'
+  validates_uniqueness_of   :name, :scope => :content_type, :message => 'already taken'
   validates_numericality_of :latitude, :allow_nil => true,
                             :greater_than => -90, :less_than => 90,
-                            :message => "Must be a number between -90 and 90"
+                            :message => "must be a number between -90 and 90"
                             
   validates_numericality_of :longitude, :allow_nil => true,
                             :greater_than => -180, :less_than => 180,
-                            :message => "Must be a number between -180 and 180"
+                            :message => "must be a number between -180 and 180"
                             
   validates_numericality_of :content_rating, :allow_nil => true,
-                            :message => "Content_rating must be an integer"
+                            :message => "must be an integer"
                             
   @@polymorph_readers =     :comments_open?, :comments_closed?, :comments_none?, :comments_require_login?,
                             :moderate_comments?, :status_description, :content_rating_description,
@@ -225,7 +226,9 @@ private
   end
   
   def set_name
-    self.name = (self.name.blank? ? self.title.remove_file_suffix.permalink : self.name.permalink) unless self.name.blank? && self.title.blank?
+    if self.name.blank?
+      self.name = self.title.remove_file_suffix.permalink unless self.title.blank?
+    end
   end
   
   def set_default_created_by

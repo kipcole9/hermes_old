@@ -6,6 +6,11 @@
 	sidebar :image_random
 %>
 <% content_for :head do %>
+	<%= "<META name=\"description\" content=\"#{h publication.description}\">" %>
+	<%= "<META name=\"author\" content=\"#{h publication.created_by.full_name}\">" if publication.created_by.full_name %>
+	<%= "<META name=\"copyright\" content=\"#{h publication.copyright_notice}\">" if publication.copyright_notice %>
+	<%= "<META name=\"keywords\" content=\"#{h publication.tag_list}\">" unless publication.tag_list.blank? %>
+	<%= "<META name=\"date\" content=\"#{h Asset.maximum('updated_at').iso8601}\">" %>
 	<%= auto_discovery_link_tag(:rss, formatted_articles_url(params.remove("page").merge(:format => "rss"))) %>
 	<%= auto_discovery_link_tag(:atom, formatted_articles_url(params.remove("page").merge(:format => "atom"))) %>
 <% end %>

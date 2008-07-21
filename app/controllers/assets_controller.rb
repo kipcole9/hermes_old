@@ -217,7 +217,8 @@ private
     # Log the view. Also increment view_count.  We do it this way to avoid changing the
     # updated_at column (which we use to mean update to metadata)
     def log_show
-      AssetView.log(@asset, current_user, request.env["HTTP_USER_AGENT"], (request.remote_addr || request.remote_ip))
+      AssetView.log(publication.id, @asset, current_user, request.env["HTTP_USER_AGENT"], 
+                  (request.remote_addr || request.remote_ip))
       Asset.increment_view_count(@asset.id)
     end
     

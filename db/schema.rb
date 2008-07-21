@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080706134608) do
+ActiveRecord::Schema.define(:version => 20080721224321) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -30,11 +30,12 @@ ActiveRecord::Schema.define(:version => 20080706134608) do
   end
 
   create_table "asset_views", :force => true do |t|
-    t.integer  "asset_id",     :limit => 11
-    t.integer  "user_id",      :limit => 11
-    t.string   "ip_address",   :limit => 50
+    t.integer  "asset_id",       :limit => 11
+    t.integer  "user_id",        :limit => 11
+    t.string   "ip_address",     :limit => 50
     t.string   "browser_type"
     t.datetime "created_at"
+    t.integer  "publication_id", :limit => 11
   end
 
   create_table "assets", :force => true do |t|
@@ -70,6 +71,7 @@ ActiveRecord::Schema.define(:version => 20080706134608) do
     t.integer  "delete_permissions",     :limit => 20
     t.integer  "publications",           :limit => 20
     t.boolean  "comments_require_login",               :default => false, :null => false
+    t.string   "copyright_notice"
   end
 
   add_index "assets", ["name", "content_type"], :name => "index_on_name_and_content_type", :unique => true
@@ -155,7 +157,6 @@ ActiveRecord::Schema.define(:version => 20080706134608) do
     t.string   "subjects"
     t.string   "genre"
     t.string   "photographer"
-    t.string   "copyright_notice"
     t.string   "iso",                   :limit => 5
     t.string   "aperture",              :limit => 5
     t.string   "shutter",               :limit => 8

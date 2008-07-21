@@ -19,7 +19,7 @@ module ActiveRecord
           as_name = configuration[:as].to_s.downcase
           
           class_eval <<-END_EVAL
-            has_one :#{polymorph_name}, :as => :#{as_name}
+            has_one :#{polymorph_name}, :as => :#{as_name}, :dependent => :destroy
             
             def acts_as_polymorph_class
               ::#{self.name}
@@ -184,17 +184,7 @@ module ActiveRecord
             def save!
               save || raise(RecordNotSaved)
             end
-            
-            def destroy
-              acts_as_polymorph_class.transaction do
-                if result = super
-                  result = self.#{polymorph_name}.destroy if result
-                  self.#{polymorph_name}.errors.each {|e, m| self.errors.add(e, m)} if !result
-                end
-              end
-            end                     
-
-            
+                        
             def to_param
               self.name
             end

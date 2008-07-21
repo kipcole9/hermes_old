@@ -98,6 +98,21 @@ class Image < ActiveRecord::Base
     write_attribute(:drive_mode, dm) if dm
   end
   
+  def exposure_mode=(v)
+    puts v.inspect if v
+    if v =~ /Aperture-priority/
+      write_attribute(:exposure_mode, "Av")
+    elsif v =~ /Shutter/
+      write_attribute(:exposure_mode, "Tv")
+    elsif v =~ /Manual/
+      write_attribute(:exposure_mode, "M")
+    elsif v =~ /Program/
+      write_attribute(:exposure_mode, "P")
+    else
+      write_attribute(:exposure_mode, v)
+    end if v
+  end
+                  
   def focus_mode=(v)
     fm = FOCUS_MODE[v] if v.is_a?(Fixnum)
     fm = v if v.is_a?(String)
@@ -169,50 +184,31 @@ class Image < ActiveRecord::Base
   
   # Import an image into the Image catalog if the image has not been imported, or if has
   # been updated/edited since last import
-  def self.import(file, destination_folder)
+  def self.import(file, options = {})
     if File.exist?(file) then
       image_filename = File.basename(file)
-      if !image = find_by_filename(image_filename)
+      unless image = find_by_filename(image_filename)
         image = Image.new
         image.filename = image_filename
         image.catalog = Catalog.default
-        image.folder = destination_folder.with_slash
+        image.folder = options["folder"].with_slash
       end
-      if image.updated_at.nil? || (File.mtime(file).utc > image.updated_at.utc)
-        make_image_files(file, destination_folder) 
+      if image.updated_at.nil? || (options["file_mtime"].to_time.utc > image.updated_at.utc)
+        make_image_files(file, options["folder"]) 
         image.import_metadata
         image.geocode
-        image.save!
       else
-        # puts "Image '#{file}' already imported (and up-to-date)"
+        logger.info "Image Import: '#{file}' already imported (and up-to-date)"
       end
       image
     else
-      logger.info "Requested Image file #{file} does not exist - not imported."
+      logger.info "Image Import: Requested Image file #{file} does not exist - not imported."
       return nil
     end
   end
   
-  def self.file_changed?(file)
-    image_filename = File.basename(file)
-    if image = find_by_filename(image_filename)
-      if image.updated_at.nil? || (File.mtime(file).utc > image.updated_at.utc)
-        return true
-      end      
-    end
-    return false
-  end
-  
-  def self.file_new?(file)
-    image_filename = File.basename(file)
-    if !image = find_by_filename(image_filename)
-      return true
-    end      
-    return false
-  end
-  
   def import_metadata
-    # puts "Import metadata for '#{self.full_path_name}'"
+    logger.info "Image Import: Import metadata for '#{self.full_path_name}'"
     image_exif = MiniExiftool.new(self.full_path_name)
     MAP.each do |k, v|
       if k == :GPSLatitude
@@ -224,14 +220,10 @@ class Image < ActiveRecord::Base
       end
     end
     self.created_by = User.find_by_email(image_exif["CreatorContactInfoCiEmailWork"]) || User.current_user
-    check_attributes
-    true
   end
   
   def self.import_metadata
-    logger.info "Importing Image metadata with current user #{User.current_user.full_name}"
     find.all.each do |i|
-       logger.info "Importing metadata for #{i.filename}"
        i.import_metadata
        i.save!
     end
@@ -245,7 +237,7 @@ class Image < ActiveRecord::Base
   end
   
   def url
-    polymorphic_url(self)
+    image_url(self)
   end
   
   def portrait?
@@ -265,20 +257,11 @@ protected
   def validate
     errors.add("Filename", "was not set") unless self.filename
     errors.add("Title", "was not set") unless make_title
-    errors.add("Image name", "could not be created") unless make_name
     errors.add("Catalog", "could not be assigned") unless set_catalog
     errors.add("Orientation", "was not set") unless calculate_orientation
   end
 
 private  
-
-  def make_name
-    # 'name' is derived from the xmp item 'title'
-     self.name ||= self.title.remove_file_suffix.permalink
-     if new_record? && Asset.find(:first, :conditions => ["name = ? and content_type = ?", self.name, self.class.name])
-       self.name = self.name + "-" + self.filename.remove_file_suffix.last(4)
-     end
-  end
   
   def calculate_orientation
     if self.width && self.height
@@ -317,6 +300,7 @@ private
   def self.make_image_files(filename, destination_folder)
     logger.info "Making catalog image files from #{filename}"
     destination = Catalog.default.directory + destination_folder.with_slash
+    FileUtils.mkdir(destination) unless File.exists?(destination)
     file_root = File.basename(filename, '.*')
     thumbnail_file = destination + file_root + THUMBNAIL_SUFFIX + ".jpg"
     slide_file = destination + file_root + SLIDE_SUFFIX + ".jpg"
