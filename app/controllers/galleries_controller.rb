@@ -16,7 +16,7 @@ class GalleriesController < AssetsController
   
   def refresh_all
     Galleries.all.each {|g| g.refresh }
-    head :200
+    head :status => 200
   end
     
   def page_size

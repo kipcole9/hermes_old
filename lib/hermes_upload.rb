@@ -19,7 +19,7 @@ module HermesUpload
     params["file_mtime"] = File.mtime(filename).utc.iso8601
     uri = "#{URI}#{filename_url}"
     url = uri + "?" + url_combine(params)
-    result = RestClient.put url, File.read(filename), :content_type => Mime::Type.lookup_by_extension(:jpg)
+    result = RestClient.put url, File.read(filename), :content_type => "image/jpg"
   rescue RestClient::RequestFailed => e
     case e.http_code
     when 204
