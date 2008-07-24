@@ -42,11 +42,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :images, :member => {:serve => :get}, 
       :collection => {:recent => :get, :popular => :get, :random => :post, :roulette => :get, 
                       :live_search => :post}
-  map.resources :galleries, :collection => {:recent => :get, :popular => :get}
+  map.resources :galleries, :collection => {:recent => :get, :popular => :get, :refresh_all => :post}
   map.resources :maps, :collection => {:world => :get}
   map.resources :comments, :collection => {:delete => :delete}, 
                       :member => {:approve => :put, :spam => :put, :notspam => :put}
-  map.resources :uploads, :collection => {:image => :put}, :member => {:updated_at => :get}
+  map.resources :uploads
   map.resources :bookmarks
   map.resources :publications
   map.resources :users

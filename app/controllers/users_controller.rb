@@ -23,4 +23,10 @@ class UsersController < AssetsController
     end
   end
   
+private
+
+  def authorized?
+    current_user.is_admin?
+  end
+    
 end

@@ -28,6 +28,7 @@ namespace :hermes do
   task(:update_galleries => :environment) do
     require 'find'
     catalog = Catalog.default
+    Publication.current = Publication.default
     if catalog then
       puts "Updating Galleries from catalog."
       User.current_user = User.admin
@@ -87,10 +88,5 @@ namespace :hermes do
     include HermesKeywordsImport
     import_keywords
   end
-  
-  desc "Clear images and galleries"
-  task(:clear_images => :environment) do
-    Gallery.clear_galleries
-    Image.find(:all).each {|i| i.delete}
-  end
+
 end

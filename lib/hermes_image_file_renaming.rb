@@ -69,7 +69,7 @@ module HermesImageFileRenaming
        if File.file?(f) && file_types.include?(File.extname(f).downcase)
          extension = File.extname(f)
          basename = File.basename(f, '.*')
-         root_basename = rename_map.select {|k, v| File.basename(f, '.*').match(Regexp.new("^#{k}", true)) ? true : false }
+         root_basename = rename_map.select {|k, v| File.basename(f, '.*').match(Regexp.new("^#{k}", true)) }
          root_basename = root_basename.length > 0 ? root_basename.first.first : nil
          path = File.dirname(f)
          if rename_map[root_basename]

@@ -1,15 +1,13 @@
 class CommentsController < ApplicationController
   include HermesControllerExtensions
-  before_filter :login_required, :except => [ :create ]  
+  before_filter :login_required, :except => [ :create ]
+  before_filter :comments_open?, :only => [:create, :edit]  
   
   def create
     comment = Comment.new(params[:comment])
-    asset = comment.asset
-    comment.status = Asset::STATUS[:draft] if asset.moderate_comments?
+    comment.status = Asset::STATUS[:draft] if comment.asset.moderate_comments?
     comment.created_by = current_user if logged_in?
-    if !comment.save
-      flash[:notice] = flash_errors("Could not create comment", comment)
-    end
+    flash[:notice] = flash_errors("Could not create comment", comment) unless comment.save
     redirect_back_or_default("/")
   end
   
@@ -24,6 +22,7 @@ class CommentsController < ApplicationController
       end
     else
       flash[:notice] = "Could not delete the comment"
+      redirect_back_or_default('/')
     end
   end
   
@@ -37,6 +36,13 @@ class CommentsController < ApplicationController
   
   def nospam
     
+  end
+
+private
+
+  def comments_open?
+    return false unless asset = Asset.find(params[:asset_id])
+    return asset.comments_open?
   end
   
 end

@@ -1,4 +1,0 @@
-class PagesController < AssetsController
-
-  
-end

@@ -1,7 +1,7 @@
 class Gallery < ActiveRecord::Base
   acts_as_polymorph
   acts_as_secure
-  has_many      :slides, :order => "position"
+  has_many      :slides, :order => "position", :dependent => :destroy
   has_many      :images, :through => :slides
   before_save   :set_geocode 
   
@@ -55,12 +55,10 @@ class Gallery < ActiveRecord::Base
     retcode
   end
   
-  def self.clear_galleries
-    find(:all).each do |g|
-      g.destroy
-      g.slides.each {|s| s.destroy}
-    end
-    true
+  def refresh
+    images = Image.find_all_by_folder(self.gallery_of) if self.gallery_of
+    puts "Found #{images.size} images for gallery #{self.name}" if images
+    self.images << images if images
   end
 
 private  
