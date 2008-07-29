@@ -3,7 +3,10 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   acts_as_polymorph
   acts_as_secure
-  before_create :set_groups, :set_publication
+  before_validation_on_create     :set_name
+  before_create                   :make_activation_code  
+  before_create                   :set_groups
+  before_save                     :encrypt_password, :set_photo  
   USERS_DIR    = "Users"
   
   # The assets we created
@@ -21,7 +24,7 @@ class User < ActiveRecord::Base
   validates_length_of       :login,    :within => 3..40
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :login, :email, :case_sensitive => false
-  before_save               :encrypt_password, :set_asset_name, :set_photo
+
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
@@ -31,7 +34,7 @@ class User < ActiveRecord::Base
   
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
-    u = find_by_login(login) # need to get the salt
+    u = find :first, :conditions => ['login = ? and activated_at IS NOT NULL', login]
     u && u.authenticated?(password) ? u : nil
   end
   
@@ -78,8 +81,28 @@ class User < ActiveRecord::Base
     save(false)
   end
 
+  # Activates the user in the database.
+  def activate
+    @activated = true
+    self.activated_at = Time.now.utc
+    self.activation_code = nil
+    save(false)
+  end
+
+  def activated?
+    # the existence of an activation code means they have not activated yet
+    activation_code.nil?
+  end
+
+  # Returns true if the user has just been activated.
+  def recently_activated?
+    @activated
+  end  
+
   def full_name
-    [given_name, family_name].join(' ')
+    name = [given_name, family_name].join(' ').strip
+    name = login if name.blank?
+    name
   end
   
   def time_zone
@@ -129,7 +152,7 @@ class User < ActiveRecord::Base
   
   def self.environment=(env)
     @environment =  env
-  end
+  end  
   
 protected
   # before filter 
@@ -138,17 +161,21 @@ protected
     self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
     self.crypted_password = encrypt(password)
   end
-  
-  def set_asset_name
-    self.name = self.login
-  end
-  
+
   def password_required?
     crypted_password.blank? || !password.blank?
   end
+
+  def make_activation_code
+    self.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
+  end  
   
   def set_groups
-    self.groups ||= AssetPermission.default_user_groups
+    self.groups = (self.groups == 0 || self.groups.nil?) ? AssetPermission.default_user_groups : self.groups
+  end
+  
+  def set_name
+    self.name = self.login
   end
   
   def set_photo

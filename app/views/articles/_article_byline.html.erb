@@ -12,5 +12,8 @@
 	<% if article.can_delete?(current_user) %>
 		<% links << link_to("Delete", show_url(article), :confirm => "Are you sure?", :method => :delete) %>
 	<% end %>
+	<% if !article.include_in_index && current_user.is_admin? %>
+		<% links << "<span class='red'>Not in index</span>" %>
+	<% end %>
 	<%= links.join(" | ")%>
 </h3>

@@ -15,7 +15,13 @@ config.action_controller.perform_caching             = true
 # config.action_controller.asset_host                  = "http://assets.example.com"
 
 # Disable delivery errors, bad email addresses will be ignored
-# config.action_mailer.raise_delivery_errors = false
+config.action_mailer.raise_delivery_errors          = true
+config.action_mailer.delivery_method                :smtp
+config.action_mailer.smtp_settings                  = {
+  :address              => "smtp.com",
+  :port                 => 25,
+  :domain               => "noexpectations.com.au"
+}
 
 # Disable raising errors when mass-assigning to a protected attribute
 # config.active_record.whiny_protected_attributes = false

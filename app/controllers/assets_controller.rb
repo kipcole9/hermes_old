@@ -2,10 +2,11 @@ class AssetsController < ApplicationController
   include HermesControllerExtensions
   
   before_filter :set_time_zone
+  before_filter :sidebar_clear
   before_filter :before_retrieve
   before_filter :retrieve_parent_assets
   before_filter :retrieve_this_asset, :only => [:edit, :update, :show, :destroy]
-  before_filter :login_required, :only => [ :edit, :update, :new, :create, :destroy ]
+  before_filter :login_required, :only => [:new, :create, :edit, :show, :update, :destroy, :index]
   before_filter :retrieve_assets, :only => [:index]
   before_filter :after_retrieve
   before_filter :create_asset, :only => [:new]
@@ -24,7 +25,6 @@ class AssetsController < ApplicationController
       format.html
       format.rss
       format.atom
-      format.iphone
       format.xml  { render :xml => @objects.to_xml }      
     end
   end
@@ -33,7 +33,7 @@ class AssetsController < ApplicationController
     respond_to do |format|
       format.html { render :action => :edit if !File.exist?(view_path) }
       format.xml  { render :xml => @object.to_xml }
-      format.iphone { render :layout => false }
+      format.any  { send("show_#{params[:format]}") } if respond_to?("show_#{params[:format]}")      
     end
   end
   
@@ -45,55 +45,29 @@ class AssetsController < ApplicationController
   
   # POST
   def create
-    @object = asset_obj.new(params[param_name])
-    update_parent_attributes
-    before_create
-    if @object.save
-      after_create
-      respond_to do |format|
-        format.html do
-          flash[:notice] = "#{asset_obj.name} created successfully."
-          redirect_back_or_default('/')
-        end
-        format.xml { head :status => 201, :location => polymorphic_url(@object) }
-      end
-    else  
-      respond_to do |format| 
-        format.html do
-          flash[:notice] = "Could not create #{asset_obj.name}"
-          set_error_sidebar
-          render :action => :edit
-        end
-        format.xml do
-          render :status => 422, :xml => @object.errors.to_xml
-        end
-      end
+    respond_to do |format|
+      format.html { create_html }
+      format.xml  { create_xml  }
+      format.any  { send("create_#{params[:format]}") } if respond_to?("create_#{params[:format]}")
     end
   end
-    
+
   # PUT
   def update
+    before_update
     respond_to do |format|
-      format.html do
-        before_update
-        @object.attributes = params[param_name]
-        if @object.save
-          after_update
-          flash[:notice] = "#{asset_obj.name} updated successfully."
-          redirect_back_or_default("/")
-        else
-          # flash[:notice] = "Information could not be updated"
-          set_error_sidebar
-          render :action => "edit"
-        end
-      end
-      format.xml do
-      end
+      format.html { update_html }
+      format.xml  { update_xml  }
+      format.any  { send("update_#{params[:format]}") } if respond_to?("update_#{params[:format]}")
     end
   end
-  
-  # Edit just renders a form
-  def edit; end
+
+  # Edit just renders a form - therefore only relevant to html requests
+  def edit
+    respond_to do |format|
+      format.html
+    end
+  end
   
   # DELETE
   def destroy; end
@@ -102,6 +76,7 @@ class AssetsController < ApplicationController
   def live_search
     unless params[:tags].blank?
       @assets = Asset.published_in(publication).published.viewable_by(current_user) \
+          .included_in_index(current_user) \
           .order('assets.content_type').find_tagged_with(params[:tags])
     else
       @assets = []
@@ -125,6 +100,55 @@ class AssetsController < ApplicationController
   end
   
 protected
+  
+  def create_html    
+    @object = asset_obj.new(params[param_name])
+    update_parent_attributes
+    before_create
+    if @object.save
+      flash[:notice] = "#{asset_obj.name} created successfully."
+      redirect_back_or_default('/') if after_create(true)
+    else
+      flash[:now] = "Could not create #{asset_obj.name}"
+      set_error_sidebar
+      render :action => :edit if after_create(false)
+    end
+  end
+  
+  def create_xml
+    @object = asset_obj.new(params[param_name])
+    update_parent_attributes
+    before_create
+    if @object.save
+      after_create(true)      
+      head :status => 201, :location => polymorphic_url(@object)
+    else
+      after_create(false)
+      render :status => 422, :xml => @object.errors.to_xml
+    end
+  end
+    
+  def update_html
+    if @object.update_attributes(params[param_name])
+      after_update(true)
+      flash[:notice] = "#{asset_obj.name} updated successfully."
+      redirect_back_or_default("/")
+    else
+      set_error_sidebar
+      after_update(false)
+      render :action => "edit"
+    end
+  end
+
+  def update_xml
+    if @object.update_attributes(params[param_name])
+      after_update(true)
+      head :status => 200
+    else
+      after_update(false)
+      render :status => 422, :xml => @object.errors.to_xml
+    end         
+  end
 
   def authorized?
     case params[:action]
@@ -134,17 +158,21 @@ protected
       @object.can_delete?(current_user)
     when "new", "create"
       AssetPermission.can_create?(asset_obj.class.name, current_user)
+    when "index"
+      true  # Override in subclass as required
+    when "show"
+      true
     else
       raise "Unknown action '#{params[:action]}' found in authorized?"
     end
   end
   
   def before_retrieve; end
-  def after_retrieve; end
+  def after_retrieve(success = true); true; end
   def before_create; end
-  def after_create; end
+  def after_create(success = true); true; end
   def before_update; end
-  def after_update; end
+  def after_update(sucess = true); true; end
   
 private
     def create_asset
@@ -180,17 +208,21 @@ private
       end
     end
     
-    # Retrieve a row from 'target_obj' that has id 'target_id' and store it in instance variable 'instance_variable'
+    # Retrieve a row from 'target_obj' that has id 'target_id' and store it in instance variable
+    # 'instance_variable_singular'
     def retrieve_asset(target_obj, instance_variable, target_id)
       user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
-      @object = target_obj.viewable_by(user).find_by_name_or_id(target_id)
-      if !@object
+      if !(@object = target_obj.viewable_by(user).find_by_name_or_id(target_id))
         respond_to do |format|
           format.html do
-            flash[:notice] = "#{target_obj.name} '#{target_id}' not found!"
-            redirect_back_or_default('/')
+            page_not_found("#{target_obj.name} '#{target_id}' not found!")
           end
-          format.xml {head :status => 404 }
+          format.xml do
+            head :status => 404
+          end
+          format.any do
+            send("retrieve_this_#{params[:format]}")
+          end if respond_to?("retrieve_this_#{params[:format]}")
         end
       else
         @asset = @object.asset if target_obj.respond_to?("polymorph_class")        
@@ -202,24 +234,37 @@ private
     def retrieve_assets
       user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
       @objects = asset_obj.viewable_by(user).conditions(marshall_params) \
+                    .included_in_index(current_user) \
                     .with_category(params[:category]) \
                     .order('assets.created_at DESC') \
                     .pager(unescape(params[:tags]), params[:page], page_size)  
       if @objects.blank?
         respond_to do |format|
-          format.html { flash[:notice] = "#{class_name}: Query '#{format_query_params}' found no items!" }
-          format.xml
+          format.html { flash[:notice] = "#{class_name}: found no items!" }
+          format.xml  { head :status => 404 }
         end
       end
       instance_variable_set(instance_variable_plural, @objects)
+      true
     end
+   
     
     # Log the view. Also increment view_count.  We do it this way to avoid changing the
     # updated_at column (which we use to mean update to metadata)
     def log_show
-      AssetView.log(publication.id, @asset, current_user, request.env["HTTP_USER_AGENT"], 
-                  (request.remote_addr || request.remote_ip))
-      Asset.increment_view_count(@asset.id)
+      respond_to do |format|
+        format.html { log_asset_show }
+        format.xml  { log_asset_show }
+        format.any  {                }
+      end
+    end
+    
+    def log_asset_show
+      if @asset
+        AssetView.log(publication.id, @asset, current_user, request.env["HTTP_USER_AGENT"], 
+                    (request.remote_addr || request.remote_ip))
+        Asset.increment_view_count(@asset.attributes["id"])
+      end
     end
     
     def remember_location

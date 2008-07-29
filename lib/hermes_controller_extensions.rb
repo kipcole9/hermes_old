@@ -1,9 +1,9 @@
 module HermesControllerExtensions
   require 'cgi'
   
-  def flash_errors(heading, obj)
-    render_to_string :partial => "sidebars/error_messages", :locals => {:obj => obj, :heading => heading}
-  end
+  #def flash_errors(heading, obj)
+  #  render_to_string :partial => "sidebars/error_messages", :locals => {:obj => obj, :heading => heading}
+  #end
   
   def page_title(title = nil)
     unless title
@@ -38,8 +38,7 @@ module HermesControllerExtensions
 
   # Displays ActiveRecord error messages as first sidebar
   def set_error_sidebar
-    @current_object = instance_variable_get(instance_variable_singular)
-    if instance_variable_get(instance_variable_singular).errors.count > 0
+    if @object.errors.count > 0
       sidebar :show_error_messages , :layout => "sidebars/sidebars_error_layout"
       sidebar_move :show_error_messages, :top
     end

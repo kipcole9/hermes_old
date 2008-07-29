@@ -9,8 +9,7 @@ module AuthenticatedSystem
     # Accesses the current user from the session.  Set it to :false if login fails
     # so that future calls do not hit the database.
     def current_user
-      @current_user ||= (login_from_session || login_from_basic_auth || \
-                        login_from_cookie || User.anonymous)
+      @current_user ||= (login_from_session || login_from_basic_auth || login_from_cookie || User.anonymous)
     end
     
     # Store the given user in the session and in the User object -> used by security_system.
@@ -119,6 +118,18 @@ module AuthenticatedSystem
         user.remember_me
         cookies[:auth_token] = { :value => user.remember_token, :expires => user.remember_token_expires_at }
         self.current_user = user
+      end
+    end
+    
+    # Do something as the Admin user (which has more access by default)
+    # Use rarely.  Mainly used when we register a new user and we update the user to be
+    # 'created_by' that user.
+    def sudo
+      if block_given?
+        saved_user = self.current_user
+        self.current_user = User.admin
+        yield
+        self.current_user = saved_user
       end
     end
 

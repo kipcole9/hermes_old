@@ -7,11 +7,15 @@
 		</a>
 	<% end %>
 </div>
-<p>
-	
-<%= link_to_function image_tag("/images/slideshow.gif") do |page|
-		page << "Lightview.show('gallery_#{images.first.id}')"
-	end
-%>
+<h4>Actions:</h4>
+<ul>
+	<li>	
+		<%= link_to_function "#{image_tag("/images/icons/photo.png")} Play Slideshow" do |page|
+				page << "Lightview.show('gallery_#{images.first.id}')"
+			end
+		 %>
+	</li>
+</ul>	
+
 	
 

@@ -89,4 +89,12 @@ namespace :hermes do
     import_keywords
   end
 
+  # Clear out all images
+  desc "Delete images from database"
+  task(:delete_images => :environment) do
+    User.current_user = User.admin
+    Publication.current = Publication.default
+    Image.destroy_all
+  end
+  
 end

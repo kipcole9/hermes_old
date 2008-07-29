@@ -5,5 +5,9 @@ class ContentRating < ActiveRecord::Base
   def self.default
     return DEFAULT
   end
+  
+  def self.select_array
+    find(:all, :select => "name, rating").collect!{|c| [c.name, c.rating] }
+  end
 
 end

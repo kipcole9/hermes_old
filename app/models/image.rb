@@ -6,15 +6,17 @@ class Image < ActiveRecord::Base
   include ActionController::UrlWriter
   acts_as_polymorph  
   acts_as_secure
+  
+  before_validation_on_create     :make_title
                                         
   named_scope :portrait,   :conditions => "orientation = 'p'"
   named_scope :landscape,  :conditions => "orientation = 'l'"
   named_scope :square,     :conditions => "orientation = 's'"
   named_scope :any
 
-  has_many :slides, :order => "position"
-  has_many :galleries, :through => :slides
-  belongs_to :catalog
+  has_many    :slides, :order => "position"
+  has_many    :galleries, :through => :slides
+  belongs_to  :catalog
   
   self.skip_time_zone_conversion_for_attributes = [:taken_at]
 
@@ -99,7 +101,6 @@ class Image < ActiveRecord::Base
   end
   
   def exposure_mode=(v)
-    puts v.inspect if v
     if v =~ /Aperture-priority/
       write_attribute(:exposure_mode, "Av")
     elsif v =~ /Shutter/
@@ -253,10 +254,10 @@ class Image < ActiveRecord::Base
   end
 
 protected
-
+  
   def validate
     errors.add("Filename", "was not set") unless self.filename
-    errors.add("Title", "was not set") unless make_title
+    errors.add("Title", "was not set") unless self.title
     errors.add("Catalog", "could not be assigned") unless set_catalog
     errors.add("Orientation", "was not set") unless calculate_orientation
   end

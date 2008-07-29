@@ -2,7 +2,7 @@
 <%= render :partial => "shared/form_heading", :locals => {:asset => @gallery} %>
 <% hermes_form_for :gallery, :url => get_url(@gallery), :html => {:method => get_method, :id => "_formEdit"} do |form| %>
 	<h3>Gallery Content</h3>
-	<%= form.text_field :gallery_of, :disabled => is_show?, :size => 50 %>
+	<%= form.text_field :gallery_of, :disabled => is_show?, :size => 43 %>
 	<%= render :partial => "shared/asset_summary", :locals => {:form => form} -%>
 <% end %>
 </div>

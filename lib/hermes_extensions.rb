@@ -53,7 +53,7 @@ module HermesExtensions #:nodoc:
           TextHelperSingleton.instance.strip_tags(self)
         end
         begin
-          require_library_or_gem 'redcloth'
+          require_library_or_gem 'RedCloth'
           def textilize
             TextHelperSingleton.instance.textilize(self)
           end

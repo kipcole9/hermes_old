@@ -33,6 +33,13 @@ module ActiveRecord
           named_scope :popular,    lambda {|num| {:order => "view_count DESC", :limit => num, :include => :asset } }
           named_scope :unpopular,  lambda {|num| {:order => "created_at ASC", :limit => num, :include => :asset } }
           named_scope :recent,     lambda {|num| {:order => "created_at DESC", :limit => num, :include => :asset } }
+          named_scope :included_in_index, lambda { |user|
+            unless user.is_admin?
+              {:conditions => "assets.include_in_index = 1", :include => :asset}
+            else
+              {:conditions => "1 = 1"}
+            end
+          }
           named_scope :conditions, lambda {|where| { :conditions => where } }
           named_scope :order,      lambda {|order| { :order => order } }
           named_scope :limit,      lambda {|limit| { :limit => limit } }
@@ -50,11 +57,15 @@ module ActiveRecord
                 
                               
           def find_by_name_or_id(param)
-             find_by_name(param) || find_by_id(param)
+            if (param.is_a?(String) && param.is_integer?) || param.is_a?(Fixnum)
+              find(:first, :conditions => ["#{table_name}.id = ?", param], :include => :asset)
+            else
+              find_by_name(param)
+            end
           end
           
           def find_by_name(param)
-            find(:first, :conditions => ["name = ?",param])
+            find(:first, :conditions => ["assets.name = ?",param], :include => :asset)
           end
           
           def pager(tags, num, per_page = 10)
@@ -67,10 +78,6 @@ module ActiveRecord
           
           def page_tagged_with(tags, num, per_page = 10)
             find_tagged_with(tags, :page => {:size => per_page, :current => num})
-          end
-          
-          def can_create?(user)
-            AssetPermission.can_create?(self.class, user)
           end
 
           # Calculate the tag counts for all tags.
@@ -139,6 +146,11 @@ module ActiveRecord
                 :group      => group_by
               }.reverse_merge!(options)
             end
+            
+            def self.can_create?(user)
+              AssetPermission.can_create?(self.name, user)
+            end
+            
           END_EVAL
           
           include ActiveRecord::Acts::Secure::InstanceMethods
@@ -146,6 +158,7 @@ module ActiveRecord
       end
 
       module InstanceMethods
+        
         def can_update?(user)
           self.asset.can_update?(user)
         end
@@ -168,7 +181,7 @@ module ActiveRecord
         def check_update_access
           raise Hermes::NoCurrentUser unless User.current_user
           return true if self.can_update?(User.current_user)
-          self.errors.add("Update", "is not authorised")
+          self.errors.add("Update", "is not authorised for user #{User.current_user.login}")
           false        
         end
         

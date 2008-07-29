@@ -1,4 +1,5 @@
 class BadPolymorphicSave < RuntimeError; end
+class BadPolymorphicDestroy < RuntimeError; end
 
 module ActiveRecord
   module Acts #:nodoc:
@@ -183,6 +184,15 @@ module ActiveRecord
             
             def save!
               save || raise(RecordNotSaved)
+            end
+            
+            def destroy
+              acts_as_polymorph_class.transaction do
+                raise BadPolymorphicDestroy unless super
+              end
+              true
+            rescue BadPolymorphicDestroy
+              false
             end
                         
             def to_param

@@ -34,18 +34,19 @@ class AssetPermission < ActiveRecord::Base
   end  
 
   def self.can_update?(asset, user)
-    ((asset.created_by == user.id) && (asset.update_permissions & GROUP["owner"]) > 0) || 
+    (((asset.created_by == user) && (asset.update_permissions & GROUP["owner"]) > 0) || 
       (asset.update_permissions & non_owner_groups(user)) > 0 || 
-      user.is_admin? ? true : false
+      user.is_admin?) ? true : false
   end
 
   def self.can_create?(asset_class, user)
-    (create_permission(asset_class) & non_owner_groups(user) > 0) || user.is_admin? ? true : false
+    asset_class = asset_class.name unless asset_class.is_a?(String)
+    ((create_permission(asset_class) & non_owner_groups(user) > 0) || user.is_admin?) ? true : false
   end
   
   def self.can_delete?(asset, user)
-    ((asset.created_by == user.id) and (asset.delete_permissions & GROUP["owner"] > 0)) || 
-      (asset.delete_permissions & non_owner_groups(user) > 0) || user.is_admin? ? true : false
+    (((asset.created_by == user) and (asset.delete_permissions & GROUP["owner"] > 0)) || 
+      (asset.delete_permissions & non_owner_groups(user) > 0) || user.is_admin?) ? true : false
   end
 
   def self.is_admin?(user)

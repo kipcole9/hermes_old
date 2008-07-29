@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080721224321) do
+ActiveRecord::Schema.define(:version => 20080729020422) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(:version => 20080721224321) do
     t.integer  "publications",           :limit => 20
     t.boolean  "comments_require_login",               :default => false, :null => false
     t.string   "copyright_notice"
+    t.boolean  "include_in_index",                     :default => true
   end
 
   add_index "assets", ["name", "content_type"], :name => "index_on_name_and_content_type", :unique => true
@@ -265,6 +266,7 @@ ActiveRecord::Schema.define(:version => 20080721224321) do
     t.integer "port_number",                :limit => 11, :default => 110
     t.string  "email_userid"
     t.string  "email_password"
+    t.string  "admin_email"
   end
 
   create_table "related_assets", :force => true do |t|
@@ -340,6 +342,8 @@ ActiveRecord::Schema.define(:version => 20080721224321) do
     t.string   "identity_url"
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
+    t.string   "activation_code"
+    t.datetime "activated_at"
   end
 
   add_index "users", ["email"], :name => "index_authors_on_email", :unique => true

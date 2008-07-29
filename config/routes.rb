@@ -34,7 +34,7 @@ ActionController::Routing::Routes.draw do |map|
   map.signup '/signup', :controller => 'users', :action => 'new'
   map.login  '/login', :controller => 'sessions', :action => 'new'
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'
-  map.open_id_complete 'session', :controller => "sessions", :action => "create", :requirements => { :method => :get }
+  map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate'
    
   # Assets routes
   map.resources :articles, :collection => {:list => :get, :recent => :get, :popular => :get, :live_search => :post}
@@ -46,9 +46,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :maps, :collection => {:world => :get}
   map.resources :comments, :collection => {:delete => :delete}, 
                       :member => {:approve => :put, :spam => :put, :notspam => :put}
-  map.resources :uploads
   map.resources :bookmarks
-  map.resources :publications
+  map.resources :publications, :member => {:about => :get, :contact => :get}
   map.resources :users
 
   map.connect "logged_exceptions/:action/:id", :controller => "logged_exceptions"

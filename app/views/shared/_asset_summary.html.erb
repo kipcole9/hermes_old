@@ -1,22 +1,23 @@
 <h3>Content Summary</h3>
-<%= form.text_field :title, :disabled => is_show?, :size => 50 %>
-<%= form.text_area :description, :disabled => is_show?, :size => "50x5" %>
-<%= form.text_field :tag_list, :disabled => is_show?, :size => 40 %>
+<%= form.text_field :title, :disabled => is_show?, :size => 45 %>
+<%= form.text_area :description, :disabled => is_show?, :size => "45x5" %>
+<%= form.text_field :tag_list, :disabled => is_show?, :size => 45 %>
 
 <% if is_show? %>
 	<%= form.text_field "Content Rating", :content_rating_description,  :disabled => is_show?, :size => 8 %>
 <% else %>	
-	<%= form.select :content_rating, ContentRating.find(:all, :select => "name, rating").collect!{|c| [c.name, c.rating] } %>
+	<%= form.select :content_rating, ContentRating.select_array %>
 <% end %>
+<%= form.check_box :include_in_index, :disabled => is_show? %>
 
 <h3>Location</h3>
+<%= form.text_field :location, :disabled => is_show?, :size => 30 %>
 <%= form.text_field :city, :disabled => is_show?, :size => 30 %>
 
 <% if is_show? %>
 	<%= form.text_field :country, :disabled => is_show?, :size => 30 %>
 <% else %>
-	<%= form.select :country, Country.find(:all, :select => "name").collect!{|c| c.name}, 
-		:include_blank => true  %>
+	<%= form.select :country, Country.select_array, :include_blank => true  %>
 <% end %>
 
 <%= form.text_field :latitude, :disabled => is_show?, :size => 10 %>	

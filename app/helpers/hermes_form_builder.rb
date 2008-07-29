@@ -1,6 +1,25 @@
 class HermesFormBuilder < ActionView::Helpers::FormBuilder
-
+  DEFAULT_SUFFIX = ":"
+  
   def text_field(label, *args)
+    default_options = {:size => 71, :class => "_formText"}
+    if label.is_a?(String) then
+      label, attribute, options = label, args[0], args[1]
+      options.reverse_merge!(default_options) if options
+    else
+      # label is actually the method
+      label, attribute, options = label.to_s, label, args[0]
+      options.reverse_merge!(default_options) if options
+    end
+
+    @template.content_tag("div",
+      @template.content_tag("label", format_label(label), 
+      :for => "#{object_name}_#{attribute}") + super(attribute, options),
+      {:class => "_formField"}
+      )
+  end
+  
+  def password_field(label, *args)
     default_options = {:size => 71, :class => "_formText"}
     if label.is_a?(String) then
       label, attribute, options = label, args[0], args[1]
@@ -137,7 +156,7 @@ class HermesFormBuilder < ActionView::Helpers::FormBuilder
       # label is actually the method
       label, attribute, options, html_options = label.to_s, label, args[0], args[1]
     end
-    html_options = default_options.merge(html_options)
+    html_options = html_options ? default_options.merge(html_options) : default_options
     options = {} unless options
         
     @template.content_tag("div",
@@ -147,7 +166,7 @@ class HermesFormBuilder < ActionView::Helpers::FormBuilder
       ) 
   end
   
-  def tz_select(label, *args)
+  def time_zone_select(label, *args)
     #time_zone_select(object, method, priority_zones = nil, options = {}, html_options = {})
     default_options = {:class => "_formText"}
     if label.is_a?(String) then
@@ -156,20 +175,20 @@ class HermesFormBuilder < ActionView::Helpers::FormBuilder
       # label is actually the method
       label, attribute, priority_zones, options, html_options = label.to_s, label, args[0], args[1], args[2]
     end
-    html_options = default_options.merge(html_options)
+    html_options = html_options ? default_options.merge(html_options) : default_options
     options = {} unless options
     
     @template.content_tag("div",
       @template.content_tag("label", format_label(label,:suffix => ':'), 
         :for => "#{object_name}_#{attribute}") +
-        time_zone_select(attribute, priority_zones, options, html_options),
+        super(attribute, priority_zones, options, html_options),
         {:class => "_formField"}
       ) 
   end  
     
 private  
-  def format_label(label, *args)
-    label = label.humanize + ":"
+  def format_label(label, options = {})
+    label = label.humanize + (options[:suffix] || DEFAULT_SUFFIX)
   end
 end
 

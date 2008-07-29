@@ -14,7 +14,7 @@ class String
   end
   
   def is_integer?
-    self =~ /\A-?\d+\Z/
+    self =~ /\A-?\d+\Z/ ? true : false
   end
 
   def with_slash

@@ -28,16 +28,22 @@ class Asset < ActiveRecord::Base
   validates_numericality_of :content_rating, :allow_nil => true,
                             :message => "must be an integer"
                             
+  # Methods that will be inherited in the dependent class. Column attributed are included already.
+  # Accessors
   @@polymorph_readers =     :comments_open?, :comments_closed?, :comments_none?, :comments_require_login?,
                             :moderate_comments?, :status_description, :content_rating_description,
-                            :categories, :category_ids, :mappable?, :geocode, :asset_id, :comments, :tag_list
+                            :category_names, :category_ids, :mappable?, :geocode, :asset_id, :comments, :tag_list,
+                            :permissions, :include_in_index?
                             
-  @@polymorph_writers =     :tag_list, :category_ids
+  # Writers
+  @@polymorph_writers =     :tag_list, :category_ids, :category_names
   
-  @@polymorph_xml_attrs =   :name, :title, :latitude, :longitude, :tag_list, :categories, :content_rating                        
+  # Generated output in to_xml
+  @@polymorph_xml_attrs =   :name, :title, :latitude, :longitude, :tag_list, :category_names, :content_rating,
+                            :description, :created_at, :updated_at, :created_by_email
   
   # Control finders that can be chained (they are really scope methods)
-  # TODO DRY up this part with the one in acts_as_secure - especially the :published finder string
+  # TODO DRY up this part with the one in acts_as_secure - especially the :published scope
   named_scope :published_in, lambda {|publication| { :conditions => ["publications & ?", publication.bit_id] } }
   named_scope :order, lambda {|order| {:order => order} }
   named_scope :viewable_by, lambda { |user| 
@@ -48,13 +54,20 @@ class Asset < ActiveRecord::Base
     end
   }   
   named_scope :published, lambda { {:conditions => Asset.published_policy} }
+  named_scope :included_in_index, lambda { |user|
+    unless user.is_admin?
+      {:conditions => "include_in_index = 1"}
+    else
+      {:conditions => "1 = 1"}
+    end
+  }  
   
   # All scoping methods and named_scopes leverage this access policy
   def self.access_policy(current_user)
     raise(Hermes::NoCurrentUser, "No Current User defined") unless current_user
-    ["((assets.created_by = :user_id and assets.read_permissions & :owner_group) " +
-      "or (assets.read_permissions & :other_groups)) " + 
-      "and (:user_content_rating >= assets.content_rating)",
+    ["((assets.created_by = :user_id AND assets.read_permissions & :owner_group) " +
+      "OR (assets.read_permissions & :other_groups)) " + 
+      "AND (:user_content_rating >= assets.content_rating)",
       {:user_id => current_user.id,
       :owner_group => AssetPermission::GROUP["owner"],
       :other_groups => AssetPermission.non_owner_groups(current_user),
@@ -139,6 +152,23 @@ class Asset < ActiveRecord::Base
   
   def status_description
     STATUS.index(self.status)
+  end
+  
+  def created_by_email
+    self.created_by.email
+  end
+  
+  def created_by_email=(email)
+    self.created_by = User.find_by_email(email)
+  end
+  
+  def category_names
+    names = []
+    self.categories.map {|c| names << c.name }.join(', ')
+  end
+  
+  def category_names=(names)
+    category_ids = names.split(',').map {|n| Category.find_by_name(n.strip).attributes['id'] rescue nil }.compact
   end
   
   # Convenience method to show human readable form of permissions for an object

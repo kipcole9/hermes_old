@@ -579,7 +579,6 @@ div#_form fieldset {
 ._sidebarContent ul a:visited {
   display:block;
   color:#555;
-  xbackground-color:#fff;
   text-decoration:none;
 }
 
@@ -598,15 +597,15 @@ div#_form fieldset {
 }
 
 ._sidebarContent ul li {
-	color: #555;
+
 	padding:0;
 	margin:0;
-	font-size:0.9em;
+	font-size:0.75em;
 }
 
 ._sidebarContent ul li img {
 	position: relative;
-	top: 3px;
+	padding: 0;
 	height: 16px;
 	width: 16px;
 }
@@ -617,16 +616,12 @@ div#_form fieldset {
 	margin: 0;
 	margin-top: 0.3em;
 	margin-bottom: 0.3em;
-	padding: 0;
+	padding-left: 2px;
+	padding-right: 2px;
 }
 
 ._sidebar p {
 	margin-left: 0.5em;
-}
-
-._sidebarContent li sup {  /* better align the image bullets and the text */
-	font-size: 100%;
-	vertical-align: 25%;
 }
 
 ._sidebarContent img {
@@ -646,8 +641,6 @@ div#_form fieldset {
   
 ._sidebarError {
   border: 2px solid red;
-  /* -moz-border-radius: 5px;
-  -webkit-border-radius: 5px; */
   color: #999;
   padding: 0px;
   padding-bottom: 0.5em;
@@ -673,7 +666,7 @@ div#_form fieldset {
 	color: red;
 }
 
-/* For example, login and search 
+/* For example search 
 --------------------------------*/
 div._sidebarForm {
 	margin: 0;
@@ -681,7 +674,7 @@ div._sidebarForm {
 	}
 
 div._sidebarForm p {
-	font-size: 80%;
+	font-size: 0.75em;
 	margin: 0;
 	padding: 2px;
 }

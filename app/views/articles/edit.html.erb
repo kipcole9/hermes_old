@@ -2,7 +2,7 @@
 <%= render :partial => "shared/form_heading", :locals => {:asset => @article} %>
 <% hermes_form_for :article, :url => get_url(@article), :html => {:method => get_method, :id => "_formEdit"} do |form| %>
 	<h3>Article Content</h3>
-	<%= form.text_area :content, :disabled => is_show?, :size => "50x20" %>
+	<%= form.text_area :content, :disabled => is_show?, :size => "45x20" %>
 	<%= render :partial => "shared/asset_summary", :locals => {:form => form} -%>
 <% end %>
 </div>

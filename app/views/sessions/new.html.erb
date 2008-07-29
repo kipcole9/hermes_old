@@ -1,14 +1,30 @@
-<h2>Please enter your login credentials</h2>
-<% form_tag sessions_path do -%>
-<p><label for="login">Login:</label>
-<%= text_field_tag 'login' %></p>
+<%
+	sidebar :asset_search
+	sidebar :article_categories
+	sidebar :image_tag_cloud
+	sidebar :image_random
+%>
+<div id="_form"
+	<h2>User login</h2>
+	<% form_tag(sessions_path, :id => "_formEdit") do -%>
+		<h3>Please enter your login credentials</h3>
+	
+		<div class="_formField">
+			<label for="login">Login:</label>
+			<%= text_field_tag 'login', nil, :class => "_formText" %>
+		</div>
 
-<p><label for="password">Password:</label>
-<%= password_field_tag 'password' %></p>
+		<div class="_formField">
+			<label for="password">Password:</label>
+			<%= password_field_tag 'password', nil, :class => "_formText" %>
+		</div>
 
-<!-- Uncomment this if you want this functionality -->
-<p><label for="remember_me">Remember me:</label>
-<%= check_box_tag 'remember_me' %></p>
+		<div class="_formField">
+			<label for="remember_me">Remember me?</label>
+			<%= check_box_tag 'remember_me', nil, :class => "_formText" %>
+		</div>
 
-<p><%= submit_tag 'Log in' %></p>
-<% end -%>
+		<%= submit_tag 'Log in' %>
+	<% end -%>
+</div>	
+	

@@ -3,10 +3,10 @@
 
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
-  include SslRequirement
+
   before_filter :set_publication
   before_filter :save_environment
-  before_filter :adjust_format_for_iphone 
+  #before_filter :adjust_format_for_iphone 
   before_filter :set_timezone
   
   helper_method :iphone_user_agent?
@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '48b39a42fb4d72f8cdda67e5e38315ff'
   
+  include SslRequirement
   include ExceptionLoggable
   include AuthenticatedSystem
   include SimpleSidebar
@@ -26,21 +27,23 @@ class ApplicationController < ActionController::Base
   layout :current_layout
   
   def unrecognized?
+    page_not_found
+  end
+  
+  def page_not_found(message = "The page you requested was not found.")
     respond_to do |format|
-      format.html { 
-        flash[:notice] = "The page \"#{request.env['PATH_INFO']}\" you requested was not found."
+      format.html do 
+        flash[:notice] = message
         redirect_back_or_default('/')  
-      }      
-      format.xml  { head :status => 404 }
-      format.iphone {
-          flash[:notice] = "The page \"#{request.env['PATH_INFO']}\" you requested was not found."
-          redirect_back_or_default('/')  
-      }
+      end      
+      format.xml  do 
+        head :status => 404
+      end
     end
   end
   
   def publication
-    @current_publication
+    Publication.current
   end
   
   # The browsers give the # of minutes that a local time needs to add to
@@ -56,6 +59,10 @@ class ApplicationController < ActionController::Base
   
 protected
  
+  def ssl_required?
+    RAILS_ENV == "production" ? super : false
+  end
+
   def adjust_format_for_iphone 
     # Detect from iPhone user-agent 
     request.format = :iphone if iphone_user_agent?
@@ -71,13 +78,16 @@ protected
   def set_publication
     # Publications are determined by the name of the host by which we were requested
     # If there is no such publication then use the default
-    @current_publication = Publication.find_by_domain(request.host) || Publication.find_by_default_publication(true)
-    raise Hermes::NoPublicationFound, "Publication for '#{request.host}' not found and no default publication." unless @current_publication
+    Publication.current = Publication.find_by_domain(request.host) || Publication.find_by_default_publication(true)
+    raise Hermes::NoPublicationFound, "Publication for '#{request.host}' not found and no default publication." \
+      unless Publication.current
   end
   
   def save_environment
     User.current_user = logged_in? ? current_user : nil
     User.environment = request.env
+    User.environment["HOST"] = request.host_with_port
+    User.environment["PROTOCOL"] = request.protocol
     Publication.current = publication
   end
     

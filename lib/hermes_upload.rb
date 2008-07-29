@@ -2,10 +2,10 @@ module HermesUpload
   require 'rest_client'
   require 'cgi'
    
-  #URI = "http://kip:crater123@localhost:3000/uploads/"
-  URI = "http://kip:crater123@www.kipcole.com/uploads/"
+  URI = "http://kip:crater123@localhost:3000/"
+  #URI = "http://kip:crater123@www.kipcole.com/uploads/"
     
-  def upload(filename, folder = nil)
+  def upload_image(filename, folder = nil)
     raise "File #{filename} was not found to import" unless File.exists?(filename)
     raise "Only Jpeg image uploads supported" unless File.extname(filename) == ".jpg"
     updated_at = update_time(filename)
@@ -17,7 +17,7 @@ module HermesUpload
     filename_url = CGI.escape(File.basename(filename))
     params["folder"] = folder || File.basename(File.dirname(filename))
     params["file_mtime"] = File.mtime(filename).utc.iso8601
-    uri = "#{URI}#{filename_url}"
+    uri = "#{URI}images/#{filename_url}"
     url = uri + "?" + url_combine(params)
     result = RestClient.put url, File.read(filename), :content_type => "image/jpg"
   rescue RestClient::RequestFailed => e
@@ -33,9 +33,13 @@ module HermesUpload
   else
     puts "File #{filename} was uploaded"
   end
+  
+  def upload_gallery
+    
+  end
    
   def update_time(filename)
-    url = "#{URI}#{CGI.escape(File.basename(filename))}"
+    url = "#{URI}images/#{CGI.escape(File.basename(filename))}"
     result = RestClient.get(url)
     return result.to_time
   rescue RestClient::ResourceNotFound => e

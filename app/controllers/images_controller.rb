@@ -1,4 +1,32 @@
 class ImagesController < AssetsController
+  skip_before_filter    :verify_authenticity_token, :only => :update
+
+  def update_jpg
+    head :status => 406 unless Mime::Type.lookup(request.env['CONTENT_TYPE']) == Mime::Type.lookup_by_extension(:jpg)
+    tmp_file = "#{RAILS_ROOT}/tmp/uploads/#{collect_filename}"
+    f = File.new(tmp_file, "w")
+    f.syswrite(request.raw_post)
+    f.close
+
+    head :status => 502 unless image = Image.import(tmp_file, params)
+    is_new = image.new_record?
+    if image.save
+      is_new ? head(:status => 201, :location => image_url(image, {})) : head(:status => 204)
+    else
+      image.errors.add("Name", "is '#{image.name}'")
+      image.errors.add("Title", "is '#{image.title}'")
+      render :status => 422, :xml => image.errors.to_xml
+    end
+  end
+  
+  def show_jpg
+    if @image
+      render :status => 200, :text => @image.updated_at.utc.iso8601
+    else
+      head :status => 404
+    end
+  end
+
   def random
     respond_to do |format|
       format.html
@@ -93,4 +121,24 @@ class ImagesController < AssetsController
     end
   end
 
+protected
+  
+  def retrieve_this_jpg
+    if @object = Image.viewable_by(current_user).find_by_filename(collect_filename)
+      @image = @object
+      @asset = @image.asset
+    end
+  end
+
+  def collect_filename
+    @filename ||= CGI.unescape(File.basename("#{params[:id]}.#{params[:format]}"))
+  end  
+  
+  def authorized?
+    if params[:action] == "update"
+      @object ? @object.can_update?(current_user) : AssetPermission.can_create?("Image", current_user)
+    else
+      super
+    end
+  end
 end

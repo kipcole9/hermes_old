@@ -9,16 +9,18 @@
 		
 	<h3>Publication domain</h3>
 	<%= form.text_field :domain, :disabled => is_show?, :size => 30 %>
+	<%= form.text_field :admin_email, :disabled => is_show?, :size => 30 %>
 	<%= form.check_box :default_publication, :disabled => is_show? %>
+
 		
 	<h3>Options</h3>
-	<%= form.text_field :articles_per_page, :disabled => is_show?, :size => 20%>
+	<%= form.text_field :articles_per_page, :disabled => is_show?, :size => 5%>
 	<%= form.text_field :theme, :disabled => is_show?, :size => 20 %>
 	
 	<h3>Comments</h3>
 	<%= form.select :allow_comments, Asset::ALLOW_COMMENTS, {}, :disabled => is_show? %>
-	<%= form.check_box "Require login?", :comments_require_login, :disabled => is_show? %>
-	<%= form.check_box "Moderate?", :moderate_comments, :disabled => is_show? %>
+	<%= form.check_box "Require login", :comments_require_login, :disabled => is_show? %>
+	<%= form.check_box "Moderate", :moderate_comments, :disabled => is_show? %>
 
 	<h3>Status</h3>
 	<%= form.select "status", :publish_status, Asset::STATUS, {:size => 20}, {:disabled => is_show?} %>

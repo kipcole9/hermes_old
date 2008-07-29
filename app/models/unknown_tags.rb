@@ -4,15 +4,14 @@ include HermesImageMetadataImport
 
 class UnknownTags < ActiveRecord::Base
   def self.add(tag)
-    ut = find_by_name(tag) || new(:name => tag)
+    ut = find(:first, :conditions => ["name = ?", tag]) || new(:name => tag)
     ut.tag_count += 1
     ut.save!
   end
   
   def self.update_tags
-    unknown = find(:all, :order => "position")
     updates = 0
-    unknown.each do |u|
+    find(:all, :order => "position").each do |u|
       if u.add_to && Tag.add_child(u.add_to, u.name)
         puts "Added tag '#{u.name}' to category '#{u.add_to}'"
         u.destroy
@@ -28,8 +27,7 @@ class UnknownTags < ActiveRecord::Base
   
   def self.images_with
     unknowns = find(:all).map(&:name)
-    images = Image.find(:all)
-    images.each do |i|
+    Image.find(:all).each do |i|
       tags = TagList.from(MiniExiftool.new(i.full_path_name).subject)
       tags.each do |t|
         if unknowns.include?(t)

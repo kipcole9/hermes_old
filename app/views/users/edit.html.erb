@@ -1,75 +1,47 @@
 <div id="_form">
-
-<h2><%= params[:action].capitalize %> profile</h2>
-
-<% hermes_form_for :user, :url => user_url, :html => {:method => :put, :id => "_formEdit", :multipart => true } do |form| %>
+<%= render :partial => "shared/form_heading", :locals => {:asset => @user} %>
+<% hermes_form_for :user, :url => get_url(@user), :html => {:method => get_method, :id => "_formEdit"} do |form| %>
 	<h3>Name and profile</h3>
-	<%= error_message_on(:user, :login) %>
 	<%= form.text_field :login, :disabled => is_show?, :size => 20 %>
-
-	<%= error_message_on(:user, :given_name) %>
 	<%= form.text_field :given_name, :disabled => is_show?, :size => 40 %>
-	
-	<%= error_message_on(:user, :family_name) %>
 	<%= form.text_field :family_name, :disabled => is_show?, :size => 40 %>	
-
-	<%= error_message_on(:user, :email) %>
 	<%= form.text_field :email, :disabled => is_show?, :size => 40 %>
-	
-	<%= error_message_on(:user, :profile) %>
 	<%= form.text_area :profile, :disabled => is_show?, :size => "40x5" %>
 	
 	<% if is_show? %>
 		<%= form.text_field :birthday, :disabled => is_show?, :size => 30 %>
 	<% else %>
-		<%= error_message_on(:user, :birthday) %>
-		<%= form.date_select :birthday, :disabled => is_show?  %>
+		<%= form.date_select :birthday, :include_blank => true  %>
 	<% end %>
 	
 	<h3>Public preferences</h3>
-	<%= error_message_on(:user, :photo) %>
     <%= form.file_field :photo, :disabled => is_show?, :size => 50 %>	
-	
-	<%= error_message_on(:user, :show_profile) %>
 	<%= form.check_box :show_profile, :disabled => is_show? %>
-	
-	<%= error_message_on(:user, :show_photo) %>
     <%= form.check_box :show_photo, :disabled => is_show? %>
 	
 	<h3>Content rating (information you can see)</h3>
-	<%= error_message_on(:user, :content_rating) %>
 	<%= form.select(:content_rating, ContentRating.find(:all).collect {|p| [ p.name, p.rating ] }, :disabled => is_show?) %>
 	
 	<h3>Location</h3>
-	<%= error_message_on(:user, :city) %>
 	<%= form.text_field :city, :disabled => is_show?, :size => 30 %>
 	
 	<% if is_show? %>
 		<%= form.text_field :country, :disabled => is_show?, :size => 30 %>
 	<% else %>
-		<%= error_message_on(:user, :country) %>
-		<%= form.select :country, Country.find(:all, :select => "name").collect!{|c| c.name}, 
-			:include_blank => true, :disabled => is_show?  %>
+		<%= form.select :country, Country.select_array, :include_blank => true, :disabled => is_show?  %>
 	<% end %>
-	
-	<%= error_message_on(:user, :latitude) %>
+
 	<%= form.text_field :latitude, :disabled => is_show?, :size => 10 %>	
-	
-	<%= error_message_on(:user, :longitude) %>
 	<%= form.text_field :longitude, :disabled => is_show?, :size => 10 %>
 	
 	<h3>Site preferences</h3>
-	<%= error_message_on(:user, :display_theme) %>
 	<%= form.text_field :display_theme, :disabled => is_show?, :size => 20 %>
-		
+
 	<% if is_show? %>
 		<%= form.text_field :time_zone, :disabled => is_show?, :size => 20 %>
 	<% else %>
-		<%= error_message_on(:user, :time_zone) %>
-		<%= form.tz_select :time_zone, :disabled => is_show?, :size => 20 %>
+		<%= form.time_zone_select :time_zone, nil, :disabled => is_show?, :size => 20 %>
 	<% end %>
-
-	<%= error_message_on(:user, :locale) %>
 	<%= form.text_field :locale, :disabled => is_show?, :size => 20 %>
 	
 	<p>

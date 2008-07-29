@@ -3,12 +3,12 @@ class ArticlesController < AssetsController
 
   def retrieve_assets
     @articles = Article.published_in(publication).published.viewable_by(current_user) \
+        .included_in_index(current_user) \
         .conditions(marshall_params).order('assets.created_at DESC') \
         .with_category(params[:category]) \
         .pager(unescape(params[:tags]), params[:page])  
     if @articles.size == 0
-      flash[:notice] = "Requested articles not found!"
-      redirect_back_or_default('/')
+      page_not_found("Requested articles not found!")
     end
   end
   

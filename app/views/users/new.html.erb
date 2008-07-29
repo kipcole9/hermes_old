@@ -1,16 +1,20 @@
-<%= error_messages_for :user %>
-<% form_for :user, :url => users_path do |f| -%>
-<p><label for="login">Login</label><br/>
-<%= f.text_field :login %></p>
-
-<p><label for="email">Email</label><br/>
-<%= f.text_field :email %></p>
-
-<p><label for="password">Password</label><br/>
-<%= f.password_field :password %></p>
-
-<p><label for="password_confirmation">Confirm Password</label><br/>
-<%= f.password_field :password_confirmation %></p>
-
-<p><%= submit_tag 'Sign up' %></p>
-<% end -%>
+<%
+	sidebar :asset_search
+	sidebar :article_categories
+	sidebar :image_tag_cloud
+	sidebar :image_random
+%>
+<div id="_form">
+	<h2>User Registration</h2>
+	<% hermes_form_for :user, :url => users_url(), :html => {:method => :post, :id => "_formEdit"} do |form| %>
+		<h3>Please enter your registration details</h3>
+		<%= form.text_field :login, :disabled => is_show?, :size => 10 %>
+		<%= form.text_field :given_name, :disabled => is_show?, :size => 30 %>
+		<%= form.text_field :family_name, :disabled => is_show?, :size => 30 %>	
+		<%= form.text_field :email, :disabled => is_show?, :size => 40 %>
+		<%= form.password_field :password, :disabled => is_show?, :size => 20 %>
+		<%= form.password_field :password_confirmation, :disabled => is_show?, :size => 20 %>
+		<%= submit_tag 'Sign up' %>
+	<% end -%>
+</div>	
+	
