@@ -2,7 +2,7 @@ class UserMailer < ActionMailer::Base
   def signup_notification(user)
     setup_email(user)
     @subject    += 'Please activate your new account'
-    @body[:url]  = activate_url(:host => User.environment["HOST"],
+    @body[:url]  = activate_url(:host => User.environment["HOST_WITH_PORT"],
                                 :protocol => User.environment["PROTOCOL"],
                                 :activation_code => user.activation_code)
   end
@@ -10,7 +10,7 @@ class UserMailer < ActionMailer::Base
   def activation(user)
     setup_email(user)
     @subject    += 'Your account has been activated!'
-    @body[:url]  = root_url(:host => User.environment["HOST"],
+    @body[:url]  = root_url(:host => User.environment["HOST_WITH_PORT"],
                             :protocol => User.environment["PROTOCOL"])
   end
   

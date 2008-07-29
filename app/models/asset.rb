@@ -10,7 +10,7 @@ class Asset < ActiveRecord::Base
   STATUS                      = AssetStatus.status_array
   ALLOW_COMMENTS              = {"none" => 0, "open" => 1, "closed" => 2}
   
-  before_save                 :set_permissions, :set_allow_comments, :set_publication, :set_status
+  before_save                 :set_permissions, :set_allow_comments, :set_publication, :set_status, :geocode
   before_validation_on_create :set_name
   before_validation_on_create :set_default_created_by
   
@@ -186,7 +186,7 @@ class Asset < ActiveRecord::Base
   end
 
   # Geocode the asset, using Google geocoding
-  def geocode(host = "localhost")
+  def geocode(host = nil)
     #  Data accuracy, as returned by google geocoder - think this relates to zoom level too for google maps
     #  0	 Unknown location. (Since 2.59)
     #  1	 Country level accuracy. (Since 2.59)
@@ -198,6 +198,7 @@ class Asset < ActiveRecord::Base
     #  7	 Intersection level accuracy. (Since 2.59)
     #  8	 Address level accuracy. (Since 2.59
     
+    host ||= User.environment["HOST"]
     if self.country && (self.latitude.blank? || self.longitude.blank? || self.google_geocoded?)
       geocode_keys = []
       geocode_keys << self.location if self.location
@@ -221,7 +222,7 @@ class Asset < ActiveRecord::Base
       end
       
       if results.status == Geocoding::GEO_SUCCESS
-        # puts "Geocoded '#{geocode_string}' with accuracy #{results[0].accuracy}"
+        # logger.info "Geocoded '#{geocode_string}' with accuracy #{results[0].accuracy}"
         self.latitude = results[0].latitude
         self.longitude = results[0].longitude
         self.geocode_accuracy = results[0].accuracy

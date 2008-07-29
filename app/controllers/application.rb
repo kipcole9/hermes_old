@@ -86,7 +86,8 @@ protected
   def save_environment
     User.current_user = logged_in? ? current_user : nil
     User.environment = request.env
-    User.environment["HOST"] = request.host_with_port
+    User.environment["HOST_WITH_PORT"] = request.host_with_port
+    User.environment["HOST"] = request.host
     User.environment["PROTOCOL"] = request.protocol
     Publication.current = publication
   end
