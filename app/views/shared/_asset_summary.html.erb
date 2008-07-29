@@ -13,6 +13,7 @@
 <h3>Location</h3>
 <%= form.text_field :location, :disabled => is_show?, :size => 30 %>
 <%= form.text_field :city, :disabled => is_show?, :size => 30 %>
+<%= form.text_field "State/Province", :state, :disabled => is_show?, :size => 30 %>
 
 <% if is_show? %>
 	<%= form.text_field :country, :disabled => is_show?, :size => 30 %>
