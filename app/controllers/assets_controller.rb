@@ -262,7 +262,7 @@ private
     def log_asset_show
       if @asset
         AssetView.log(publication.id, @asset, current_user, request.env["HTTP_USER_AGENT"], 
-                    (request.remote_addr || request.remote_ip))
+                    (request.env["HTTP_X_REAL_IP"] || request.remote_addr || request.remote_ip))
         Asset.increment_view_count(@asset.attributes["id"])
       end
     end
