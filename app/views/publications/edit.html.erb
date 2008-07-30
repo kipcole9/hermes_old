@@ -38,6 +38,10 @@
 	<%= form.text_field :email_userid, :disabled => is_show?, :size => 20 %>
 	<%= form.text_field :email_password, :disabled => is_show?, :size => 30 %>
 
+	<h3>Google Information</h3>
+	<%= form.text_field :google_analytics, :disabled => is_show?, :size => 30 %>
+	<%= form.text_field :google_maps, :disabled => is_show?, :size => 30 %>
+		
 	<h3>Location</h3>
 	<%= form.text_field :location, :disabled => is_show?, :size => 30 %>
 	<%= form.text_field :city, :disabled => is_show?, :size => 30 %>

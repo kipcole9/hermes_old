@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080729020422) do
+ActiveRecord::Schema.define(:version => 20080730121019) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(:version => 20080729020422) do
     t.integer  "asset_id",       :limit => 11
     t.integer  "user_id",        :limit => 11
     t.string   "ip_address",     :limit => 50
-    t.string   "browser_type"
+    t.string   "user_agent"
     t.datetime "created_at"
     t.integer  "publication_id", :limit => 11
   end
@@ -267,6 +267,8 @@ ActiveRecord::Schema.define(:version => 20080729020422) do
     t.string  "email_userid"
     t.string  "email_password"
     t.string  "admin_email"
+    t.string  "google_analytics"
+    t.string  "google_maps"
   end
 
   create_table "related_assets", :force => true do |t|
