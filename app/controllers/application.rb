@@ -26,10 +26,11 @@ class ApplicationController < ActionController::Base
   
   layout :current_layout
   
+  # Rescue from incompatible with AWS (weird cookie overflow exception)
   def rescue_action_in_public(exception)
     case(exception)
     when ::ActionController::UnknownAction
-      unrecognized?
+      page_not_found
     else
       super
     end
@@ -39,6 +40,11 @@ class ApplicationController < ActionController::Base
     page_not_found
   end
   
+  # Page not found handling depends on (a) format requested and (b) the user agent
+  # As a user experience we prefer to redirect to the site home page if there was a 
+  # page not found.  For xml requests we send only the 404 status.
+  # Googlebots need a real 404 for pages not found, and hence we detect googlebots 
+  # and respond appropriately.
   def page_not_found(message = "The page you requested was not found.")
     if request.env["HTTP_USER_AGENT"].match(/google/i)
       render :file => "#{RAILS_ROOT}/public/404.html", :status => 404
