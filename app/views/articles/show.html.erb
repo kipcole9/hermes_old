@@ -6,10 +6,10 @@
 %>
 
 <% content_for :head do %>
-	<%= "<META name=\"description\" content=\"#{h @article.description}\">" %>
-	<%= "<META name=\"author\" content=\"#{h @article.created_by.full_name}\">" if @article.created_by.full_name %>
-	<%= "<META name=\"keywords\" content=\"#{h @article.tag_list}\">" unless @article.tag_list.blank? %>
-	<%= "<META name=\"date\" content=\"#{h @article.updated_at.iso8601}\">" %>
+	<%= "<meta name=\"description\" content=\"#{h @article.description}\" />" %>
+	<%= "<meta name=\"author\" content=\"#{h @article.created_by.full_name}\" />" if @article.created_by.full_name %>
+	<%= "<meta name=\"keywords\" content=\"#{h @article.tag_list}\" />" unless @article.tag_list.blank? %>
+	<%= "<meta name=\"date\" content=\"#{h @article.updated_at.iso8601}\" />" %>
 <% end %>	
 
 <div id="<%= "article_#{@article.id}" %>" class="_article" >

@@ -4,9 +4,15 @@
 	sidebar :asset_map if (@asset.latitude && @asset.longitude)
 %>
 
+<% content_for :head do %>
+	<%= "<meta name=\"description\" content=\"#{h @gallery.description}\" />" %>
+	<%= "<meta name=\"author\" content=\"#{h @gallery.created_by.full_name}\" />" if @gallery.created_by.full_name %>
+	<%= "<meta name=\"keywords\" content=\"#{h @gallery.tag_list}\" />" unless @gallery.tag_list.blank? %>
+	<%= "<meta name=\"date\" content=\"#{h @gallery.updated_at.iso8601}\" />" %>
+<% end %>
+
 <% content_for :javascripts do %>
-	<%= javascript_include_tag "scriptaculous.js" %>
-	<%= javascript_include_tag "lightview.js" %>
+	<%= javascript_include_merged :lightview %>
 <% end %>
 
 <% images = @gallery.images.published_in(publication).published.viewable_by(current_user) \

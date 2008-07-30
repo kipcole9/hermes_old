@@ -4,16 +4,17 @@
 	sidebar :image_gallery_list
 	sidebar :asset_map if @asset.mappable?
 %>
+
 <% content_for :javascripts do %>
 	<%= javascript_include_merged :lightview %>
 <% end %>
 
 <% content_for :head do %>
-	<%= "<META name=\"description\" content=\"#{h @image.description}\">" %>
-	<%= "<META name=\"author\" content=\"#{h @image.created_by.full_name}\">" if @image.created_by.full_name %>
-	<%= "<META name=\"copyright\" content=\"#{h @image.copyright_notice}\">" if @image.copyright_notice %>
-	<%= "<META name=\"keywords\" content=\"#{h @image.tag_list}\">" unless @image.tag_list.blank? %>
-	<%= "<META name=\"date\" content=\"#{h @image.updated_at.iso8601}\">" %>
+	<%= "<meta name=\"description\" content=\"#{h @image.description}\" />" %>
+	<%= "<meta name=\"author\" content=\"#{h @image.created_by.full_name}\" />" if @image.created_by.full_name %>
+	<%= "<meta name=\"copyright\" content=\"#{h @image.copyright_notice}\" />" if @image.copyright_notice %>
+	<%= "<meta name=\"keywords\" content=\"#{h @image.tag_list}\" />" unless @image.tag_list.blank? %>
+	<%= "<meta name=\"date\" content=\"#{h @image.updated_at.iso8601}\" />" %>
 <% end %>
 
 <div class="_article clearfix">
