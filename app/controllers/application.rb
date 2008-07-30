@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
   
   def page_not_found(message = "The page you requested was not found.")
     if request.env["HTTP_USER_AGENT"].match(/google/i)
-      head :status => 404
+      render :file => "#{RAILS_ROOT}/public/404.html", :status => 404
     else
       respond_to do |format|
         format.html do 
