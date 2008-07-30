@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   
   def rescue_action_in_public(exception)
     case(exception)
-    when ActionController::UnknownAction
+    when ::ActionController::UnknownAction
       unrecognized?
     else
       super
