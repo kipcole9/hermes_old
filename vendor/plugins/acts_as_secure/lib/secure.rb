@@ -25,7 +25,7 @@ module ActiveRecord
             if user
               { :conditions => Asset.access_policy(user), :include => :asset }
             else
-              nil
+              { :conditions => Asset.access_policy(User.anonymous) }
             end
           }   
 
@@ -57,6 +57,7 @@ module ActiveRecord
                 
                               
           def find_by_name_or_id(param)
+            return nil unless param 
             if (param.is_a?(String) && param.is_integer?) || param.is_a?(Fixnum)
               find(:first, :conditions => ["#{table_name}.id = ?", param], :include => :asset)
             else
@@ -65,6 +66,7 @@ module ActiveRecord
           end
           
           def find_by_name(param)
+            return nil unless param 
             find(:first, :conditions => ["assets.name = ?",param], :include => :asset)
           end
           

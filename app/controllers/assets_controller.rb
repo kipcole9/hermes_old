@@ -212,7 +212,7 @@ private
     # 'instance_variable_singular'
     def retrieve_asset(target_obj, instance_variable, target_id)
       user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
-      if !(@object = target_obj.viewable_by(user).find_by_name_or_id(target_id))
+      if !(@object = target_obj.viewable_by(user).find_by_name_or_id(target_id) rescue nil)
         respond_to do |format|
           format.html do
             page_not_found("#{target_obj.name} '#{target_id}' not found!")

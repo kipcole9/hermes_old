@@ -50,7 +50,7 @@ class Asset < ActiveRecord::Base
     if user
       { :conditions => Asset.access_policy(user) }
     else
-      nil
+      { :conditions => Asset.access_policy(User.anonymous) }
     end
   }   
   named_scope :published, lambda { {:conditions => Asset.published_policy} }
