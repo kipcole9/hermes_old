@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
   end
   
   def page_not_found(message = "The page you requested was not found.")
-    if request.env["HTTP_USER_AGENT"] =~ /google/i
+    if request.env["HTTP_USER_AGENT"].match(/google/i)
       head :status => 404
     else
       respond_to do |format|
