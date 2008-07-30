@@ -31,13 +31,17 @@ class ApplicationController < ActionController::Base
   end
   
   def page_not_found(message = "The page you requested was not found.")
-    respond_to do |format|
-      format.html do 
-        flash[:notice] = message
-        redirect_back_or_default('/')  
-      end      
-      format.xml  do 
-        head :status => 404
+    if request.env["HTTP_USER_AGENT"] =~ /google/i
+      head :status => 404
+    else
+      respond_to do |format|
+        format.html do 
+          flash[:notice] = message
+          redirect_back_or_default('/')  
+        end      
+        format.xml  do 
+          head :status => 404
+        end
       end
     end
   end
