@@ -26,6 +26,15 @@ class ApplicationController < ActionController::Base
   
   layout :current_layout
   
+  def rescue_action_in_public(exception)
+    case(exception)
+    when ActionController::UnknownAction
+      unrecognized?
+    else
+      super
+    end
+  end
+
   def unrecognized?
     page_not_found
   end
