@@ -2,8 +2,8 @@ module HermesUpload
   require 'rest_client'
   require 'cgi'
    
-  URI = "http://kip:crater123@localhost:3000/"
-  #URI = "http://kip:crater123@www.kipcole.com/uploads/"
+  #URI = "http://kip:crater123@localhost:3000/"
+  URI = "http://kip:crater123@www.noexpectations.com.au/"
     
   def upload_image(filename, folder = nil)
     raise "File #{filename} was not found to import" unless File.exists?(filename)

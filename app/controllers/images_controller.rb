@@ -3,7 +3,11 @@ class ImagesController < AssetsController
 
   def update_jpg
     head :status => 406 unless Mime::Type.lookup(request.env['CONTENT_TYPE']) == Mime::Type.lookup_by_extension(:jpg)
-    tmp_file = "#{RAILS_ROOT}/tmp/uploads/#{collect_filename}"
+    if RAILS_ENV == "development"
+      tmp_file = "#{RAILS_ROOT}/tmp/uploads/#{collect_filename}"
+    else
+      tmp_file = "/u/apps/hermes/uploads/#{collect_filename}"
+    end
     f = File.new(tmp_file, "w")
     f.syswrite(request.raw_post)
     f.close

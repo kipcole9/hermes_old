@@ -5,7 +5,7 @@ namespace :hermes do
     require "hermes_image_import"
     include HermesImageImport
     User.current_user = User.admin
-    import_images
+    import_images ENV["dir"]
   end
   
   desc "List changed images"
