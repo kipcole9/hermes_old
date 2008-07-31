@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   
   layout :current_layout
   
-  # Rescue from incompatible with AWS (weird cookie overflow exception)
+  # Rescue_from incompatible with AWS (weird cookie overflow exception)
   def rescue_action_in_public(exception)
     case(exception)
     when ::ActionController::UnknownAction
