@@ -9,6 +9,7 @@
 	<%= "<meta name=\"author\" content=\"#{h @gallery.created_by.full_name}\" />" if @gallery.created_by.full_name %>
 	<%= "<meta name=\"keywords\" content=\"#{h @gallery.tag_list}\" />" unless @gallery.tag_list.blank? %>
 	<%= "<meta name=\"date\" content=\"#{h @gallery.updated_at.iso8601}\" />" %>
+	<%= stylesheet_link_merged :lightview %>
 <% end %>
 
 <% content_for :javascripts do %>

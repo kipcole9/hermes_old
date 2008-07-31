@@ -15,6 +15,7 @@
 	<%= "<meta name=\"copyright\" content=\"#{h @image.copyright_notice}\" />" if @image.copyright_notice %>
 	<%= "<meta name=\"keywords\" content=\"#{h @image.tag_list}\" />" unless @image.tag_list.blank? %>
 	<%= "<meta name=\"date\" content=\"#{h @image.updated_at.iso8601}\" />" %>
+	<%= stylesheet_link_merged :lightview %>
 <% end %>
 
 <div class="_article clearfix">
