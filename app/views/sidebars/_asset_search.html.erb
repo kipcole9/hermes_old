@@ -1,5 +1,5 @@
 <div class="_sidebarForm">	
-	<% form_remote_tag :url => {:action => :live_search} do %>
+	<% form_remote_tag :url => {:controller => :assets, :action => :live_search} do %>
 	  <p>Search: <%= text_field_tag :search, "", :size => 23 %></p>
 	  <div class="_spinner">
 		<div id="imageSpinner" style="display: none" >
