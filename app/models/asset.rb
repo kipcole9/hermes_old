@@ -198,7 +198,7 @@ class Asset < ActiveRecord::Base
     #  7	 Intersection level accuracy. (Since 2.59)
     #  8	 Address level accuracy. (Since 2.59
     
-    host ||= User.environment["HOST"]
+    host ||= User.environment["HOST"] rescue "localhost"
     if self.country && (self.latitude.blank? || self.longitude.blank? || self.google_geocoded?)
       geocode_keys = []
       geocode_keys << self.location if self.location
@@ -245,6 +245,13 @@ class Asset < ActiveRecord::Base
   
   def self.polymorph_xml_attrs
     @@polymorph_xml_attrs rescue nil
+  end
+            
+  # Add location identifiers as tags
+  def tag_list=(tags)
+    location_tags = [self.location, self.city, self.state, self.country].compact.join(', ')
+    new_tags = location_tags ? location_tags + "," + tags : tags
+    super new_tags
   end
 
 private
