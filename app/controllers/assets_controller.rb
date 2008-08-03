@@ -14,6 +14,7 @@ class AssetsController < ApplicationController
   before_filter :remember_location, :only => [:show, :index]
   
   after_filter  :log_show, :only => [:show]
+  @@asset_actions = ["live_search", "apis"]
   
   # Proxies: implement in concrete Asset sub-class as required
   # Normally nothing is required (the correct template will get rendered)
@@ -151,6 +152,8 @@ protected
   end
 
   def authorized?
+    # Unless specified, no actions can be called on this base class
+    return false if self.class.name == "AssetsController" && !@@asset_actions.include?(params[:action])
     case params[:action]
     when "edit","update"
       @object.can_update?(current_user)
@@ -167,6 +170,7 @@ protected
     end
   end
   
+  # Prototype methods for callbacks
   def before_retrieve; end
   def after_retrieve(success = true); true; end
   def before_create; end

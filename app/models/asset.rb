@@ -227,12 +227,11 @@ class Asset < ActiveRecord::Base
         self.longitude = results[0].longitude
         self.geocode_accuracy = results[0].accuracy
         self.google_geocoded = true
-        true
       else
         logger.info "Asset: Could not geocode '#{self.name}' with '#{geocode_string}'. Result was #{results.status}"
-        false
       end
     end
+    true
   end
   
   def self.polymorph_readers
@@ -250,7 +249,7 @@ class Asset < ActiveRecord::Base
   # Add location identifiers as tags
   def tag_list=(tags)
     location_tags = [self.location, self.city, self.state, self.country].compact.join(', ')
-    new_tags = location_tags ? location_tags + "," + tags : tags
+    new_tags = [location_tags, tags].join(', ')
     super new_tags
   end
 

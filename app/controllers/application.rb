@@ -36,6 +36,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # This is the fall through from the default path.  Rather than return empty pages
+  # or error pages we use our standard page_not_found process
   def unrecognized?
     page_not_found
   end

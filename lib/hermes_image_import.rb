@@ -13,7 +13,7 @@ module HermesImageImport
     @catalog = Catalog.default
     proc = lambda {|file, folder| upload_image(file, folder) }
     directory = dir || @catalog.source
-    process_folder(directory, proc)
+    process_folder(directory, proc)   
   end
   
   def changed_images
@@ -44,9 +44,16 @@ module HermesImageImport
           end
         end
       end
+      
+      # And now check if we have an image directory
+      if File.directory?(folder.with_slash + IMAGE_SUBDIR)
+        process_one_folder(folder) do |file, folder_name|
+          proc.call file, folder_name
+        end
+      end      
     else
       puts "'#{folder}' is not a directory or does not exist."
-    end
+    end    
     true
   end
   
