@@ -2,6 +2,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
+  BOTS = /(google|yahoo|cuill|friendfeedbot|ask jeeves/teoma|netnewswire)/i
   helper :all # include all helpers, all the time
 
   before_filter :set_publication
@@ -48,7 +49,7 @@ class ApplicationController < ActionController::Base
   # Googlebots(and other bots) need a real 404 for pages not found, and hence we detect
   #  googlebots and yahoo bots and respond appropriately.
   def page_not_found(message = "The page you requested was not found.")
-    if request.env["HTTP_USER_AGENT"].match(/(google|yahoo)/i)
+    if request.env["HTTP_USER_AGENT"].match(BOTS)
       render :file => "#{RAILS_ROOT}/public/404.html", :status => 404
     else
       respond_to do |format|
