@@ -90,8 +90,7 @@ class Image < ActiveRecord::Base
   
   def taken_at=(v)
     ta = DateTime.strptime(v,'%Y:%m:%d %H:%M:%S%Z') if v.is_a?(String)
-    ta = v if v.is_a?(DateTime)
-    puts "Taken_at is '#{v}' => '#{ta}'"
+    ta = v if (v.is_a?(DateTime) || v.is_a?(Time))
     write_attribute(:taken_at, ta) if ta
   end
   
