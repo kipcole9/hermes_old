@@ -91,6 +91,7 @@ class Image < ActiveRecord::Base
   def taken_at=(v)
     ta = DateTime.strptime(v,'%Y:%m:%d %H:%M:%S%Z') if v.is_a?(String)
     ta = v if v.is_a?(DateTime)
+    puts "Taken_at is '#{v}' => '#{ta}'"
     write_attribute(:taken_at, ta) if ta
   end
   
@@ -221,12 +222,13 @@ class Image < ActiveRecord::Base
       end
     end
     self.created_by = User.find_by_email(image_exif["CreatorContactInfoCiEmailWork"]) || User.current_user
+    true
   end
   
   def self.import_metadata
-    find.all.each do |i|
-       i.import_metadata
-       i.save!
+    all.each do |i|
+      i.import_metadata
+      i.save!
     end
     true
   end
