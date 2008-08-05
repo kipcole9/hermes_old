@@ -7,6 +7,10 @@ User-Agent: *
 Allow: /
 Disallow: /assets/live_search/
 Disallow: /images/live_search/
+Disallow: /signup
+Disallow: /login
+Disallow: /logout
+Disallow: /publications/no-expectations/contact
 
 # Remove old content from the index
 Disallow /images/Amritsar0607/
