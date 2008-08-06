@@ -6,6 +6,8 @@ module Hermes
   class NotFound < Error; end
   class NoPublicationFound < NotFound; end
   class ArticleNotFound < NotFound; end
+  
+  class TitleNotSet < Error; end
     
   class UpdateNotPermitted < Error; end
   class CreateNotPermitted < Error; end

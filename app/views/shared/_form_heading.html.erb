@@ -1,1 +1,5 @@
-<h2><%= "#{params[:action].capitalize}" + (asset.title.blank? ? "" : " '#{asset.title}'") %></h2>
+<% if asset %>
+	<h2><%= "#{params[:action].capitalize}" + (asset.title.blank? ? "" : " '#{asset.title}'") %></h2>
+<% else %>
+	<h2><%= "#{params[:action].capitalize}" %></h2>
+<% end %>

@@ -16,6 +16,7 @@ class Asset < ActiveRecord::Base
   
   validates_presence_of     :name 
   validates_presence_of     :created_by
+  validates_presence_of     :title
   validates_uniqueness_of   :name, :scope => :content_type, :message => 'already taken'
   validates_numericality_of :latitude, :allow_nil => true,
                             :greater_than => -90, :less_than => 90,

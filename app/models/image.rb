@@ -272,6 +272,7 @@ private
   end
   
   def make_title
+    return unless !self.title.blank? || self.filename
     self.title = self.title.blank? ? self.filename.remove_file_suffix.titleize : self.title
   end
   
