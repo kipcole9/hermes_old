@@ -1,7 +1,7 @@
 namespace :hermes do
   
-  desc "Import Image Library"
-  task(:import_images => :environment) do
+  desc "Upload Images"
+  task(:upload_images => :environment) do
     require "hermes_image_import"
     include HermesImageImport
     User.current_user = User.admin
@@ -21,46 +21,7 @@ namespace :hermes do
     assets = Asset.find(:all)
     assets.each do |a|
       a.geocode
-    end
-  end
-  
-  desc "Create or Update Galleries from metadata"
-  task(:update_galleries => :environment) do
-    require 'find'
-    catalog = Catalog.default
-    Publication.current = Publication.default
-    if catalog then
-      puts "Updating Galleries from catalog."
-      User.current_user = User.admin
-      find_pattern = "#{catalog.source}places/**/#{Gallery::METADATA_FILENAME}"
-      puts "Looking for gallery metadata file in '#{find_pattern}'"
-      Dir.glob(find_pattern) do |f|
-        if File.file?(f) then
-          puts "Creating or updating gallery from file '#{f}'"
-          case retcode = Gallery.create_or_update_from_xml(f)
-            when :no_metadata     then puts "No metadata found for #{f}"
-            when :bad_metadata    then puts "Metadata file found but malformed for #{f}. Ignoring it."
-            when :bad_update      then puts "Could not update Gallery in the database for #{f}"
-            else puts "Update returned '#{retcode}'"
-          end
-        end
-      end
-    else
-      puts "Gallery: The catalog '#{catalog}' was not found to update galleries."
-    end
-  end
-  
-  desc "Create gallery metadata templates"
-  task(:create_gallery_metadata_templates => :environment) do
-    catalog = Catalog.default
-    if catalog then
-      RAILS_DEFAULT_LOGGER.info "Creating Gallery metadata templates."
-      galleries = Gallery.find(:all, :include => :asset)
-      galleries.each do |g|
-        RAILS_DEFAULT_LOGGER.info "  Creating metadata template for #{g.name}"
-        g.create_metadata_template(catalog.directory)
-      end
-      RAILS_DEFAULT_LOGGER.info "Finished creating gallery metadata templates."
+      a.save!
     end
   end
   

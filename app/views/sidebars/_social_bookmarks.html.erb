@@ -1,0 +1,28 @@
+<h4>Bookmark it:</h4>
+<ul>
+	<li>
+		<a href="http://delicious.com/post" 
+				onclick="window.open('http://delicious.com/post?v=5&noui&jump=close&url=<%= h polymorphic_url(@object) %>&title=<%= h page_title %>',
+				'Delicious','toolbar=no,width=550,height=550');
+				return false;">
+			<%= image_tag("/images/social/delicious_32x32.png") %> Add to Delicious
+		</a>
+	</li>
+	<li>
+		<a href="http://digg.com/submit?phase=2&url=<%= h polymorphic_url(@object) %>&title=<%= h page_title %>"
+				onclick="window.open('http://digg.com/submit?phase=2&url=<%= h polymorphic_url(@object) %>&title=<%= h page_title %>',
+				'Digg','toolbar=no,width=950,height=550');
+				return false;">
+			<%= image_tag("/images/social/digg_32x32.png") %> Digg it
+		</a>
+	</li>
+	
+	<li>
+		<a href="http://www.stumbleupon.com/submit?url=<%= h polymorphic_url(@object) %>&title=<%= h page_title %>"
+				onclick="window.open('http://www.stumbleupon.com/submit?url=<%= h polymorphic_url(@object) %>&title=<%= h page_title %>',
+				'StumbleUpon','toolbar=no,width=750,height=550');
+				return false;">			
+			<%= image_tag("/images/social/Stumbleupon_32x32.png") %> StumbleUpon
+		</a>
+	</li>
+</ul>

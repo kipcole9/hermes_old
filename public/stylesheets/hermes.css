@@ -597,14 +597,17 @@ div#_form fieldset {
 }
 
 ._sidebarContent ul li {
-
 	padding:0;
+	padding-left: 2px;
 	margin:0;
+	line-height: 16px;
+	vertical-align: center;
 	font-size:0.75em;
 }
 
 ._sidebarContent ul li img {
 	position: relative;
+	top: 4px;
 	padding: 0;
 	height: 16px;
 	width: 16px;

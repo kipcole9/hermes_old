@@ -9,21 +9,22 @@ module HermesImageImport
   # => Create destination directory
   # => Convert the  image into 4 types (large, standard, slide and thumb) and save
   # => Add to the database
-  def import_images(dir = nil)
+  def upload_images(dir = nil)
     @catalog = Catalog.default
     proc = lambda {|file, folder| upload_image(file, folder) }
     directory = dir || @catalog.source
     process_folder(directory, proc)   
   end
   
-  def changed_images
+  def changed_images(dir = nil)
     @catalog = Catalog.default
     proc = lambda { |file, folder| 
       image_exists, updated_at = update_time(file)
       puts "#{file} has changed since last import." if image_exists && File.mtime(file) > updated_at
       puts "#{file} is new since last import." unless image_exists
     }
-    process_folder(@catalog.source, proc)
+    directory = dir || @catalog.source
+    process_folder(directory, proc)
   end   
   
   def process_folder(folder, proc)
@@ -60,11 +61,6 @@ module HermesImageImport
   def process_one_folder(folder)
     # Check to see if the image has changed before importing
     # puts "Processing images in '#{folder}'."
-    destination = "#{@catalog.directory}#{File.basename(folder)}"
-    if !File.exist?(destination)
-      puts "Making destination folder '#{destination}'."
-      FileUtils.mkdir_p(destination)
-    end
     gallery_folder = folder.with_slash + IMAGE_SUBDIR + "/**/*.jpg"
     Dir.glob(gallery_folder).each do |f|
       if IMAGE_FILE_TYPES.include?(File.extname(f).downcase) && !f.match(/^\./)

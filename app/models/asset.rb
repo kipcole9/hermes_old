@@ -9,6 +9,9 @@ class Asset < ActiveRecord::Base
   
   STATUS                      = AssetStatus.status_array
   ALLOW_COMMENTS              = {"none" => 0, "open" => 1, "closed" => 2}
+  LAT                         = /\A([-+]?\d{1,2})[d°] *(\d{1,2})\' *(\d{1,2}\.?\d{1,4})\" *(N|S)\Z/
+  LON                         = /\A([-+]?\d{1,3})[d°] *(\d{1,2})\' *(\d{1,2}\.?\d{1,4})\" *(E|W)\Z/
+  DECIMAL                     = /\A[-+]?[0-9]*\.?[0-9]+\Z/
   
   before_save                 :set_permissions, :set_allow_comments, :set_publication, :set_status, :geocode
   before_validation_on_create :set_name
