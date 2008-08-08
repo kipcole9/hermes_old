@@ -123,7 +123,7 @@ module HermesControllerExtensions
     end
   end
   
-  def path_parameters_from_path(path, request_method) 
+  def path_parameters_from_path(path, request_method = :get) 
     request = ActionController::TestRequest.new({}, {}, nil) 
     request.env["REQUEST_METHOD"] = request_method.to_s.upcase if request_method 
     request.path = path 
