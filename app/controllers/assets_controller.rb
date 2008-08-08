@@ -71,7 +71,13 @@ class AssetsController < ApplicationController
   end
   
   # DELETE
-  def destroy; end
+  def destroy;
+    respond_to do |format|
+      format.html { destroy_html }
+      format.xml  { destroy_xml  }
+      format.any  { send("destroy_#{params[:format]}") } if respond_to?("destroy_#{params[:format]}")
+    end
+  end
   
   # Ajax-based search
   def live_search
@@ -130,6 +136,7 @@ protected
   end
     
   def update_html
+    before_update
     if @object.update_attributes(params[param_name])
       after_update(true)
       flash[:notice] = "#{asset_obj.name} updated successfully."
@@ -149,6 +156,29 @@ protected
       after_update(false)
       render :status => 422, :xml => @object.errors.to_xml
     end         
+  end
+  
+  def destroy_html
+    before_destroy
+    if @object.destroy
+      after_destroy(true)
+      flash[:notice] = "#{asset_obj.name} deleted successfully."
+    else
+      set_error_sidebar
+      after_destroy(false)
+    end
+    redirect_back_or_default("/")
+  end
+  
+  def destroy_xml
+    before_destroy
+    if @object.destroy
+      after_destroy(true)
+      head :status => 200
+    else
+      after_destroy(false)
+      render :status => 422, :xml => @object.errors.to_xml
+    end
   end
 
   def authorized?
@@ -177,6 +207,8 @@ protected
   def after_create(success = true); true; end
   def before_update; end
   def after_update(sucess = true); true; end
+  def before_destroy; end
+  def after_destroy(success = true); true; end
   
 private
     def create_asset
