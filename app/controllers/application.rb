@@ -2,7 +2,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  BOTS = /(google|yahoo|cuill|friendfeedbot|ask jeeves\/teoma|netnewswire)/i
+  BOTS = /(google|yahoo|cuill|friendfeedbot|ask jeeves\/teoma|netnewswire|hermes)/i
   helper :all # include all helpers, all the time
 
   before_filter :set_publication
