@@ -27,6 +27,15 @@
 	</li>
 	
 	<li>
+		<a href='http://ma.gnolia.com/bookmarks/add' 
+				onclick="var w=window.open('http://ma.gnolia.com/bookmarklet/marker/add?url=<%= h polymorphic_url(@object) %>&amp;title=<%= h page_title %>',
+				'magnolia','scrollbars=0,status=0,resizable=1,location=0,toolbar=0,width=340,height=300');
+				(function(){setTimeout('w.focus()',1000);})();return false;">
+			<%= image_tag("/images/social/Magnolia_32x32.png") %> Add to Magnolia
+		</a>
+	</li>
+	
+	<li>
 		<a href="http://technorati.com/faves?sub=addfavbtn&amp;add=http://www.noexpectations.com.au">			
 			<%= image_tag("/images/social/Technorati_32x32.png") %> Add to Technorati Favorites
 		</a>

@@ -15,5 +15,5 @@ class XmlrpcController < ApplicationController
   web_service :metaWeblog, MetaWeblogService.new
   web_service :blogger, BloggerService.new
   web_service :mt, MovableTypeService.new
-  
+  web_service :pingback, PingbackService.new
 end

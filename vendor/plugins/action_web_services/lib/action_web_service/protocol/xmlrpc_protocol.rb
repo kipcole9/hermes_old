@@ -98,7 +98,13 @@ module ActionWebService # :nodoc:
             elsif value.is_a?(ActionWebService::Base64)
               XMLRPC::Base64.new(value)
             elsif value.is_a?(Exception) && !value.is_a?(XMLRPC::FaultException)
-              XMLRPC::FaultException.new(2, value.message)
+              ###### We want to be able to send a different exception code so we'll make something up to decode the message
+              ######
+              if value.message.is_a?(Hash)
+                XMLRPC::FaultException.new(value.message[:code], value.message[:text])
+              else
+                XMLRPC::FaultException.new(2, value.message)
+              end
             else
               value
             end

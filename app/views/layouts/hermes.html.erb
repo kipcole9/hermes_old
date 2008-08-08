@@ -6,6 +6,7 @@
 	<%= yield :head %>
 	<link rel="icon" type="image/png" href="/hermes.png" />
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="<%= formatted_apis_assets_url :xml %>" />
+	<link rel="pingback" href="<%= xmlrpc_url %>" />
 	<%= stylesheet_link_merged :base %>
 	<%= javascript_include_merged :base %>
 </head>
