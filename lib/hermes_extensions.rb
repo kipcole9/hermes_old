@@ -85,6 +85,13 @@ class Hash
   end
 end
 
+class Symbol
+  def to_message
+    self.to_s.sub("_"," ").capitalize
+  end
+end
+
+
 
 
 
