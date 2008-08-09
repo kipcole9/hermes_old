@@ -19,11 +19,15 @@ module HermesSitemap
       # Each asset
       assets.each do |a|
         asset = a.content
-        xml.url do
-          xml.loc         polymorphic_url(asset)
-          xml.lastmod     asset.updated_at.iso8601
-          xml.changefreq  "weekly"
-          xml.priority    "0.8"
+        if asset
+          xml.url do
+            xml.loc         polymorphic_url(asset)
+            xml.lastmod     asset.updated_at.iso8601
+            xml.changefreq  "weekly"
+            xml.priority    "0.8"
+          end
+        else
+          puts "Nil asset content for #{a.name} of type #{a.content_type} found - skipping."
         end
       end
     end
