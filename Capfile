@@ -34,7 +34,7 @@ namespace(:deploy) do
   desc "Create sitemap" 
   task :create_sitemap, :roles => [:web] do
     run <<-EOF
-      cd #{release_path} && rake RAILS_ENV=production hermes:create_sitemap dir=#{sitemap_path}
+      cd #{shared_path} && cd ../current && rake RAILS_ENV=production hermes:create_sitemap dir=#{sitemap_path}
     EOF
   end
   
