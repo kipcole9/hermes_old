@@ -1,7 +1,7 @@
 load 'deploy' if respond_to?(:namespace) # cap2 differentiator
 Dir['vendor/plugins/*/recipes/*.rb'].each { |plugin| load(plugin) }
 load 'config/deploy'
-set :sitemap_path "#{shared_path}/config/sitemap.xml"
+set :sitemap_path, "#{shared_path}/config/sitemap.xml"
 
 namespace(:deploy) do
   desc "Symlink the database config to the current release directory." 
