@@ -12,6 +12,7 @@ Disallow: /signup
 Disallow: /login
 Disallow: /logout
 Disallow: /bookmarks
+Disallow: /xmlrpc
 Disallow: /publications/no-expectations/contact
 
 # Remove old content from the index
