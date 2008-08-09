@@ -25,6 +25,12 @@ namespace :hermes do
     end
   end
   
+  desc "Create sitemap"
+  task(:create_sitemap => :environment) do
+    include HermesSitemap
+    create_sitemap ENV["dir"]
+  end
+  
   # Gallery rating is the minimum rating for any image in the gallery
   # Of course images that our outside the bounds for any viewer cannot be seen
   desc "Updating content ratings for galleries"

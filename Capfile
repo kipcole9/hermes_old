@@ -1,6 +1,7 @@
 load 'deploy' if respond_to?(:namespace) # cap2 differentiator
 Dir['vendor/plugins/*/recipes/*.rb'].each { |plugin| load(plugin) }
 load 'config/deploy'
+set :sitemap_path "#{shared_path}/config/sitemap.xml"
 
 namespace(:deploy) do
   desc "Symlink the database config to the current release directory." 
@@ -8,6 +9,11 @@ namespace(:deploy) do
     run "ln -nsf #{shared_path}/config/database.yml #{release_path}/config/database.yml" 
   end
 
+  desc "Symlink the sitemap to the current release directory." 
+  task :symlink_sitemap_xml do 
+    run "ln -nsf #{sitemap_path} #{release_path}/public/sitemap.xml" 
+  end
+  
   desc "Symlink the nginx_streaming plugin into the plugins directory - used only for ngix deployment." 
   task :symlink_nginx_streaming do 
     run "ln -nsf #{release_path}/vendor/deployment_plugins/nginx_streaming #{release_path}/vendor/plugins/ngix_streaming" 
@@ -25,6 +31,13 @@ namespace(:deploy) do
     EOF
   end
   
+  desc "Create sitemap" 
+  task :create_sitemap, :roles => [:web] do
+    run <<-EOF
+      cd #{release_path} && rake RAILS_ENV=production hermes:create_sitemap dir=#{sitemap_path}
+    EOF
+  end
+  
   desc "Run database migrations"
   task :run_database_migrations, :roles => [:db] do
     run "cd #{release_path} && rake RAILS_ENV=production db:migrate"
@@ -32,6 +45,7 @@ namespace(:deploy) do
 
   after 'deploy:update_code', 'deploy:create_asset_packages'
   after 'deploy:update_code', 'deploy:symlink_database_yml'
+  after 'deploy:update_code', 'deploy:symlink_sitemap_xml'
   after 'deploy:update_code', 'deploy:symlink_nginx_streaming'
   after 'deploy:update_code', 'deploy:run_database_migrations'
 end

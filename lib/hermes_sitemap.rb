@@ -3,10 +3,10 @@ module HermesSitemap
   SITEMAP           = "#{RAILS_ROOT}/public/sitemap.xml"
   INCLUDE_ASSETS    = ["Article", "Image", "Gallery"]
   
-  def create_sitemap(publication = nil)
+  def create_sitemap(sitemap_path = SITEMAP, publication = nil)
     Publication.current = publication || Publication.default
-    puts "Storing sitemap in #{SITEMAP}"
-    f = File.new(SITEMAP, File::CREAT|File::TRUNC|File::RDWR, 0644)
+    puts "Storing sitemap in #{sitemap_path}"
+    f = File.new(sitemap_path, File::CREAT|File::TRUNC|File::RDWR, 0644)
     xml = Builder::XmlMarkup.new(:target => f, :indent => 2)
     xml.instruct!
     xml.urlset "xmlns:xsi"          => "http://www.w3.org/2001/XMLSchema-instance",
@@ -27,7 +27,7 @@ module HermesSitemap
             xml.priority    "0.8"
           end
         else
-          puts "Nil asset content for #{a.name} of type #{a.content_type} found - skipping."
+          puts "Nil asset content for #{a.id.to_s}:#{a.name} of type #{a.content_type} found - skipping."
         end
       end
     end
