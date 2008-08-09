@@ -64,11 +64,7 @@ module AuthenticatedSystem
     def access_denied
       respond_to do |accepts|
         accepts.html do
-          #store_location
-          # redirect_to :controller => '/sessions', :action => 'new'
-          headers["Code"] = 404
-          flash[:notice] = "The page you requested could not be found."
-          redirect_back_or_default('/')
+          page_not_found
         end
         accepts.xml do
           headers["Status"]           = "Unauthorized"

@@ -2,5 +2,6 @@
 log/*.log
 tmp/**/*
 config/database.yml
+public/sitemap.xml
 vendor/rails/**/*
 

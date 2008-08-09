@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080730121019) do
+ActiveRecord::Schema.define(:version => 20080808233329) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -245,6 +245,15 @@ ActiveRecord::Schema.define(:version => 20080730121019) do
   end
 
   add_index "paper_sizes", ["short_side_metric"], :name => "key_metric_size", :unique => true
+
+  create_table "pingbacks", :force => true do |t|
+    t.string   "target_uri"
+    t.string   "source_uri"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pingbacks", ["target_uri", "source_uri"], :name => "index_pingbacks_on_target_uri_and_source_uri", :unique => true
 
   create_table "publication_assets", :force => true do |t|
     t.integer "publication_id", :limit => 11
