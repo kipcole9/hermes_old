@@ -3,7 +3,6 @@
 <ul>
 	<% categories.each do |category| %>
 		<li>
-			<%=  %>
 			<%= link_to("#{image_tag("/images/icons/folder_go.png")} #{category.name}  (#{category.counts})", \
 			 	articles_url(:category => category.name)) -%>
 		</li>

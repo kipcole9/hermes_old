@@ -35,7 +35,7 @@ module ApplicationHelper
       u = '#'
       t = "{Bookmark '#{name}' not found}"
     end
-    "<a href=#{u}>#{t}</a>"
+    link_to t, u
   end
   
   def image(name)

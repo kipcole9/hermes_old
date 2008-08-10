@@ -5,7 +5,7 @@ namespace :hermes do
     require "hermes_image_import"
     include HermesImageImport
     User.current_user = User.admin
-    import_images ENV["dir"]
+    upload_images ENV["dir"]
   end
   
   desc "List changed images"
@@ -13,7 +13,7 @@ namespace :hermes do
     require "hermes_image_import"
     include HermesImageImport
     User.current_user = User.admin    
-    changed_images
+    changed_images ENV["dir"]
   end
   
   desc "Geocode all assets"

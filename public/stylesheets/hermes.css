@@ -132,7 +132,13 @@ h2 a:hover, h3 a:hover {
   letter-spacing: 0.1em;
   }  
 
-
+#_footer img {
+  position: relative;
+  top: 4px;
+  padding: 0;
+  height: 16px;
+  width: 16px;
+}
 /* Header
 ----------------------------------------------- */
   
@@ -596,7 +602,7 @@ div#_form fieldset {
   text-decoration:none;
 }
 
-._sidebarContent ul li {
+._sidebarContent ul li{
 	padding:0;
 	padding-left: 2px;
 	margin:0;
@@ -605,7 +611,7 @@ div#_form fieldset {
 	font-size:0.75em;
 }
 
-._sidebarContent ul li img {
+._sidebarContent ul li img{
 	position: relative;
 	top: 4px;
 	padding: 0;
@@ -862,6 +868,14 @@ div._infoWindow p {
 	margin: 0;
 	padding: 0;
 	margin-left: 5px;
+}
+
+div._infoWindow > ._thumbsmall_l,
+div._infoWindow > ._thumbsmall_p {
+	background-color:	#999;
+	margin-right: 4px;
+	margin-left: 0px;
+	padding-left: 0px;
 }
 
 /*---------- For Pagination ------------*/
