@@ -70,13 +70,13 @@ class Article < ActiveRecord::Base
   end
 
   def set_options(options)
-    self.title = options[:title] || self.title
-    self.category_names = options[:categories] || self.category_names
-    self.content = options[:content] || self.content
-    self.description = options[:description] || self.description
-    self.tag_list = options[:keywords] || self.tag_list
-    self.dont_publish_before = options[:publishDate] || self.dont_publish_before
-    self.status = options[:status]
+    self.title = options[:title] unless options[:title].blank?
+    self.category_names = options[:categories] unless options[:categories].blank?
+    self.content = options[:content] unless options[:content].blank?
+    self.description = options[:description] unless options[:descrition].blank?
+    self.tag_list = options[:keywords] unless options[:keywords].blank?
+    self.dont_publish_before = options[:publishDate] unless options[:publishDate].blank?
+    self.status = options[:status] unless options[:status].blank?
     self.allow_comments = options[:allow_comments]
     self.markup_type = options[:convert_breaks]
   end

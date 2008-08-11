@@ -167,8 +167,7 @@ class Asset < ActiveRecord::Base
   end
   
   def category_names
-    names = []
-    self.categories.map {|c| names << c.name }.join(', ')
+    self.categories.map(&:name).join(', ')
   end
   
   def category_names=(names)

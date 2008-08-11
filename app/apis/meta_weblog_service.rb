@@ -61,7 +61,7 @@ private
   
   def blogify_post(article)
     Blog::Post.new(:title => article.title, :mt_excerpt => article.description, 
-      :dateCreated => article.dont_publish_before ? article.dont_publish_before.utc.strftime(Blog::ISO8601) : nil,
+      :dateCreated => article.dont_publish_before ? article.dont_publish_before.utc.iso8601 : nil,
       :postid => article.name, :mt_keywords => article.tag_list.join(','), :description => article.content,
       :categories => article.category_names.split(','), :mt_allow_comments => article.allow_comments)
   end
@@ -93,7 +93,7 @@ private
   end
   
   def encode_categories(categories)
-    categories.nil? ? "" : categories.join(',')
+    categories && categories.join(', ')
   end
   
 end

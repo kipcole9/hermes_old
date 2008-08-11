@@ -12,7 +12,7 @@ class MovableTypeService < ActionWebService::Base
   end
   
   def setPostCategories(postid, user, password, structs)
-    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
     raise(Hermes::ArticleNotFound, "Post '#{postid}' was not found.") unless (article = Article.get_post(user, postid))    
     categories = categorise(structs)
     article.category_names = categories
@@ -31,11 +31,11 @@ class MovableTypeService < ActionWebService::Base
   end
   
   def getPostCategories(postid, user, password)
-    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
     raise(Hermes::ArticleNotFound, "Post '#{postid}' was not found.") unless (article = Article.get_post(user, postid))
     post_categories = []    
     article.category_names.split(',').each do |t|
-      post_categories << Blog::PostCategory.new(:categoryName => t.name, :categoryId => t.id, :isPrimary => false)
+      post_categories << Blog::PostCategory.new(:categoryName => t.strip, :categoryId => t.strip, :isPrimary => false)
     end
     return post_categories
   end
@@ -44,7 +44,7 @@ class MovableTypeService < ActionWebService::Base
     raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
     categories = []
     Category.find(:all, :order => 'name ASC').each do |c|
-      categories << Blog::MtCategory.new(:categoryId => c.id, :categoryName => c.name)
+      categories << Blog::MtCategory.new(:categoryId => c.name, :categoryName => c.name)
     end
     categories
   end
@@ -62,7 +62,7 @@ private
   def categorise(structs)
     categories = []
     structs.each {|s| categories << s.categoryName }
-    categories
+    categories.join(', ')
   end
   
   def unique(a1, a2)
