@@ -2,6 +2,7 @@ module HermesSitemap
   include           ActionController::UrlWriter
   SITEMAP           = "#{RAILS_ROOT}/public/sitemap.xml"
   INCLUDE_ASSETS    = ["Article", "Image", "Gallery"]
+  PRIORITY          = {"Article" => "0.8", "Image" => "0.5", "Gallery" => "0.6"}
   
   def create_sitemap(sitemap_path = SITEMAP, publication = nil)
     Publication.current = publication || Publication.default
@@ -21,7 +22,7 @@ module HermesSitemap
             xml.loc         polymorphic_url(asset)
             xml.lastmod     asset.updated_at.iso8601
             xml.changefreq  "weekly"
-            xml.priority    "0.8"
+            xml.priority    PRIORITY[a.content_type] || "0.5"
           end
         else
           puts "Nil asset content for #{a.id.to_s}:#{a.name} of type #{a.content_type} found - skipping."

@@ -40,6 +40,14 @@ class Defensio
       :permalink            => "permalink",
       :article_date         => "create_date"
     },
+    
+    :image => {
+      
+    },
+    
+    :gallery => {
+      
+    },
   
     :comment => {
       :user_ip              => "user_ip",
@@ -113,7 +121,7 @@ private
   end
 
   def server_url(action, options)  
-    "#{options[:server]}/#{options[:api_version]}/#{action}/#{options[:api_key]}.yml"
+    "#{options[:server]}/#{options[:api_version]}/#{action}/#{options[:api_key]}.yaml"
   end
   
   def convert_name(name)
@@ -137,18 +145,19 @@ private
   
   def post(api, options)
     request = create_request(api, options)
-    puts "Sending #{server_url(api[:action], options)}"
     unless options[:debug]
       response = Net::HTTP.post_form(URI.parse(server_url(api[:action], options)), request)
       if response.class == Net::HTTPOK
         return YAML::load(response.body)["defensio-result"]
       else
+        puts "Defensio sent: #{server_url(api[:action], options)}"
+        puts "Received:\n================\n#{response.body}\n================"
         raise InvalidRequest, response.inspect
       end
     else
       puts "Defensio(debug only): Action: #{api[:action]}"
       puts "                      Server: #{server_url(api[:action], options)}"
-      puts request.inspect
+      puts "                      #{request.inspect}"
       {"status" => "success"}
     end
   end
