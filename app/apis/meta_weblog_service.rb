@@ -68,7 +68,7 @@ private
 
   def post_options(struct, publish)
     {:title => struct.title, :description => struct.mt_excerpt, :content => struct.description, 
-      :author => struct.author, :categories => struct.categories.join(","), :publishDate => parse_date(struct.dateCreated), 
+      :author => struct.author, :categories => encode_categories(struct.categories), :publishDate => parse_date(struct.dateCreated), 
       :keywords => struct.mt_keywords, :allow_comments => encode_allow_comments(struct.mt_allow_comments),
       :more_text => struct.mt_text_more,
       :convert_breaks => struct.mt_convert_breaks, :status => encode_status(publish)
@@ -90,6 +90,10 @@ private
   def encode_allow_comments(allow_comments)
     # None = 0, Closed = 2, Open = 1
     return allow_comments.to_i rescue 0
+  end
+  
+  def encode_categories(categories)
+    categories.nil? ? "" : categories.join(',')
   end
   
 end
