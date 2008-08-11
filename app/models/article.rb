@@ -75,7 +75,6 @@ class Article < ActiveRecord::Base
     self.content = options[:content] || self.content
     self.description = options[:description] || self.description
     self.tag_list = options[:keywords] || self.tag_list
-    self.content = options[:more_text] || self.content
     self.dont_publish_before = options[:publishDate] || self.dont_publish_before
     self.status = options[:status]
     self.allow_comments = options[:allow_comments]
