@@ -137,6 +137,7 @@ private
   
   def post(api, options)
     request = create_request(api, options)
+    puts "Sending #{server_url(api[:action], options)}"
     unless options[:debug]
       response = Net::HTTP.post_form(URI.parse(server_url(api[:action], options)), request)
       if response.class == Net::HTTPOK

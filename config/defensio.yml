@@ -7,5 +7,5 @@ test:
   owner_url: http://code.macournoyer.com/svn/plugins/defensio
 
 production:
-  api_key: 6789xyz
-  owner_url: http://code.macournoyer.com/svn/plugins/defensio
+  api_key: 386bb526c292e7395c3ee06d1d829eb6
+  owner_url: http://www.noexpectations.com.au

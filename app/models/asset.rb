@@ -34,16 +34,16 @@ class Asset < ActiveRecord::Base
                             
   # Methods that will be inherited in the dependent class. Column attributed are included already.
   # Accessors
-  @@polymorph_readers =     :comments_open?, :comments_closed?, :comments_none?, :comments_require_login?,
+  POLYMORPH_READERS =       :comments_open?, :comments_closed?, :comments_none?, :comments_require_login?,
                             :moderate_comments?, :status_description, :content_rating_description,
                             :category_names, :category_ids, :mappable?, :geocode, :asset_id, :comments, :tag_list,
                             :permissions, :include_in_index?
                             
   # Writers
-  @@polymorph_writers =     :tag_list, :category_ids, :category_names
+  POLYMORPH_WRITERS =       :tag_list, :category_ids, :category_names
   
   # Generated output in to_xml
-  @@polymorph_xml_attrs =   :name, :title, :latitude, :longitude, :tag_list, :category_names, :content_rating,
+  POLYMORPH_XML_ATTRS =     :name, :title, :latitude, :longitude, :tag_list, :category_names, :content_rating,
                             :description, :created_at, :updated_at, :created_by_email
   
   # Control finders that can be chained (they are really scope methods)
@@ -238,15 +238,15 @@ class Asset < ActiveRecord::Base
   end
   
   def self.polymorph_readers
-    @@polymorph_readers rescue nil
+    POLYMORPH_READERS rescue nil
   end
   
   def self.polymorph_writers
-    @@polymorph_writers rescue nil
+    POLYMORPH_WRITERS rescue nil
   end
   
   def self.polymorph_xml_attrs
-    @@polymorph_xml_attrs rescue nil
+    POLYMORPH_XML_ATTRS rescue nil
   end
             
   # Add location identifiers as tags
