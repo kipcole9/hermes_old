@@ -4,5 +4,7 @@
 	sidebar :image_tag_cloud
 	sidebar :image_random
 %>
-<h3>About <%= Publication.current.title %></h3>
-<%= Publication.current.description %>
+<div class="_article">
+	<h2>About <%= Publication.current.title %></h2>
+	<%= Publication.current.description %>
+</div>

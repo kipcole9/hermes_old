@@ -45,7 +45,7 @@ class Article < ActiveRecord::Base
     article.set_options(options)
     article.publications |= publication.bit_id
     article.created_by = user
-    raise Hermes::CannotSave unless article.save
+    raise(Hermes::CannotSave, formatted_errors(article)) unless article.save
     return article
   end
   
@@ -53,7 +53,7 @@ class Article < ActiveRecord::Base
     return nil unless (article = self.get_post(user, article_id))
     raise Hermes::UpdateNotPermitted unless article.can_update?(user)
     article.set_options(options)
-    article.save!
+    raise(Hermes::CannotSave, formatted_errors(article)) unless article.save
     return article
   end
 
@@ -65,12 +65,13 @@ class Article < ActiveRecord::Base
     return nil unless (article = viewable_by(user).find_by_name(article_id))
     raise Hermes::DeleteNotPermitted unless article.can_delete?(user)
     article.status = Asset::STATUS["deleted"]
-    article.save!
+    raise(Hermes::CannotSave, formatted_errors(article)) unless article.save
     return true
   end
 
   def set_options(options)
     self.title = options[:title] || self.title
+    self.category_names = options[:categories] || self.category_names
     self.content = options[:content] || self.content
     self.description = options[:description] || self.description
     self.tag_list = options[:keywords] || self.tag_list
@@ -80,5 +81,10 @@ class Article < ActiveRecord::Base
     self.allow_comments = options[:allow_comments]
     self.markup_type = options[:convert_breaks]
   end
+  
+private
+  def formatted_errors(a)
+    a.errors.full_messages.join(' / ')
+  end  
 
 end

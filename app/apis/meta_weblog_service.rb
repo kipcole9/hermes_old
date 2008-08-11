@@ -5,20 +5,20 @@ class MetaWeblogService < ActionWebService::Base
   web_service_api MetaWeblogAPI
 
   def newPost(blog_id, user, password, struct, publish)
-    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
     raise(Hermes::NoPublicationFound, blog_id) unless publication = Publication.viewable_by(user).find_by_name(blog_id)
     raise Hermes::CannotCreateArticle unless (article = Article.add_post(user, publication, post_options(struct, publish)))
     return article.name
   end
 
   def editPost(post_id, user, pw, struct, publish)
-    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, pw))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, pw))
     raise Hermes::CannotUpdateArticle unless Article.update_post(user, post_id, post_options(struct, publish)) 
     return true
   end
 
   def getPost(post_id, user, password)
-    raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
+    raise Hermes::UserNotAuthenticated unless (user = User.authenticate_and_set(user, password))
     raise Hermes::ArticleNotFound unless (post = Article.get_post(user, post_id))
     return blogify_post(post)
   end
@@ -26,7 +26,7 @@ class MetaWeblogService < ActionWebService::Base
   def getCategories(id, user, password)
     raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
     categories = []
-    Category.find(:all, :order => 'name').map(&:name).each do |c|
+    Category.find(:all, :order => 'name').each do |c|
       categories << Blog::Category.new(
       :description => c.name,
       :htmlUrl     => "",
@@ -63,12 +63,12 @@ private
     Blog::Post.new(:title => article.title, :mt_excerpt => article.description, 
       :dateCreated => article.dont_publish_before ? article.dont_publish_before.utc.strftime(Blog::ISO8601) : nil,
       :postid => article.name, :mt_keywords => article.tag_list.join(','), :description => article.content,
-      :mt_allow_comments => article.allow_comments)
+      :categories => article.category_names.split(','), :mt_allow_comments => article.allow_comments)
   end
 
   def post_options(struct, publish)
     {:title => struct.title, :description => struct.mt_excerpt, :content => struct.description, 
-      :author => struct.author, :category => struct.category, :publishDate => parse_date(struct.dateCreated), 
+      :author => struct.author, :categories => struct.categories.join(","), :publishDate => parse_date(struct.dateCreated), 
       :keywords => struct.mt_keywords, :allow_comments => encode_allow_comments(struct.mt_allow_comments),
       :more_text => struct.mt_text_more,
       :convert_breaks => struct.mt_convert_breaks, :status => encode_status(publish)

@@ -14,10 +14,9 @@ class MovableTypeService < ActionWebService::Base
   def setPostCategories(postid, user, password, structs)
     raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
     raise(Hermes::ArticleNotFound, "Post '#{postid}' was not found.") unless (article = Article.get_post(user, postid))    
-    tag_list = categorise(structs)
-    category_ids = Category.find(:all, :conditions => ["name in (?)", tag_list]).map(&:id)
-    article.category_ids = category_ids
-    article.save!
+    categories = categorise(structs)
+    article.category_names = categories
+    raise(Hermes::CannotSave, formatted_errors(article)) unless article.save
     true
   end
   
@@ -78,4 +77,8 @@ private
     end
     dest
   end
+  
+  def formatted_errors(a)
+    a.errors.full_messages.join(' / ')
+  end  
 end

@@ -8,7 +8,7 @@ module Blog
     member :link,        :string
     member :description, :string
     member :author,      :string
-    member :category,    :string
+    member :categories,  [:string]
     member :comments,    :string
     #member :guid,        :string
     member :postid,      :string

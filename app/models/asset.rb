@@ -172,7 +172,7 @@ class Asset < ActiveRecord::Base
   end
   
   def category_names=(names)
-    category_ids = names.split(',').map {|n| Category.find_by_name(n.strip).attributes['id'] rescue nil }.compact
+    self.category_ids = names.split(',').map {|n| Category.find(:first, :conditions => ["name = ?", n.strip]).attributes['id'] rescue nil }.compact
   end
   
   # Convenience method to show human readable form of permissions for an object
