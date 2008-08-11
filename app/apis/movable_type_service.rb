@@ -34,7 +34,7 @@ class MovableTypeService < ActionWebService::Base
     raise Hermes::UserNotAuthenticated unless (user = User.authenticate(user, password))
     raise(Hermes::ArticleNotFound, "Post '#{postid}' was not found.") unless (article = Article.get_post(user, postid))
     post_categories = []    
-    article.categories.each do |t|
+    article.category_names.split(',').each do |t|
       post_categories << Blog::PostCategory.new(:categoryName => t.name, :categoryId => t.id, :isPrimary => false)
     end
     return post_categories
