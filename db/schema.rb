@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080808233329) do
+ActiveRecord::Schema.define(:version => 20080812051457) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20080808233329) do
   end
 
   add_index "assets_categories", ["asset_id", "category_id"], :name => "asset_id", :unique => true
+  add_index "assets_categories", ["asset_id", "category_id"], :name => "asset_category_key", :unique => true
 
   create_table "bookmarks", :force => true do |t|
     t.string "url"
@@ -120,6 +121,8 @@ ActiveRecord::Schema.define(:version => 20080808233329) do
     t.boolean  "spam"
     t.float    "spaminess"
     t.string   "signature"
+    t.string   "website"
+    t.string   "ip_address",       :limit => 20
   end
 
   create_table "content_ratings", :force => true do |t|

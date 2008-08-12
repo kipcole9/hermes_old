@@ -18,6 +18,10 @@ class Gallery < ActiveRecord::Base
         :order => "view_count DESC")
   end
 
+  # Announce articles to Defensio spam analyser?
+  def self.defensio?
+    true
+  end
 
 private
   def refresh

@@ -81,7 +81,7 @@ class Asset < ActiveRecord::Base
   def self.published_policy
     @published_policy ||= "(assets.dont_publish_before < now() OR assets.dont_publish_before IS NULL) "+
         "AND (assets.dont_publish_after > now() OR assets.dont_publish_after IS NULL) " +
-        "AND (assets.status = #{Asset::STATUS["published"]})"
+        "AND (assets.status = #{Asset::STATUS[:published]})"
   end
   
   # Comments flags
@@ -101,7 +101,7 @@ class Asset < ActiveRecord::Base
   
   def comments_none?              
     Publication.current.allow_comments == ALLOW_COMMENTS["none"] || 
-      attributes['comments_none'] == ALLOW_COMMENTS["none"]
+      attributes['allow_comments'] == ALLOW_COMMENTS["none"]
   end
   
   def comments_require_login?
@@ -248,14 +248,14 @@ class Asset < ActiveRecord::Base
   def self.polymorph_xml_attrs
     POLYMORPH_XML_ATTRS rescue nil
   end
-            
+      
   # Add location identifiers as tags
   def tag_list=(tags)
     location_tags = [self.location, self.city, self.state, self.country].compact.join(', ')
     new_tags = [location_tags, tags].compact.join(', ')
     super new_tags
   end
-
+  
 private
   
   def set_permissions

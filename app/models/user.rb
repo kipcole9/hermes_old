@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   before_create                   :make_activation_code  
   before_create                   :set_groups
   before_save                     :encrypt_password, :set_photo  
-  USERS_DIR    = "Users"
+  USERS_DIR                       = "Users"
   
   # The assets we created
   has_many    :my_assets, :class_name => 'Asset', :foreign_key => :created_by
@@ -41,7 +41,11 @@ class User < ActiveRecord::Base
   def self.authenticate_and_set(login, password)
     self.current_user = authenticate(login, password)
   end
-
+  
+  def self.logged_in?
+    self.current_user != self.anonymous
+  end
+  
   # Encrypts some data with the salt.
   def self.encrypt(password, salt)
     Digest::SHA1.hexdigest("--#{salt}--#{password}--")
@@ -153,6 +157,10 @@ class User < ActiveRecord::Base
   def self.environment=(env)
     @environment =  env
   end  
+  
+  def self.ip_address
+    self.environment ? self.environment["IP"] : "127.0.0.1"
+  end
   
 protected
   # before filter 

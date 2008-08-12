@@ -1,13 +1,21 @@
 <div class="_article">
 	<h2>Add Comment</h2>
+	<p class='dimmed'>
+		<% unless logged_in? %> 
+			Name and a valid email address are required.  A website URL is optional. 
+		<% end %>
+	 	All information	is used only for validation and spam management purposes. No information 
+		is divulged	to any third party (except as required by law).
+	</p>
 	<div class="_comment" id="_form">
 	<% hermes_form_for :comment, :url => comments_url, :html => {:method => :post, :id => "_formEdit"} do |form| %>
 		<%= hidden_field_tag :asset_id, comment_form.asset_id, :name => "comment[asset_id]"  %>
 		<% unless logged_in? %>
 			<%= form.text_field "Name", :created_by_name, :size => 45 %>
 			<%= form.text_field "Email", :created_by_email, :size => 45 %>
+			<%= form.text_field "Web site", :website, :size => 45 %>
 		<% end %>
-		<%= form.text_area "Comment", :content, :size => "66x5" %>
+		<%= form.text_area "Comment", :content, :size => "54x7" %>
 		<%= submit_tag "Submit" %>
 	<% end %>
 	</div>

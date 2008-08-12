@@ -23,10 +23,11 @@ class Defensio
                           :permalink => :mandatory},
     :audit_comment    => {:action => "audit-comment", :owner_url => :mandatory, :user_ip => :mandatory,
                           :article_date => :mandatory, :comment_author => :mandatory, :comment_type => :mandatory,
-                          :comment_content => :optional, :comment_author_email => :optional, 
-                          :comment_author_url => :optional, :permalink => :optional},
-    :report_false_negative => {:action => "report-false-negative", :signatures => :mandatory},
-    :report_false_positive => {:action => "report-false-positive", :signatures => :mandatory},
+                          :comment_content => :optional, :comment_author_email => :optional, "test-force" => :optional,
+                          :comment_author_url => :optional, :permalink => :optional, :referrer => :optional, 
+                          "user-logged-in" => :optional, "trusted-user" => :optional, :openid => :optional},
+    :report_false_negative => {:action => "report-false-negatives", :signatures => :mandatory, :owner_url => :mandatory},
+    :report_false_positive => {:action => "report-false-positives", :signatures => :mandatory, :owner_url => :mandatory},
     :get_stats             => {:action => "get-stats", :owner_url => :mandatory}
   }
   
@@ -40,13 +41,14 @@ class Defensio
       :permalink            => "permalink",
       :article_date         => "create_date"
     },
-    
-    :image => {
-      
-    },
-    
-    :gallery => {
-      
+
+    :default => {
+      :article_author       => "author_name",
+      :article_author_email => "author_email",
+      :article_title        => "title",
+      :article_content      => "description",
+      :permalink            => "permalink",
+      :article_date         => "create_date"      
     },
   
     :comment => {
@@ -55,7 +57,8 @@ class Defensio
       :comment_type         => "source",
       :comment_content      => "content",
       :comment_author_email => "author_email",
-      :comment_author_url   => "author_url"
+      :comment_author_url   => "author_url",
+      :signatures           => "signature"
     }
   }
   
@@ -63,9 +66,11 @@ class Defensio
     options.each {|k, v| CONFIG[k] = v }
     CONFIG[:api_version] ||= "1.2"
     CONFIG[:server]      ||=  SERVER
+    CONFIG[:debug]       ||=  true
     if !validate_key
       raise(InvalidAPIKey, "API Key '#{CONFIG[:api_key]}' is invalid") 
     end unless CONFIG[:no_validate_key]
+    true
   end
   
   def validate_key(options = {})
@@ -84,25 +89,26 @@ class Defensio
   def audit_comment(article, comment, options = {})
     raise NoArticle if article.nil?
     raise NoComment if comment.nil?
+    options[:referrer] = User.environment['HTTP_REFERER'] if User.environment['HTTP_REFERER']
+    options["user-logged-in"] = User.logged_in? ? "true" : "false"
+    options["trusted-user"] = User.current_user.is_admin? ? "true" : "false"
     merged_options = CONFIG.merge(extract_options(article)).merge(extract_options(comment)).merge(options)
     @response = post(API[:audit_comment], merged_options)
     success?(@response)    
   end
   
-  def report_false_negative(signatures, options = {})
-    signature_string = signatures.is_a?(Array) ? signatures.join(',') : signatures
-    raise NoSignatures, "No signatures were supplied" if signature_string.blank?
-    merged_options = CONFIG.merge(options).merge({:signatures => signature_string})
+  def report_false_negative(comment, options = {})
+    raise NoComment if comment.nil?
+    merged_options = CONFIG.merge(extract_options(comment)).merge(options)
     @response = post(API[:report_false_negative], merged_options)
     success?(@response)
   end
   
-  def report_false_positive(signatures, options = {})
-    signature_string = signatures.is_a?(Array) ? signatures.join(',') : signatures
-    raise NoSignatures, "No signatures were supplied" if signature_string.blank?
-    merged_options = CONFIG.merge(options).merge({:signatures => signature_string})
-    @response = post(API[:report_false_postive], merged_options)  
-    success?(@response) 
+  def report_false_positive(comment, options = {})
+    raise NoComment if comment.nil?
+    merged_options = CONFIG.merge(extract_options(comment)).merge(options)
+    @response = post(API[:report_false_positive], merged_options)
+    success?(@response)
   end
   
   def get_stats(options = {})
@@ -114,7 +120,8 @@ class Defensio
 private    
   def extract_options(obj)
     options = {}
-    METHOD_MAP[obj.class.name.downcase.to_sym].each do |k, v|
+    method_map = METHOD_MAP[obj.class.name.downcase.to_sym] || METHOD_MAP[:default]
+    method_map.each do |k, v|
       options[k] = obj.send(v) rescue nil
     end
     options
@@ -145,20 +152,15 @@ private
   
   def post(api, options)
     request = create_request(api, options)
-    unless options[:debug]
-      response = Net::HTTP.post_form(URI.parse(server_url(api[:action], options)), request)
-      if response.class == Net::HTTPOK
-        return YAML::load(response.body)["defensio-result"]
-      else
-        puts "Defensio sent: #{server_url(api[:action], options)}"
-        puts "Received:\n================\n#{response.body}\n================"
-        raise InvalidRequest, response.inspect
-      end
+    puts "Defensio request: #{server_url(api[:action], options)}" if options[:debug]
+    response = Net::HTTP.post_form(URI.parse(server_url(api[:action], options)), request)
+    if response.class == Net::HTTPOK
+      result =  YAML::load(response.body)["defensio-result"]
+      puts "Defensio result: #{result.inspect}" if options[:debug]
+      return result
     else
-      puts "Defensio(debug only): Action: #{api[:action]}"
-      puts "                      Server: #{server_url(api[:action], options)}"
-      puts "                      #{request.inspect}"
-      {"status" => "success"}
+      puts "Error: Received:\n================\n#{response.body}\n================" if options[:debug] && response.body
+      raise InvalidRequest, response.inspect
     end
   end
   

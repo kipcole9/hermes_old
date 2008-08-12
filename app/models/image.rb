@@ -45,6 +45,11 @@ class Image < ActiveRecord::Base
     num == 1 ? results.first : results
   end
   
+  # Announce articles to Defensio spam analyser?
+  def self.defensio?
+    true
+  end
+  
   def display_caption(len = 99999)
     (self.title || self.filename.remove_file_suffix.gsub(/-/," ")).truncate(len)
   end

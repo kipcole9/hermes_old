@@ -1,7 +1,7 @@
 <h3>
 	<%= "by #{article.created_by.full_name} on #{article.created_at.strftime("%A, %B %d %Y at %H:%M %Z")}" -%>
 	<% if !article.comments_none? %>
-		<% if (@comment_count ||= article.comments.published.count) > 0 %>
+		<% if (@comment_count ||= article.comments.published.not_spam.count) > 0 %>
 			<%= "(#{pluralize(@comment_count, "comment")})" %>
 		<% end %>
 	<% end %>

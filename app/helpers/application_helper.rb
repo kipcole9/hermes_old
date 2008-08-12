@@ -12,7 +12,7 @@ module ApplicationHelper
   def link_to_image(image_name, options = {})
     return options[:text] unless image = Image.viewable_by(current_user).find_by_name_or_filename(image_name)
     link_text = options[:text] || image.title
-    "<a href='#{image_url(image)}'>#{link_text}</a>"
+    link_to link_text, image_url(image)
   end
   
   def render_description(asset)

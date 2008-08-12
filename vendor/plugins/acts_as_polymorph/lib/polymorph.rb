@@ -20,6 +20,7 @@ module ActiveRecord
           as_name = configuration[:as].to_s.downcase
           
           class_eval <<-END_EVAL
+            include ActionController::UrlWriter
             has_one :#{polymorph_name}, :as => :#{as_name}, :dependent => :destroy
             
             def acts_as_polymorph_class
@@ -201,8 +202,27 @@ module ActiveRecord
             
             def asset_id
               self.#{polymorph_name}.id
-            end            
+            end
+            
+            #
+            # For Defensio spam protections service attribute methods
+            #
+            def author_name
+              self.created_by.full_name
+            end
 
+            def author_email
+              self.#{polymorph_name}.created_by_email
+            end
+
+            def create_date
+              self.#{polymorph_name}.created_at.strftime("%Y/%m/%d")
+            end
+            
+            def permalink
+              send("#{self.name.downcase}_url", self, :host => Publication.current.domain)
+            end
+                        
           END_EVAL
         end
       end

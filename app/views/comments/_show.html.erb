@@ -1,5 +1,5 @@
 <% unless show.comments_none? %>
-	<% @comments = show.comments.published %>
+	<% @comments = show.comments.published.not_spam %>
 	<% if (@comments.count > 0 rescue nil) %>
 		<%= render :partial => "comments/comments", :object => @comments %>
 	<% end %>

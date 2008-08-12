@@ -16,6 +16,10 @@ body {
   color:#ccc;
   font-size: medium;
   }
+
+.dimmed {
+	color: #555;
+}
  
 a:link {
   color:#9ad;
@@ -485,6 +489,10 @@ div#_form form label {
 	font-weight: normal;
 	font-size:1em;
 	} /* this is the text label on the left of each input */
+	
+._comment > #_formEdit > ._formField label {
+	width: 100px;
+}	/* To better format for comment entry */
 
 div#_form div.buttongroup {
 	float:left; 

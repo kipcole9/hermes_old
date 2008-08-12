@@ -1,38 +1,10 @@
-class Article < ActiveRecord::Base
-  include ActionController::UrlWriter
+class Article < ActiveRecord::Base 
   acts_as_polymorph
   acts_as_secure
   has_many :pages
 
-  def leader
-    self.asset.description
-  end
-  
-  def leader=(val)
-    self.asset.description = val
-  end
-  
   def full_content
     self.content.blank? ? self.description : self.description + ' ' + self.content
-  end
-  
-  #
-  # For Defensio spam protections service attribute methods
-  #
-  def author_name
-    self.asset.created_by.full_name
-  end
-  
-  def author_email
-    self.asset.created_by.email
-  end
-  
-  def permalink
-    publications_url(self.name)
-  end
-  
-  def create_date
-    self.created_at.strftime("%Y/%m/%d")
   end
   
   #
@@ -68,7 +40,7 @@ class Article < ActiveRecord::Base
     raise(Hermes::CannotSave, formatted_errors(article)) unless article.save
     return true
   end
-
+  
   def set_options(options)
     self.title = options[:title] unless options[:title].blank?
     self.category_names = options[:categories] unless options[:categories].blank?
@@ -79,6 +51,11 @@ class Article < ActiveRecord::Base
     self.status = options[:status] unless options[:status].blank?
     self.allow_comments = options[:allow_comments]
     self.markup_type = options[:convert_breaks]
+  end
+  
+  # Announce articles to Defensio spam analyser?
+  def self.defensio?
+    true
   end
   
 private

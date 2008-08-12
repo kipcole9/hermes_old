@@ -1,16 +1,17 @@
 class Comment < ActiveRecord::Base
-  belongs_to    :asset
-  belongs_to    :created_by, :class_name => 'User', :foreign_key => "created_by"
+  belongs_to                    :asset
+  belongs_to                    :created_by, :class_name => 'User', :foreign_key => "created_by"
   before_validation_on_create   :set_comment_status
-  before_save                   :check_spam
+  before_save                   :set_ip_address
   
   validates_presence_of   :asset
   validate do |comment|
     comment.check_content
   end
   
-  named_scope :published, lambda { {:conditions => ["status = ?", Asset::STATUS["published"]]} }
-  named_scope :draft, lambda { {:conditions => ["status = ?", Asset::STATUS["draft"]]} }
+  named_scope :published, lambda { {:conditions => ["status = ?", Asset::STATUS[:published]]} }
+  named_scope :not_spam, lambda { {:conditions => "spam = 0" } }
+  named_scope :draft, lambda { {:conditions => ["status = ?", Asset::STATUS[:draft]]} }
   
   # Defensio spam protection service attributes
   def author_name
@@ -29,6 +30,14 @@ class Comment < ActiveRecord::Base
     end
   end
   
+  def source
+    "comment"
+  end
+  
+  def user_ip
+    User.ip_address
+  end
+  
   def check_content
     unless self.created_by
       errors.add_to_base("Must provide a name and email address") if created_by_name.blank? || created_by_email.blank?
@@ -39,15 +48,13 @@ class Comment < ActiveRecord::Base
 
 private  
   def set_comment_status
-    if Publication.current.moderate_comments
-      self.status = Asset::STATUS["draft"]
-    else
-      self.status = Asset::STATUS["published"]
+    if Publication.current.moderate_comments && self.status.nil?
+      self.status = Asset::STATUS[:draft]
     end
   end
   
-  def check_spam
-    
+  def set_ip_address
+    self.ip_address = User.environment["IP"]
   end
 
 end

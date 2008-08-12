@@ -99,6 +99,7 @@ protected
     User.environment["HOST_WITH_PORT"] = request.host_with_port
     User.environment["HOST"] = request.host
     User.environment["PROTOCOL"] = request.protocol
+    User.environment["IP"] = request.env["HTTP_X_REAL_IP"] || request.remote_addr || request.remote_ip
     Publication.current = publication
   end
     

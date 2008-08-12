@@ -24,6 +24,11 @@ module Hermes
   class NoAnonUserDefined < Error; end
   
   class BadPolymorphicSave < Error; end
+  
+  def default_url_options
+    {:host => Publication.current.domain}
+  end
+  
 
 end
 

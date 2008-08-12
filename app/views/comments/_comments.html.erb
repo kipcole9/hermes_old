@@ -8,7 +8,11 @@
 			<% if current_user.is_admin? %>
 				<%= link_to_remote "Edit", :url => edit_comment_url(comment) %> | 
 				<%= link_to_remote "Delete", :url => comment_url(comment), :confirm => "Are you sure?", :method => :delete %> | 
-				<%= link_to_remote "Mark as spam", :url => spam_comment_url(comment), :method => :put %>
+				<% if comment.spam? %>
+					<%= link_to_remote "Mark as ham", :url => ham_comment_url(comment), :method => :put %>
+				<% else %>
+					<%= link_to_remote "Mark as spam", :url => spam_comment_url(comment), :method => :put %>
+				<% end %>
 			<% end %>
 		</h3>
 		</div>
