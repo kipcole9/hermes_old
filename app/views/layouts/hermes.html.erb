@@ -46,7 +46,9 @@
 	<%= Publication.current.copyright_notice rescue "" %><br />
 	<a href="http://technorati.com/faves?sub=addfavbtn&amp;add=http://www.noexpectations.com.au">			
 		<%= image_tag("/images/social/Technorati_32x32.png") %> Add to Technorati Favorites
-	</a>
+	</a> | 
+	<a href="<%= privacy_publication_url(Publication.current) -%>">Privacy Policy</a> |
+	<a href="<%= terms_publication_url(Publication.current) -%>">Terms of Service</a>
   </div>
 </div>
 

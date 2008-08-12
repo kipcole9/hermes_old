@@ -52,14 +52,30 @@ class CommentsController < ApplicationController
     if defensio.report_false_positive(@comment)
       @comment.spam = true
       @comment.save!
+      respond_to do |format|
+        format.js do
+          render :update do |page| 
+              page["spam_#{params[:id].to_s}"].hide
+              page["ham_#{params[:id].to_s}"].show
+          end
+        end
+      end
     end
   end
   
   def ham
     defensio = Defensio.new(:no_validate_key => true)
     if defensio.report_false_negative(@comment)
-      @comment.spam = true
+      @comment.spam = false
       @comment.save!
+      respond_to do |format|
+        format.js do
+          render :update do |page| 
+              page["spam_#{params[:id].to_s}"].show
+              page["ham_#{params[:id].to_s}"].hide
+          end
+        end
+      end      
     end
   end
 

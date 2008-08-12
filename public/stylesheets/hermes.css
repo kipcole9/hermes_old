@@ -20,6 +20,14 @@ body {
 .dimmed {
 	color: #555;
 }
+
+.small {
+	font-size: 75%;
+}
+
+.verysmall {
+	font-size: 50%;
+}
  
 a:link {
   color:#9ad;
@@ -239,6 +247,15 @@ div#_navigation a:hover {
 	font-size: 90%;
 	font-weight: normal;
 	margin-bottom: 0.7em;
+}
+
+/* For page numbers */
+._article h5 {
+	margin: 0;
+	color: #777;
+	padding: 0;
+	font-size: 100%;
+	font-weight: normal;
 }
 
 div._comment {

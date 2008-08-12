@@ -47,7 +47,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :comments, :collection => {:delete => :delete}, 
                       :member => {:approve => :put, :spam => :put, :ham => :put}
   map.resources :bookmarks
-  map.resources :publications, :member => {:about => :get, :contact => :get}
+  map.resources :publications, :member => {:about => :get, :contact => :get, :privacy => :get, :terms => :get}
   map.resources :users
 
   map.connect "logged_exceptions/:action/:id", :controller => "logged_exceptions"
