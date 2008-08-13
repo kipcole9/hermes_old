@@ -24,7 +24,7 @@ class Comment < ActiveRecord::Base
   def self.add_pingback(asset, sourceURI, body)
     Comment.create!(:asset => asset.asset, :comment_type => COMMENT_TYPE[:pingback],
                    :author_name => "Pingback", :status => Asset::STATUS[:published],
-                   :website => sourceURI, :content => pingback_comment(sourceURI, body))
+                   :website => sourceURI, :content => self.pingback_comment(sourceURI, body))
   end
   
   # Defensio spam protection service attributes
@@ -75,7 +75,7 @@ private
     self.comment_type ||= COMMENT_TYPE[:comment]
   end
   
-  def pingback_comment(sourceURI, body)
+  def self.pingback_comment(sourceURI, body)
     "Pingback from #{link_to((body/'title' || 'site'), sourceURI)}"
   end
 end
