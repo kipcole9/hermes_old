@@ -23,7 +23,7 @@ class Comment < ActiveRecord::Base
   
   def self.add_pingback(asset, sourceURI, body)
     Comment.create!(:asset => asset.asset, :comment_type => COMMENT_TYPE[:pingback],
-                   :created_by = User.admin, :status => Asset::STATUS[:published],
+                   :created_by => User.admin, :status => Asset::STATUS[:published],
                    :website => sourceURI, :content => self.pingback_comment(sourceURI, body))
   end
   
