@@ -14,7 +14,7 @@ class AssetsController < ApplicationController
   before_filter :remember_location, :only => [:show, :index]
   
   after_filter  :log_show, :only => [:show]
-  @@asset_actions = ["live_search", "apis"]
+  ASSET_ACTIONS = ["live_search", "apis"]
   
   # Proxies: implement in concrete Asset sub-class as required
   # Normally nothing is required (the correct template will get rendered)
@@ -32,7 +32,7 @@ class AssetsController < ApplicationController
 
   def show
     respond_to do |format|
-      format.html { render :action => :edit if !File.exist?(view_path) }
+      format.html { render :action => :edit unless File.exist?(view_path) }
       format.xml  { render :xml => @object.to_xml }
       format.any  { send("show_#{params[:format]}") } if respond_to?("show_#{params[:format]}")      
     end
@@ -40,7 +40,7 @@ class AssetsController < ApplicationController
   
   def new
     respond_to do |format|
-      format.html { render :action => :edit if !File.exist?(view_path) }
+      format.html { render :action => :edit unless File.exist?(view_path) }
     end
   end
   
@@ -183,7 +183,7 @@ protected
 
   def authorized?
     # Unless specified, no actions can be called on this base class
-    return false if self.class.name == "AssetsController" && !@@asset_actions.include?(params[:action])
+    return false if self.class.name == "AssetsController" && !ASSET_ACTIONS.include?(params[:action])
     case params[:action]
     when "edit","update"
       @object.can_update?(current_user)
@@ -297,8 +297,7 @@ private
     
     def log_asset_show
       if @asset
-        AssetView.log(publication.id, @asset, current_user, request.env["HTTP_USER_AGENT"], 
-                    (request.env["HTTP_X_REAL_IP"] || request.remote_addr || request.remote_ip))
+        AssetView.log(publication.id, @asset, current_user, request.env["HTTP_USER_AGENT"], User.environment["IP"])
         Asset.increment_view_count(@asset.attributes["id"])
       end
     end

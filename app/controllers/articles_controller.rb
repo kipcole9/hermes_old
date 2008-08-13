@@ -7,9 +7,6 @@ class ArticlesController < AssetsController
         .conditions(marshall_params).order('assets.created_at DESC') \
         .with_category(params[:category]) \
         .pager(unescape(params[:tags]), params[:page])  
-    #if @articles.size == 0
-    #  page_not_found("Requested articles not found!")
-    #end
   end
   
 end
