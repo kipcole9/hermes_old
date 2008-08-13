@@ -64,17 +64,17 @@ class Comment < ActiveRecord::Base
 private
   def defensio_spam_check
     defensio = Defensio.new(:no_validate_key => true)
-    article = comment.asset.content
-    if defensio.audit_comment(article, comment)
-      comment.signature = defensio.response["signature"]
-      comment.spam = defensio.response["spam"]
-      comment.spaminess = defensio.response["spaminess"]
-      comment.status = comment.spam? ? Asset::STATUS[:draft] : Asset::STATUS[:published]
+    article = self.asset.content
+    if defensio.audit_comment(article, self)
+      self.signature = defensio.response["signature"]
+      self.spam = defensio.response["spam"]
+      self.spaminess = defensio.response["spaminess"]
+      self.status = comment.spam? ? Asset::STATUS[:draft] : Asset::STATUS[:published]
     else
       logger.warning "Comment: Defensio failure: setting comment to draft"
-      comment.status = Asset::STATUS[:draft]
+      self.status = Asset::STATUS[:draft]
     end
-    comment.status = Asset::STATUS[:draft] if comment.asset.moderate_comments?
+    self.status = Asset::STATUS[:draft] if self.asset.moderate_comments?
   end 
     
   def set_comment_status
