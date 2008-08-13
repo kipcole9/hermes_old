@@ -92,7 +92,9 @@ private
   end
   
   def self.pingback_comment(sourceURI, body)
-    "Pingback from <a href=\"#{sourceURI}\">#{(body/'title' || 'site')}</ a>"
+    source_title = (body/'title').inner_html
+    source_title = source_title.blank? ? 'site' : source_title
+    "Pingback from \'<a href=\"#{sourceURI}\">#{source_title}\'.</a>"
   end
 end
 

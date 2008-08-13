@@ -11,8 +11,11 @@ class CommentsController < ApplicationController
   def create
     comment = Comment.new(params[:comment])
     comment.created_by = current_user if logged_in?
-    flash[:notice] = "Comment not saved: #{comment.errors.full_messages.join(', ')}." unless comment.save
-    flash[:notice] = "Your comment has been saved for moderation" if comment.status == Asset::STATUS[:draft]
+    if comment.save
+      flash[:notice] = "Your comment has been saved for moderation" if comment.status == Asset::STATUS[:draft]
+    else
+      flash[:notice] = "Comment not saved: #{comment.errors.full_messages.join(', ')}."
+    end
     redirect_back_or_default("/")
   end
   
