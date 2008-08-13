@@ -38,20 +38,20 @@ module ApplicationHelper
     link_to t, u
   end
   
-  def image(name)
-    if i = Image.viewable_by(current_user).find_by_name_or_filename(name)
-      render :partial => "images/thumbnail.html.erb", :locals => {:image => i}
+  def image(name, options = {})
+    if i = Image.viewable_by(current_user).published.published_in(publication).find_by_name_or_filename(name)
+      if options[:size] && options[:size] == :large
+        render :partial => "images/image.html.erb", :locals => {:image => i}
+      else
+        render :partial => "images/thumbnail.html.erb", :locals => {:image => i}
+      end
     else
       "{image '#{name}' not found}"
     end
   end
   
-  def thumb(name)
-    image(name)
-  end
-  
   def image_rss(name)
-    if i = Image.viewable_by(current_user).find_by_name(name)
+    if i = Image.viewable_by(current_user).published.published_in(publication).find_by_name(name)
       render :partial => "images/thumbnail_rss.html.erb", :locals => {:image => i}
     else
       "{image '#{name}' not found}"
@@ -59,7 +59,7 @@ module ApplicationHelper
   end  
 
   def gallery(name)
-    if g = Gallery.viewable_by(current_user).find_by_name(name)
+    if g = Gallery.viewable_by(current_user).published.published_in(publication).find_by_name(name)
       render :partial => "images/thumbnail.html.erb", :locals => {:image => g.popular_image(current_user)}
     else
       "{gallery '#{name}' not found}"
@@ -99,7 +99,7 @@ module ApplicationHelper
 	
   def base_uri
     # This is only used in a form_for, so we can discard any supplied parameters (there shouldn't be any anyway)
-    if !@base_uri
+    unless @base_uri
       @base_uri = request.request_uri.split("?")[0].split('/')
       @base_uri = @base_uri[0..-2].join('/')
     end

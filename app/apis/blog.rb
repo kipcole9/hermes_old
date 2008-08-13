@@ -17,11 +17,12 @@ module Blog
     
     # Items supported for MoveableType API
     member :mt_allow_comments,  :string
-    member :mt_allow_pings,     :bool
+    member :mt_allow_pings,     :string
     member :mt_convert_breaks,  :string
     member :mt_text_more,       :string
     member :mt_excerpt,         :string
     member :mt_keywords,        :string
+    member :mt_tags,            :string
     member :mt_tb_ping_urls,    [:string]
   end
 

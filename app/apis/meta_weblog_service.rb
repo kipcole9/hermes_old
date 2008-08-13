@@ -62,15 +62,15 @@ private
   def blogify_post(article)
     Blog::Post.new(:title => article.title, :mt_excerpt => article.description, 
       :dateCreated => article.dont_publish_before ? article.dont_publish_before.utc.iso8601 : nil,
-      :postid => article.name, :mt_keywords => article.tag_list.join(','), :description => article.content,
-      :categories => article.category_names.split(','), :mt_allow_comments => article.allow_comments)
+      :postid => article.name, :mt_tags => article.tag_list.join(', '), :description => article.content,
+      :categories => article.category_names.split(','), :mt_allow_comments => article.allow_comments, :mt_allow_pings => article.allow_pingbacks)
   end
 
   def post_options(struct, publish)
     {:title => struct.title, :description => struct.mt_excerpt, :content => struct.description, 
       :author => struct.author, :categories => encode_categories(struct.categories), :publishDate => parse_date(struct.dateCreated), 
-      :keywords => struct.mt_keywords, :allow_comments => encode_allow_comments(struct.mt_allow_comments),
-      :more_text => struct.mt_text_more,
+      :keywords => struct.mt_tags, :allow_comments => encode_allow_comments(struct.mt_allow_comments),
+      :more_text => struct.mt_text_more, :allow_pingbacks => encode_allow_pings(struct.mt_allow_pings),
       :convert_breaks => struct.mt_convert_breaks, :status => encode_status(publish)
     }
   end
@@ -80,11 +80,11 @@ private
   end
   
   def encode_status(publish)
-    publish ? Asset::STATUS["published"] : Asset::STATUS["draft"]
+    publish ? Asset::STATUS[:published] : Asset::STATUS[:draft]
   end
   
   def decode_status(status)
-    status == Asset::STATUS["published"] ? true : false
+    status == Asset::STATUS[:published] ? true : false
   end
   
   def encode_allow_comments(allow_comments)
@@ -92,8 +92,13 @@ private
     return allow_comments.to_i rescue 0
   end
   
+  def encode_allow_pings(allow_pings)
+    # True = "1", False = "0"
+    return allow_pings.to_i rescue 0
+  end
+  
   def encode_categories(categories)
     categories && categories.join(', ')
   end
-  
+
 end

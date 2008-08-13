@@ -45,12 +45,13 @@ class Article < ActiveRecord::Base
     self.title = options[:title] unless options[:title].blank?
     self.category_names = options[:categories] unless options[:categories].blank?
     self.content = options[:content] unless options[:content].blank?
-    self.description = options[:description] unless options[:descrition].blank?
+    self.description = options[:description] unless options[:description].blank?
     self.tag_list = options[:keywords] unless options[:keywords].blank?
     self.dont_publish_before = options[:publishDate] unless options[:publishDate].blank?
     self.status = options[:status] unless options[:status].blank?
     self.allow_comments = options[:allow_comments]
     self.markup_type = options[:convert_breaks]
+    self.allow_pingbacks = options[:allow_pingbacks]
   end
   
   # Announce articles to Defensio spam analyser?

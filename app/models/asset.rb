@@ -109,7 +109,7 @@ class Asset < ActiveRecord::Base
   end
   
   def allow_pingbacks?
-    Publication.current.allow_pingback && attributes['allow_pingback']
+    Publication.current.allow_pingbacks && attributes['allow_pingbacks']
   end
   
   # Authorisation methods
@@ -151,7 +151,11 @@ class Asset < ActiveRecord::Base
   end
   
   def status=(s)
-    s.is_a?(Fixnum) || s.is_integer? ? super(s) : super(STATUS[s])
+    unless s.nil?
+      s.is_a?(Fixnum) || s.is_integer? ? super(s) : super(STATUS[s.to_sym])
+    else
+      super
+    end
   end
   
   def content_rating_description
@@ -159,7 +163,7 @@ class Asset < ActiveRecord::Base
   end
   
   def status_description
-    STATUS.index(self.status)
+    STATUS.index(self.status).to_s
   end
   
   def created_by_email

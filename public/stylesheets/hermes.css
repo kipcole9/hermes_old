@@ -913,3 +913,23 @@ v:* {
 	behavior:url(#default#VML);
 } 
 
+/* For tables */
+table.index_table {
+	border: 2px solid #555;
+	vertical-align: top;
+}
+
+table.index_table th { 
+	border: 1px solid #555;
+	background-color: #333; 
+	vertical-align: middle; 
+	padding: 7px;
+}
+
+table.index_table td { 
+	border: 1px solid #555;
+	background-color: #222; 
+	vertical-align: top; 
+	padding: 7px;
+}
+

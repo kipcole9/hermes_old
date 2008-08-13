@@ -1,35 +1,44 @@
+<%
+	sidebar :asset_search
+	sidebar :articles_subscribe
+	sidebar :article_categories
+	sidebar :image_tag_cloud
+	sidebar :image_random
+%>
 <div class="_article">
 	<h2>Draft Comments</h2>
-	<table>
+	<table class="index_table">
 		<head>
 		     <tr>
-				<td>
+				<th>
 					Asset
-				</td>
-				<td>
+				</th>
+				<th>
 					Comment
-				</td>
-				<td>
+				</th>
+				<th>
 					Spam?
-				</td>
-				<td>
+				</th>
+				<th>
 					Spaminess
-				</td>
-				<td>
+				</th>
+				<th>
 					Actions
-				</td>
+				</th>
 		</thead>
 		<tbody>
 			<% @comments.each do |c| %>
 		    <tr>
 				<td>
-					<%= c.asset.nil? ? "Nil Asset" : h(c.asset.name) %>
+					<%= c.asset.nil? ? "Nil Asset" : link_to(h(c.asset.name), polymorphic_url(c.asset.content)) %>
 				</td>	
 				<td>
 					<%= h c.content %>
 				</td>
 				<td>
-					<%= c.spam %>
+					<% if c.spam %>
+						<%= image_tag "/images/icons/warning_sign_48x48.png" %>
+					<% end %>
 				</td>
 				<td>
 					<%= c.spaminess.to_s %>

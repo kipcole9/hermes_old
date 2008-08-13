@@ -122,7 +122,7 @@ private
     options = {}
     method_map = METHOD_MAP[obj.class.name.downcase.to_sym] || METHOD_MAP[:default]
     method_map.each do |k, v|
-      options[k] = obj.send(v) rescue nil
+      options[k] = obj.send(v) # rescue nil
     end
     options
   end
