@@ -11,24 +11,8 @@ class CommentsController < ApplicationController
   def create
     comment = Comment.new(params[:comment])
     comment.created_by = current_user if logged_in?
-    if comment.valid?
-      defensio = Defensio.new(:no_validate_key => true)
-      article = comment.asset.content
-      if defensio.audit_comment(article, comment)
-        comment.signature = defensio.response["signature"]
-        comment.spam = defensio.response["spam"]
-        comment.spaminess = defensio.response["spaminess"]
-        comment.status = comment.spam? ? Asset::STATUS[:draft] : Asset::STATUS[:published]
-      else
-        logger.warning "Defensio failure: setting comment to draft"
-        comment.status = Asset::STATUS[:draft]
-      end
-      comment.status = Asset::STATUS[:draft] if comment.asset.moderate_comments?
-      flash[:notice] = "Your comment has been saved for moderation" if comment.status == Asset::STATUS[:draft]
-      flash[:notice] = "Comment not saved: #{comment.errors.full_messages.join(', ')}." unless comment.save
-    else
-      flash[:notice] = "Comment not saved: #{comment.errors.full_messages.join(', ')}"
-    end
+    flash[:notice] = "Comment not saved: #{comment.errors.full_messages.join(', ')}." unless comment.save
+    flash[:notice] = "Your comment has been saved for moderation" if comment.status == Asset::STATUS[:draft]
     redirect_back_or_default("/")
   end
   

@@ -2,7 +2,7 @@ class Comment < ActiveRecord::Base
   belongs_to                    :asset
   belongs_to                    :created_by, :class_name => 'User', :foreign_key => "created_by"
   before_validation_on_create   :set_comment_status
-  before_save                   :set_ip_address, :set_comment_type
+  before_save                   :set_ip_address, :set_comment_type, :defensio_spam_check
   
   validates_presence_of   :asset
   validate do |comment|
@@ -22,9 +22,10 @@ class Comment < ActiveRecord::Base
   }
   
   def self.add_pingback(asset, sourceURI, body)
-    Comment.create!(:asset => asset.asset, :comment_type => COMMENT_TYPE[:pingback],
+    comment = Comment.new(:asset => asset.asset, :comment_type => COMMENT_TYPE[:pingback],
                    :created_by => User.admin, :status => Asset::STATUS[:published],
                    :website => sourceURI, :content => self.pingback_comment(sourceURI, body))
+    comment.save               
   end
   
   # Defensio spam protection service attributes
@@ -60,7 +61,22 @@ class Comment < ActiveRecord::Base
     errors.add_to_base("Empty comments are not saved") if content.blank?
   end
 
-private  
+private
+  def defensio_spam_check
+    defensio = Defensio.new(:no_validate_key => true)
+    article = comment.asset.content
+    if defensio.audit_comment(article, comment)
+      comment.signature = defensio.response["signature"]
+      comment.spam = defensio.response["spam"]
+      comment.spaminess = defensio.response["spaminess"]
+      comment.status = comment.spam? ? Asset::STATUS[:draft] : Asset::STATUS[:published]
+    else
+      logger.warning "Comment: Defensio failure: setting comment to draft"
+      comment.status = Asset::STATUS[:draft]
+    end
+    comment.status = Asset::STATUS[:draft] if comment.asset.moderate_comments?
+  end 
+    
   def set_comment_status
     if self.status.nil?
       self.status = Asset::STATUS[:draft]
@@ -76,7 +92,7 @@ private
   end
   
   def self.pingback_comment(sourceURI, body)
-    "Pingback from <a href=\"#{sourceURI}\">(body/'title' || 'site')</ a>"
+    "Pingback from <a href=\"#{sourceURI}\">#{(body/'title' || 'site')}</ a>"
   end
 end
 
