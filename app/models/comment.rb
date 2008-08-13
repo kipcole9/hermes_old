@@ -69,7 +69,7 @@ private
       self.signature = defensio.response["signature"]
       self.spam = defensio.response["spam"]
       self.spaminess = defensio.response["spaminess"]
-      self.status = comment.spam? ? Asset::STATUS[:draft] : Asset::STATUS[:published]
+      self.status = self.spam? ? Asset::STATUS[:draft] : Asset::STATUS[:published]
     else
       logger.warning "Comment: Defensio failure: setting comment to draft"
       self.status = Asset::STATUS[:draft]
