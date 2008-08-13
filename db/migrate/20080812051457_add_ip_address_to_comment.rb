@@ -4,6 +4,6 @@ class AddIpAddressToComment < ActiveRecord::Migration
   end
 
   def self.down
-    drop_column :comments, :ip_address
+    remove_column :comments, :ip_address
   end
 end

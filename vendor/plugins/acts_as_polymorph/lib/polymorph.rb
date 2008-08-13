@@ -204,6 +204,11 @@ module ActiveRecord
               self.#{polymorph_name}.id
             end
             
+            # For pingbacks
+            def add_pingback(sourceURI, body)
+              Comment.add_pingback(self, sourceURI, body)
+            end
+            
             #
             # For Defensio spam protections service attribute methods
             #

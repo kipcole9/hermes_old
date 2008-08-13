@@ -4,14 +4,17 @@ class CommentsController < ApplicationController
   before_filter :comments_open?, :only => [:create, :edit]
   before_filter :retrieve_comment, :only => [:ham, :spam]
   
+  def index
+    @comments = Comment.all
+  end
+  
   def create
     comment = Comment.new(params[:comment])
-    comment.status = Asset::STATUS[:draft] if comment.asset.moderate_comments?
     comment.created_by = current_user if logged_in?
     if comment.valid?
       defensio = Defensio.new(:no_validate_key => true)
       article = comment.asset.content
-      if defensio.audit_comment(article, comment, :debug => true)
+      if defensio.audit_comment(article, comment)
         comment.signature = defensio.response["signature"]
         comment.spam = defensio.response["spam"]
         comment.spaminess = defensio.response["spaminess"]
@@ -20,7 +23,8 @@ class CommentsController < ApplicationController
         logger.warning "Defensio failure: setting comment to draft"
         comment.status = Asset::STATUS[:draft]
       end
-      flash[:notice] = "Your comment has been saved for moderation" if comment.status == Asset::STATUS[:draft] or comment.spam?
+      comment.status = Asset::STATUS[:draft] if comment.asset.moderate_comments?
+      flash[:notice] = "Your comment has been saved for moderation" if comment.status == Asset::STATUS[:draft]
       flash[:notice] = "Comment not saved: #{comment.errors.full_messages.join(', ')}." unless comment.save
     else
       flash[:notice] = "Comment not saved: #{comment.errors.full_messages.join(', ')}"
@@ -51,12 +55,12 @@ class CommentsController < ApplicationController
     defensio = Defensio.new(:no_validate_key => true)
     if defensio.report_false_positive(@comment)
       @comment.spam = true
+      @comment.status = Asset::STATUS[:draft]
       @comment.save!
       respond_to do |format|
         format.js do
           render :update do |page| 
-              page["spam_#{params[:id].to_s}"].hide
-              page["ham_#{params[:id].to_s}"].show
+              page["ham_#{params[:id].to_s}"].replace_html "Marked as spam"
           end
         end
       end
@@ -67,12 +71,12 @@ class CommentsController < ApplicationController
     defensio = Defensio.new(:no_validate_key => true)
     if defensio.report_false_negative(@comment)
       @comment.spam = false
+      @comment.status = Asset::STATUS[:published]
       @comment.save!
       respond_to do |format|
         format.js do
           render :update do |page| 
-              page["spam_#{params[:id].to_s}"].show
-              page["ham_#{params[:id].to_s}"].hide
+              page["spam_#{params[:id].to_s}"].replace_html "Marked as not spam"
           end
         end
       end      

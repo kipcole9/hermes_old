@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080812051457) do
+ActiveRecord::Schema.define(:version => 20080813040350) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(:version => 20080812051457) do
     t.boolean  "comments_require_login",               :default => false, :null => false
     t.string   "copyright_notice"
     t.boolean  "include_in_index",                     :default => true
+    t.boolean  "allow_pingback"
   end
 
   add_index "assets", ["name", "content_type"], :name => "index_on_name_and_content_type", :unique => true
@@ -123,6 +124,7 @@ ActiveRecord::Schema.define(:version => 20080812051457) do
     t.string   "signature"
     t.string   "website"
     t.string   "ip_address",       :limit => 20
+    t.string   "comment_type",     :limit => 10
   end
 
   create_table "content_ratings", :force => true do |t|

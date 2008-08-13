@@ -27,12 +27,14 @@ class PingbackService < ActionWebService::Base
     # Get the target page - its needs to be on this site
     # and it needs to be referenceable for a pingback.
     begin
-      uri = URI.parse(targetURI)
-      # params = path_parameters_from_path(uri.path)
-      raise_error(:uri_cannot_be_target) unless uri.host == Publication.current.domain && pingback_is_allowed?(params)
+      raise_error(:uri_cannot_be_target, "Target '#{URI.parse(targetURI).host}' host is not this site #{Publication.current.domain}'.") unless URI.parse(targetURI).host == Publication.current.domain
+      raise_error(:target_does_not_exist) unless asset = retrieve_asset_from_path(targetURI, User.anonymous, Publication.current)
+      raise_error(:uri_cannot_be_target) unless asset.allow_pingbacks?
       target_page = RestClient.get(targetURI, HEADERS)
     rescue RestClient::ResourceNotFound => e
       raise_error(:target_does_not_exist)
+    rescue Hermes::BadPingUri => e
+      raise_error(:uri_cannot_be_target)  
     end
           
     # Source pages contains the link to us.      
@@ -46,15 +48,15 @@ class PingbackService < ActionWebService::Base
     body = Hpricot(source_page)
     (body/"a").each do |a_link|
       if a_link.attributes["href"] == targetURI
-        return "pingback accepted" if add_pingback(params, targetURI, body)
-        raise_error(:could_not_communicate_upstream)
+        return "pingback accepted" if asset.add_pingback(sourceURI, body)
+        raise_error(:could_not_communicate_upstream, "Couldn't register pingback")
       end
     end
     raise_error(:no_target_link)
     
   # Unknown http error
   rescue RestClient::RequestFailed => e
-    raise_error(:unspecified, "Unmanaged error '#{e}'")
+    raise_error(:unspecified, "Unexpected http error '#{e}'")
     
   # Couldn't parse the targetURI
   rescue URI::InvalidURIError
@@ -66,12 +68,4 @@ private
     raise Hermes::PingbackError, {:code => PING_ERROR_CODE[error], :text => (text || error.to_message)}
   end
   
-  def pingback_is_allowed?(params)
-    true
-  end
-  
-  def add_pingback(params, targetURI, html_body)
-    true
-  end
-
 end

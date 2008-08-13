@@ -2,7 +2,10 @@ module Hermes
   class Error < RuntimeError; end
   class UserNotAuthenticated < Error; end
   class NoCurrentUser < Error; end
-  class PingbackError < Error; end
+  
+  class PingError < Error; end
+  class BadPingUri < PingError; end
+  class PingbackError < PingError; end
     
   class NotFound < Error; end
   class NoPublicationFound < NotFound; end

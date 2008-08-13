@@ -6,12 +6,12 @@
 				<span class="_comment_author"> 
 				<%= check_box_tag "comment_ids[]", comment.id, true %>
 				<%= "#{sanitize comment.author_name} said:" %></span>
-				<%= format_content(comment.content) -%>		
+				<%= format_content(comment.content).strip_tags -%>		
 				<h3><%= "#{comment.created_at.strftime("%A, %B %d %Y at %H:%M %Z")}" -%>
 				<%= link_to_remote "Approve", :url => approve_comment_url(comment), :method => :put %> | 
 				<%= link_to_remote "Delete", :url => comment_url(comment), :confirm => "Are you sure?", :method => :delete %> | 
 				<% if comment.spam? %>
-					<%= link_to_remote "Mark as not spam", :url => notspam_comment_url(comment), :method => :put %>
+					<%= link_to_remote "Mark as not spam", :url => ham_comment_url(comment), :method => :put %>
 				<% else %>
 					<%= link_to_remote "Mark as spam", :url => spam_comment_url(comment), :method => :put %>
 		  		<% end %>

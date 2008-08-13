@@ -37,7 +37,7 @@ class Asset < ActiveRecord::Base
   POLYMORPH_READERS =       :comments_open?, :comments_closed?, :comments_none?, :comments_require_login?,
                             :moderate_comments?, :status_description, :content_rating_description,
                             :category_names, :category_ids, :mappable?, :geocode, :asset_id, :comments, :tag_list,
-                            :permissions, :include_in_index?
+                            :permissions, :include_in_index?, :allow_pingbacks?
                             
   # Writers
   POLYMORPH_WRITERS =       :tag_list, :category_ids, :category_names
@@ -106,6 +106,10 @@ class Asset < ActiveRecord::Base
   
   def comments_require_login?
     Publication.current.comments_require_login || attributes['comments_require_login']
+  end
+  
+  def allow_pingbacks?
+    Publication.current.allow_pingback && attributes['allow_pingback']
   end
   
   # Authorisation methods

@@ -1,0 +1,44 @@
+<div class="_article">
+	<h2>Draft Comments</h2>
+	<table>
+		<head>
+		     <tr>
+				<td>
+					Asset
+				</td>
+				<td>
+					Comment
+				</td>
+				<td>
+					Spam?
+				</td>
+				<td>
+					Spaminess
+				</td>
+				<td>
+					Actions
+				</td>
+		</thead>
+		<tbody>
+			<% @comments.each do |c| %>
+		    <tr>
+				<td>
+					<%= c.asset.nil? ? "Nil Asset" : h(c.asset.name) %>
+				</td>	
+				<td>
+					<%= h c.content %>
+				</td>
+				<td>
+					<%= c.spam %>
+				</td>
+				<td>
+					<%= c.spaminess.to_s %>
+				</td>
+				<td>
+					Spam | No Spam | Edit | Delete
+				</td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>	

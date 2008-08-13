@@ -4,7 +4,7 @@ javascripts:
   - prototype
   - effects
   - dragdrop
-  - controls 
+  - controls
   - application
 - lightview:
   - scriptaculous    

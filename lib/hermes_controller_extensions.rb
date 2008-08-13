@@ -49,8 +49,8 @@ module HermesControllerExtensions
     Asset.send("sanitize_sql", marshall_params)
   end
 
-  def asset_obj
-    Object.const_get(class_name)
+  def asset_obj(klass = nil)
+    Object.const_get(klass || class_name)
   end
 
   def class_name
@@ -123,12 +123,14 @@ module HermesControllerExtensions
       nil
     end
   end
-  
-  def path_parameters_from_path(path, request_method = :get) 
-    request = ActionController::TestRequest.new({}, {}, nil) 
-    request.env["REQUEST_METHOD"] = request_method.to_s.upcase if request_method 
-    request.path = path 
-    ActionController::Routing::Routes.recognize(request) 
-    request.path_parameters 
+
+  def retrieve_asset_from_path(uri, user, publication)
+    paths = [] && URI.parse(uri).path.sub(/\A\//,"").split('/')
+    controller_name, asset_name = paths[0], paths[1]
+    raise(BadPingUri, uri) unless controller_name && asset_name && paths.length == 2
+    asset = asset_obj(controller_name.singularize.capitalize)
+    asset.viewable_by(user).published.published_in(publication).find_by_name(asset_name)
+  rescue NameError
+    raise(BadPingURI, "No such asset class")  
   end
 end
