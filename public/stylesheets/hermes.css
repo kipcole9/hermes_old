@@ -316,7 +316,7 @@ div._comment {
   text-align: center;
   background: #222;
   }
-  
+
 ._articleImage img {
   max-width: 540px;  /* Content div width - (2*border size) - (2*img padding size) */
   max-height: 540px;

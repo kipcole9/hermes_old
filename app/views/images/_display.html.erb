@@ -1,0 +1,7 @@
+<div id="image_<%= image.id -%>" class="_articleImage">
+	<a href="<%= image_url(image) -%>" title="<%= image.title -%>" >
+		<img alt="<%= h(image.title) -%>" title="<%= h(image.title) -%>"
+			src="<%= serve_image_link(image, :type => :display) -%>" />
+	</a>
+	<p><%= image.display_caption %></p>
+</div>

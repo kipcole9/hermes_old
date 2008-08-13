@@ -41,7 +41,7 @@ module ApplicationHelper
   def image(name, options = {})
     if i = Image.viewable_by(current_user).published.published_in(publication).find_by_name_or_filename(name)
       if options[:size] && options[:size] == :large
-        render :partial => "images/image.html.erb", :locals => {:image => i}
+        render :partial => "images/display.html.erb", :locals => {:image => i}
       else
         render :partial => "images/thumbnail.html.erb", :locals => {:image => i}
       end
