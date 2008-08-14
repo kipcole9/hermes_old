@@ -56,7 +56,7 @@ class AssetsController < ApplicationController
 
   # PUT
   def update
-    before_update
+    before_update_object
     respond_to do |format|
       format.html { update_html }
       format.xml  { update_xml  }
@@ -147,7 +147,7 @@ protected
   end
     
   def update_html
-    before_update
+    before_update_object
     if @object.update_attributes(params[param_name])
       after_update_object(true)
       flash[:notice] = "#{asset_obj.name} updated successfully."
@@ -170,7 +170,7 @@ protected
   end
   
   def destroy_html
-    before_destroy
+    before_destroy_object
     if @object.destroy
       after_destroy_object(true)
       flash[:notice] = "#{asset_obj.name} deleted successfully."
@@ -182,7 +182,7 @@ protected
   end
   
   def destroy_xml
-    before_destroy
+    before_destroy_object
     if @object.destroy
       after_destroy_object(true)
       head :status => 200
