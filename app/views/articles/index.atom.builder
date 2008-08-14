@@ -9,7 +9,6 @@ atom_feed(:url => formatted_articles_url(:atom), :root_url => articles_url, :sch
 
       entry.author do |author|
         author.name(article.created_by.full_name)
-        author.email(article.created_by.email)
       end
     end
   end

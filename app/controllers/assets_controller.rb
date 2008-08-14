@@ -5,8 +5,9 @@ class AssetsController < ApplicationController
   before_filter :sidebar_clear
   before_filter :before_retrieve
   before_filter :retrieve_parent_assets
-  before_filter :retrieve_this_asset, :only => [:edit, :update, :show, :destroy]
-  before_filter :login_required, :only => [:new, :create, :edit, :show, :update, :destroy, :index]
+  before_filter :retrieve_this_asset, :only => [:edit, :update, :show, :destroy, :comments]
+  before_filter :retrieve_comments, :only => [:comments]
+  before_filter :login_required, :only => [:new, :create, :edit, :show, :update, :destroy, :index, :comments]
   before_filter :retrieve_assets, :only => [:index]
   before_filter :after_retrieve
   before_filter :create_asset, :only => [:new]
@@ -71,12 +72,22 @@ class AssetsController < ApplicationController
   end
   
   # DELETE
-  def destroy;
+  def destroy
     respond_to do |format|
       format.html { destroy_html }
       format.xml  { destroy_xml  }
       format.any  { send("destroy_#{params[:format]}") } if respond_to?("destroy_#{params[:format]}")
     end
+  end
+  
+  def comments
+    respond_to do |format|
+      format.html { comments_html }
+      format.xml  { comments_xml  }
+      format.rss  { comments_rss  }
+      format.atom { comments_atom }
+      format.any  { send("comments_#{params[:format]}") } if respond_to?("comments_#{params[:format]}")
+    end  
   end
   
   # Ajax-based search
@@ -180,6 +191,21 @@ protected
       render :status => 422, :xml => @object.errors.to_xml
     end
   end
+  
+  def comments_html
+  end
+  
+  def comments_xml
+    render :xml => @object.comments
+  end
+  
+  def comments_rss
+    render :template => "comments/comments.rss.builder"
+  end
+  
+  def comments_atom
+    render :template => "comments/comments.atom.builder"
+  end
 
   def authorized?
     # Unless specified, no actions can be called on this base class
@@ -194,6 +220,8 @@ protected
     when "index"
       true  # Override in subclass as required
     when "show"
+      true
+    when "comments"
       true
     else
       raise "Unknown action '#{params[:action]}' found in authorized?"
@@ -283,7 +311,10 @@ private
       instance_variable_set(instance_variable_plural, @objects)
       true
     end
-   
+    
+    def retrieve_comments
+      @comments = @object.comments.published
+    end
     
     # Log the view. Also increment view_count.  We do it this way to avoid changing the
     # updated_at column (which we use to mean update to metadata)

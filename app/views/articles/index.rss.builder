@@ -18,7 +18,10 @@ do
         xml.description do
           xml << h(render_description(article))
         end
-        xml.comments(article_url(article) + "/#comments") if article.comments.published.count > 0 
+        if article.comments.published.count > 0
+          xml.comments(article_url(article) + "/#comments") 
+          xml.wfw :commentRss, formatted_comments_article_url(article, :rss)
+        end
         xml.pubDate article.updated_at.rfc822
         xml.guid article_url(article)
         xml.author h(article.created_by.full_name)

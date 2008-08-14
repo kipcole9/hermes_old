@@ -37,15 +37,18 @@ ActionController::Routing::Routes.draw do |map|
   map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate'
    
   # Assets routes
-  map.resources :articles, :collection => {:list => :get, :recent => :get, :popular => :get, :live_search => :post}
-  map.resources :assets, :collection => {:live_search => :post, :apis => :get}
-  map.resources :images, :member => {:serve => :get}, 
-      :collection => {:recent => :get, :popular => :get, :random => :post, :roulette => :get, 
-                      :live_search => :post}
-  map.resources :galleries, :collection => {:recent => :get, :popular => :get, :refresh_all => :post}
-  map.resources :maps, :collection => {:world => :get}
-  map.resources :comments, :collection => {:delete => :delete}, 
-                      :member => {:approve => :put, :spam => :put, :ham => :put}
+  map.resources :articles,  :collection => {:list => :get, :recent => :get, :popular => :get, :live_search => :post},
+                            :member => {:comments => :get}
+  map.resources :assets,    :collection => {:live_search => :post, :apis => :get}
+  map.resources :images,    :member => {:serve => :get}, 
+                            :collection => {:recent => :get, :popular => :get, :random => :post, :roulette => :get, 
+                              :live_search => :post},
+                            :member => {:comments => :get}
+  map.resources :galleries, :collection => {:recent => :get, :popular => :get, :refresh_all => :post},
+                            :member => {:comments => :get}
+  map.resources :maps,      :collection => {:world => :get}
+  map.resources :comments,  :collection => {:delete => :delete}, 
+                            :member => {:approve => :put, :spam => :put, :ham => :put}
   map.resources :bookmarks
   map.resources :publications, :member => {:about => :get, :contact => :get, :privacy => :get, :terms => :get}
   map.resources :users
