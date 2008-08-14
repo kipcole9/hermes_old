@@ -55,9 +55,10 @@ class Comment < ActiveRecord::Base
   
   def check_content
     unless self.created_by
-      errors.add_to_base("Must provide a name and email address") if created_by_name.blank? || created_by_email.blank?
+      errors.add_to_base("Must provide a name") if created_by_name.blank?
+      errors.add_to_base("Must provide an email address") if created_by_email.blank?
+      errors.add_to_base("Valid email address is required") unless (created_by_email && created_by_email.is_email?) || comment_type == COMMENT_TYPE[:pingback]
     end
-    errors.add_to_base("Valid email address is required") unless author_email.is_email? || comment_type == COMMENT_TYPE[:pingback]
     errors.add_to_base("Empty comments are not saved") if content.blank?
   end
 

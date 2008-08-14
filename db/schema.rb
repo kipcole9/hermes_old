@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080813040350) do
+ActiveRecord::Schema.define(:version => 20080814045045) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(:version => 20080813040350) do
     t.boolean  "comments_require_login",               :default => false, :null => false
     t.string   "copyright_notice"
     t.boolean  "include_in_index",                     :default => true
-    t.boolean  "allow_pingback"
+    t.boolean  "allow_pingbacks",                      :default => true,  :null => false
   end
 
   add_index "assets", ["name", "content_type"], :name => "index_on_name_and_content_type", :unique => true
@@ -212,6 +212,18 @@ ActiveRecord::Schema.define(:version => 20080813040350) do
     t.string  "object_type"
     t.string  "track_filename"
     t.text    "javascript"
+  end
+
+  create_table "messages", :force => true do |t|
+    t.string   "created_by_name",  :limit => 50
+    t.string   "created_by_email", :limit => 50
+    t.string   "website"
+    t.text     "content"
+    t.integer  "created_by",       :limit => 11
+    t.string   "ip_address",       :limit => 20
+    t.string   "browser"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "open_id_authentication_associations", :force => true do |t|

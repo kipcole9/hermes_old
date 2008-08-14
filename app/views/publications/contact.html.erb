@@ -1,0 +1,28 @@
+<%
+	sidebar_clear
+	sidebar :asset_search
+	sidebar :image_tag_cloud
+%>
+
+<div id="send_message" class="_article">
+	<h2>Contact Site Administrator</h2>
+	<% unless logged_in? %> 
+		<p class='dimmed'>
+			Name and a valid email address are required.  A website URL is optional. 
+ 			All information	is used only for validation and spam management purposes. No information 
+			is divulged	to any third party (except as required by law).
+		</p>
+	<% end %>
+
+	<div class="_comment" id="_form">
+	<% hermes_form_for :message, :url => messages_url, :html => {:method => :post, :id => "_formEdit"} do |form| %>
+		<% unless logged_in? %>
+			<%= form.text_field "Name", :created_by_name, :size => 45 %>
+			<%= form.text_field "Email", :created_by_email, :size => 45 %>
+			<%= form.text_field "Web site", :website, :size => 45 %>
+		<% end %>
+		<%= form.text_area "Message", :content, :size => "54x7" %>
+		<%= submit_tag "Send Message" %>
+	<% end %>
+	</div>
+</div>
