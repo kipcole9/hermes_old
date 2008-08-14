@@ -3,7 +3,7 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   acts_as_polymorph
   acts_as_secure
-  before_validation_on_create     :set_name
+  before_validation_on_create     :set_name_and_title
   before_create                   :make_activation_code  
   before_create                   :set_groups
   before_save                     :encrypt_password, :set_photo  
@@ -182,8 +182,8 @@ protected
     self.groups = (self.groups == 0 || self.groups.nil?) ? AssetPermission.default_user_groups : self.groups
   end
   
-  def set_name
-    self.name = self.login
+  def set_name_and_title
+    self.name = self.title = self.login
   end
   
   def set_photo
