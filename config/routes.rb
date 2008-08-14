@@ -40,10 +40,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :articles,  :collection => {:list => :get, :recent => :get, :popular => :get, :live_search => :post},
                             :member => {:comments => :get}
   map.resources :assets,    :collection => {:live_search => :post, :apis => :get}
-  map.resources :images,    :member => {:serve => :get}, 
+  map.resources :images,    :member => {:serve => :get, :comments => :get}, 
                             :collection => {:recent => :get, :popular => :get, :random => :post, :roulette => :get, 
-                              :live_search => :post},
-                            :member => {:comments => :get}
+                              :live_search => :post}
   map.resources :galleries, :collection => {:recent => :get, :popular => :get, :refresh_all => :post},
                             :member => {:comments => :get}
   map.resources :maps,      :collection => {:world => :get}
