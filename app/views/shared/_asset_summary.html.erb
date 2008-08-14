@@ -28,7 +28,7 @@
 <% if is_show? %>
 	<%= form.text_field "Status", :status_description, :disabled => is_show?, :size => 10 %>
 <% else %>
-	<%= form.select :status, Asset::STATUS %>
+	<%= form.select :status, AssetStatus.description_hash %>
 <% end %>
 
 <% if is_show? %>

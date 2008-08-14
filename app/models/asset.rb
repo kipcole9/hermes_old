@@ -296,6 +296,6 @@ private
   end
   
   def set_status
-    self.status ||= STATUS["published"]
+    self.status ||= STATUS[:published]
   end
 end

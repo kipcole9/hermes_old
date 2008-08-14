@@ -1,10 +1,19 @@
 class AssetStatus < ActiveRecord::Base
 
   def self.status_array
-    statii = {}
-    status = find(:all)
-    status.each {|s| statii[s.name.downcase.to_sym] = s.id }
-    statii
+    unless @statti
+      @statii = {}
+      self.description_hash.each {|k, v| @statii[k.to_sym] = v }
+    end
+    @statii
+  end
+  
+  def self.description_hash
+    unless @descriptions
+      @descriptions = {}
+      all.each {|s| @descriptions[s.name.downcase] = s.id }
+    end
+    @descriptions
   end
   
 end
