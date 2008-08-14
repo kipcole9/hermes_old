@@ -1,3 +1,8 @@
-<%= @user.login %>, your registration at <%= Publication.current.title %> has been activated.  You may now start visiting:
+<%= "#{@user.full_name} (#{@user.login})" %>, 
 
-  <%= @url %>
+Your registration at <%= Publication.current.title %> has been activated. You can visit us any
+time at <%= @url %>
+
+Thanks for signing up!,
+
+--Kip

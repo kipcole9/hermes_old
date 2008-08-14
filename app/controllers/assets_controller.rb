@@ -3,13 +3,13 @@ class AssetsController < ApplicationController
   
   before_filter :set_time_zone
   before_filter :sidebar_clear
-  before_filter :before_retrieve
+  before_filter :before_retrieve_object
   before_filter :retrieve_parent_assets
   before_filter :retrieve_this_asset, :only => [:edit, :update, :show, :destroy, :comments]
   before_filter :retrieve_comments, :only => [:comments]
   before_filter :login_required, :only => [:new, :create, :edit, :show, :update, :destroy, :index, :comments]
   before_filter :retrieve_assets, :only => [:index]
-  before_filter :after_retrieve
+  before_filter :after_retrieve_object
   before_filter :create_asset, :only => [:new]
   before_filter :set_sidebars, :only => [:edit, :update, :show, :index]
   before_filter :remember_location, :only => [:show, :index]
@@ -122,14 +122,14 @@ protected
   def create_html    
     @object = asset_obj.new(params[param_name])
     update_parent_attributes
-    before_create
+    before_create_object
     if @object.save
       flash[:notice] = "#{asset_obj.name} created successfully."
-      redirect_back_or_default('/') if after_create(true)
+      redirect_back_or_default('/') if after_create_object(true)
     else
       flash[:now] = "Could not create #{asset_obj.name}"
       set_error_sidebar
-      render :action => :edit if after_create(false)
+      render :action => :edit if after_create_object(false)
     end
   end
   
@@ -138,10 +138,10 @@ protected
     update_parent_attributes
     before_create
     if @object.save
-      after_create(true)      
+      after_create_object(true)      
       head :status => 201, :location => polymorphic_url(@object)
     else
-      after_create(false)
+      after_create_object(false)
       render :status => 422, :xml => @object.errors.to_xml
     end
   end
@@ -149,22 +149,22 @@ protected
   def update_html
     before_update
     if @object.update_attributes(params[param_name])
-      after_update(true)
+      after_update_object(true)
       flash[:notice] = "#{asset_obj.name} updated successfully."
       redirect_back_or_default("/")
     else
       set_error_sidebar
-      after_update(false)
+      after_update_object(false)
       render :action => "edit"
     end
   end
 
   def update_xml
     if @object.update_attributes(params[param_name])
-      after_update(true)
+      after_update_object(true)
       head :status => 200
     else
-      after_update(false)
+      after_update_object(false)
       render :status => 422, :xml => @object.errors.to_xml
     end         
   end
@@ -172,11 +172,11 @@ protected
   def destroy_html
     before_destroy
     if @object.destroy
-      after_destroy(true)
+      after_destroy_object(true)
       flash[:notice] = "#{asset_obj.name} deleted successfully."
     else
       set_error_sidebar
-      after_destroy(false)
+      after_destroy_object(false)
     end
     redirect_back_or_default("/")
   end
@@ -184,10 +184,10 @@ protected
   def destroy_xml
     before_destroy
     if @object.destroy
-      after_destroy(true)
+      after_destroy_object(true)
       head :status => 200
     else
-      after_destroy(false)
+      after_destroy_object(false)
       render :status => 422, :xml => @object.errors.to_xml
     end
   end
@@ -229,14 +229,14 @@ protected
   end
   
   # Prototype methods for callbacks
-  def before_retrieve; end
-  def after_retrieve(success = true); true; end
-  def before_create; end
-  def after_create(success = true); true; end
-  def before_update; end
-  def after_update(sucess = true); true; end
-  def before_destroy; end
-  def after_destroy(success = true); true; end
+  def before_retrieve_object; end
+  def after_retrieve_object(success = true); true; end
+  def before_create_object; end
+  def after_create_object(success = true); true; end
+  def before_update_object; end
+  def after_update_object(sucess = true); true; end
+  def before_destroy_object; end
+  def after_destroy_object(success = true); true; end
   
 private
     def create_asset

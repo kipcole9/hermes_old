@@ -6,14 +6,26 @@
 %>
 <div id="_form">
 	<h2>User Registration</h2>
+	<p class="dimmed">
+		The information you enter here is for site administration purposes only.  No information
+		apart from your name is ever disclosed to other visitors to this site or to any 
+		other person or organisation. Your name or user name may be used to identify you as 
+		the author of any comments you make on this site.
+	</p>
+	<p class="dimmed">
+		To protect against spambots and other nasty germs, the registration process will send an
+		activation email to the email address you specify, so it needs to be a real proper working
+		email address. The email is sent immediately upon signup.
+	</p>
 	<% hermes_form_for :user, :url => users_url(), :html => {:method => :post, :id => "_formEdit"} do |form| %>
 		<h3>Please enter your registration details</h3>
-		<%= form.text_field :login, :disabled => is_show?, :size => 10 %>
-		<%= form.text_field :given_name, :disabled => is_show?, :size => 30 %>
-		<%= form.text_field :family_name, :disabled => is_show?, :size => 30 %>	
+		<%= form.text_field "User name", :login, :disabled => is_show?, :size => 10 %>
+		<%= form.text_field "Given (first) name", :given_name, :disabled => is_show?, :size => 30 %>
+		<%= form.text_field "Family (last) name", :family_name, :disabled => is_show?, :size => 30 %>	
 		<%= form.text_field :email, :disabled => is_show?, :size => 40 %>
+		<%= form.time_zone_select :time_zone, nil, :disabled => is_show?, :size => 20 %>
 		<%= form.password_field :password, :disabled => is_show?, :size => 20 %>
-		<%= form.password_field :password_confirmation, :disabled => is_show?, :size => 20 %>
+		<%= form.password_field "Password again", :password_confirmation, :disabled => is_show?, :size => 20 %>
 		<%= submit_tag 'Sign up' %>
 	<% end -%>
 </div>	

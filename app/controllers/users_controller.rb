@@ -1,6 +1,6 @@
 class UsersController < AssetsController
 
-  def after_create(success)
+  def after_create_object(success)
     # Update the owner of this record to be our new person
     if success
       sudo do
@@ -11,7 +11,7 @@ class UsersController < AssetsController
       reset_session
       flash[:notice] = "'#{@object.full_name}' is now registered but not activated. " + \
                        "Please check your email for activation instructions."
-      redirect_back_or_default('/')
+      return true
     else
       render :action => :new
     end
@@ -50,7 +50,7 @@ protected
     case action_name
     when "index" && !current_user.is_admin?
       false
-    when "new"
+    when "new", "create"
       true
     else
       super
