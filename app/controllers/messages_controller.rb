@@ -1,5 +1,6 @@
 class MessagesController < ApplicationController
-  before_filter :login_required, :except => [:create] 
+  before_filter :login_required, :except => [:create]
+  before_filter :retrieve_messages
   
   def create
     @message =  Message.new(params[:message])
@@ -12,10 +13,20 @@ class MessagesController < ApplicationController
       render :template => "publications/contact"
     end
   end
+  
+  def index
+    respond_to do |format|
+      format.rss
+    end
+  end
 
 private
   def authorized?
     current_user.is_admin?
   end  
+  
+  def retrieve_messages
+    @messages = Message.all
+  end
   
 end

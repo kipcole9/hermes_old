@@ -15,6 +15,22 @@ class Message < ActiveRecord::Base
     end
     errors.add_to_base("Empty messages are not sent") if self.content.blank?
   end
+  
+  def author_name
+    if created_by
+      created_by.full_name
+    else
+      created_by_name
+    end
+  end
+  
+  def author_email
+    if created_by
+      created_by.email
+    else
+      created_by_email
+    end
+  end  
     
 private
   
