@@ -12,7 +12,7 @@ module ApplicationHelper
   def link_to_image(image_name, options = {})
     return options[:text] unless image = Image.viewable_by(current_user).find_by_name_or_filename(image_name)
     link_text = options[:text] || image.title
-    link_to link_text, image_url(image)
+    link_to link_text, image_path(image)
   end
   
   def render_description(asset)
@@ -79,11 +79,11 @@ module ApplicationHelper
   end
   
   def edit_url(asset)
-    send("edit_#{asset.class.name.downcase}_url", asset)
+    send("edit_#{asset.class.name.downcase}_path", asset)
   end
   
   def show_url(asset)
-    send("#{asset.class.name.downcase}_url", asset)    
+    send("#{asset.class.name.downcase}_path", asset)    
   end
   
   def get_method

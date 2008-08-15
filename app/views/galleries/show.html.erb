@@ -13,10 +13,6 @@
 	<%= stylesheet_link_merged :lightview %>
 <% end %>
 
-<% content_for :javascripts do %>
-	<%= javascript_include_merged :lightview %>
-<% end %>
-
 <% images = @gallery.images.published_in(publication).published.viewable_by(current_user) \
 	.find(:all, :page => {:size => controller.page_size, :current => params[:page]}) %>
 
@@ -26,11 +22,10 @@
 	<%= render :partial => "shared/page_numbers", :locals => {:collection => images} %>
 	<%= render :inline => @gallery.description -%>
 	<p></p>
-	<div id="_thumbnailList" class="_thumbnailList clearfix">
+	<div id="thumbnailList" class="_thumbnailList clearfix">
 		<% images.each do |i| %>
 			<%= render :partial => "images/slide", :locals => {:image => i} %>
 		<% end %>
 	</div>
 </div>
-
 <%= render :partial => "comments/show", :object => @gallery %>

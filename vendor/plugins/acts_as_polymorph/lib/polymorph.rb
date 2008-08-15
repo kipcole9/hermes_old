@@ -225,7 +225,8 @@ module ActiveRecord
             end
             
             def permalink
-              send("#{self.name.downcase}_url", self, :host => Publication.current.domain)
+              polymorphic_path(self)
+              #send("#{self.name.downcase}_url", self, :host => Publication.current.domain)
             end
                         
           END_EVAL

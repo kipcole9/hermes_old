@@ -244,7 +244,7 @@ class Image < ActiveRecord::Base
   end
   
   def url
-    image_url(self)
+    image_path(self)
   end
   
   def portrait?

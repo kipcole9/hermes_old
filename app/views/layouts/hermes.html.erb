@@ -16,15 +16,15 @@
   <div id="_header">
      <h1><%= publication.title -%></h1> 
 	 <div id="_navigation">
-	  		<a href="<%= root_url -%>" >Home</a>
- 			|   <a href="<%= galleries_url -%>" >Galleries</a>
- 			|   <a href="<%= images_url -%>" >Images</a>
- 			|   <a href="<%= world_maps_url -%>" >Maps</a>
-			|	<a href="<%= about_publication_url(Publication.current) -%>">About</a>
- 			|   <a href="<%= contact_publication_url(Publication.current) -%>">Contact</a>
- 			|   <a href="<%= signup_url %>" >Signup</a>
- 			|   <%= logged_in? ? "<a href=\"#{logout_url}\" >Logout '#{current_user.login}'</a>" : 
-								 "<a href=\"#{login_url}\" >Login</a>" -%>
+	  		<a href="<%= root_path -%>" >Home</a>
+ 			|   <a href="<%= galleries_path -%>" >Galleries</a>
+ 			|   <a href="<%= images_path -%>" >Images</a>
+ 			|   <a href="<%= world_maps_path -%>" >Maps</a>
+			|	<a href="<%= about_publication_path(Publication.current) -%>">About</a>
+ 			|   <a href="<%= contact_publication_path(Publication.current) -%>">Contact</a>
+ 			|   <a href="<%= signup_path %>" >Signup</a>
+ 			|   <%= logged_in? ? "<a href=\"#{logout_path}\" >Logout '#{current_user.login}'</a>" : 
+								 "<a href=\"#{login_path}\" >Login</a>" -%>
  	  </div>
   </div>
   <div id="_content">
@@ -47,8 +47,8 @@
 	<a href="http://technorati.com/faves?sub=addfavbtn&amp;add=http://www.noexpectations.com.au">			
 		<%= image_tag("/images/social/Technorati_32x32.png") %> Add to Technorati Favorites
 	</a> | 
-	<a href="<%= privacy_publication_url(Publication.current) -%>">Privacy Policy</a> |
-	<a href="<%= terms_publication_url(Publication.current) -%>">Terms of Service</a>
+	<a href="<%= privacy_publication_path(Publication.current) -%>">Privacy Policy</a> |
+	<a href="<%= terms_publication_path(Publication.current) -%>">Terms of Service</a>
   </div>
 </div>
 

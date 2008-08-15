@@ -1,10 +1,10 @@
 <h4>Subscribe to articles:</h4>
 <ul>
 	<li>
-		<%= link_to "#{image_tag('/images/social/feeds_32x32.png')} in RSS 2.0 format", formatted_articles_url(:rss) %>
+		<%= link_to "#{image_tag('/images/social/feeds_32x32.png')} in RSS 2.0 format", formatted_articles_path(:rss) %>
 	</li>
 	<li>
-		<%= link_to "#{image_tag('/images/social/feeds_32x32.png')} in Atom format", formatted_articles_url(:atom) %>
+		<%= link_to "#{image_tag('/images/social/feeds_32x32.png')} in Atom format", formatted_articles_path(:atom) %>
 	</li>
 	<li>			
 		<%= link_to "#{image_tag('/images/social/Technorati_32x32.png')} Add to Technorati Favourites", 

@@ -8,7 +8,7 @@
 <h4>Popular Galleries:
 	<% format_pagination_links(galleries, :window_size => 3, :always_show_anchors => true, 
 																	:link_to_current_page => true) do |n| %>
-		<%= link_to_remote n.to_s, :update => "_galleryPopular", :url => popular_galleries_url, :with => "'page=#{n.to_s}'" -%>
+		<%= link_to_remote n.to_s, :update => "_galleryPopular", :url => popular_galleries_path, :with => "'page=#{n.to_s}'" -%>
 	<% end %>
 </h4>
 <% galleries.each do |g|%>

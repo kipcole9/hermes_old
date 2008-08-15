@@ -2,13 +2,13 @@
 	<% if !(ajax rescue nil) %>
 		<div id="_random_image">
 	<% end %>
-		<a href="<%= image_url(image) -%>" >
+		<a href="<%= image_path(image) -%>" >
 			<img alt="<%= h(image.title) -%>" title="<%= h(image.title) -%>"
 				src="<%= serve_image_link(image, :type => :display) -%>" />
 		</a>
 		<h6><%= image.title %></h6>
 	<% if !(ajax rescue nil) %>
 		</div>
-		<%= periodically_call_remote  :update => '_random_image', :url => random_images_url, :frequency => 30 %>	
+		<%= periodically_call_remote  :update => '_random_image', :url => random_images_path, :frequency => 30 %>	
 	<% end %>
 <% end %>

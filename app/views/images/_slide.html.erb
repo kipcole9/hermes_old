@@ -1,7 +1,7 @@
 <% if image %>
 	<% gallery = gallery rescue nil %>
 	<% caption = caption rescue nil %>
-	<% url = gallery ? gallery_url(gallery) : image_url(image) %>
+	<% url = gallery ? gallery_path(gallery) : image_path(image) %>
 	<% display_caption = (caption || image.title).truncate(23) %>
 	<% description = gallery ? gallery.description : image.description %>
 	<% link_as = image.catalog.link_as %>
