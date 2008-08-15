@@ -24,12 +24,12 @@ private
     self.name = self.name.blank? ? self.title.remove_file_suffix.permalink : self.name 
   end
   
-  def set_id
+  def set_bit_id
     # Each new Publication has a bit_id that is 2 times the previous maximum.  The idea is that we
     # can then use this id as a bit mask in permissions fields. Since in MySql the maximum size
     # is constrained to 20 digits, this equates to 65 bits and hence the maximum size below.
     # This means we cannot host any more than 65 publications using this scheme.
-    max = maximum(:bit_id)
+    max = Publication.maximum(:bit_id)
     raise "Publication cannot be created: maximum number reached" if max == 18446744073709551615
     self.bit_id = max * 2
   end

@@ -1,7 +1,7 @@
 <%
 	sidebar :asset_search
 	sidebar :image_random
-	sidebar :asset_map if @asset.mappable?
+	sidebar :asset_map if @asset && @asset.mappable?
 %>
 <div id="_form">
 <%= render :partial => "shared/form_heading", :locals => {:asset => @publication} %>
