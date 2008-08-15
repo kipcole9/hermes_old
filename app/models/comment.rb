@@ -30,19 +30,15 @@ class Comment < ActiveRecord::Base
   
   # Defensio spam protection service attributes
   def author_name
-    if created_by
-      created_by.full_name
-    else
-      created_by_name
-    end
+    created_by ? created_by.full_name : created_by_name
   end
   
   def author_email
-    if created_by
-      created_by.email
-    else
-      created_by_email
-    end
+    created_by ? created_by.email : created_by_email
+  end
+  
+  def author_url
+    created_by ? created_by.website : website
   end
   
   def source

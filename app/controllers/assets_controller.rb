@@ -276,7 +276,7 @@ private
     # 'instance_variable_singular'
     def retrieve_asset(target_obj, instance_variable, target_id)
       user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
-      if !(@object = target_obj.viewable_by(user).find_by_name_or_id(target_id) rescue nil)
+      if !(@object = target_obj.viewable_by(user).published.published_in(publication).find_by_name_or_id(target_id) rescue nil)
         respond_to do |format|
           format.html do
             page_not_found("#{target_obj.name} '#{target_id}' not found!")
@@ -297,7 +297,9 @@ private
     # Called from index action, invoke query parameters if any
     def retrieve_assets
       user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
-      @objects = asset_obj.viewable_by(user).conditions(marshall_params) \
+      @objects = asset_obj.viewable_by(user) \
+                    .published.published_in(publication) \
+                    .conditions(marshall_params) \
                     .included_in_index(current_user) \
                     .with_category(params[:category]) \
                     .order('assets.created_at DESC') \

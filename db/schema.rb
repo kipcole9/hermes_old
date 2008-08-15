@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080814045045) do
+ActiveRecord::Schema.define(:version => 20080815093033) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -372,6 +372,7 @@ ActiveRecord::Schema.define(:version => 20080814045045) do
     t.datetime "remember_token_expires_at"
     t.string   "activation_code"
     t.datetime "activated_at"
+    t.string   "website"
   end
 
   add_index "users", ["email"], :name => "index_authors_on_email", :unique => true
