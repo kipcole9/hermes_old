@@ -1,4 +1,4 @@
-<% if image = Image.random(current_user, :landscape) -%>
+<% if image = Image.random(current_user, publication, :landscape) -%>
 	<% if !(ajax rescue nil) %>
 		<div id="_random_image">
 	<% end %>

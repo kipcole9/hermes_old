@@ -8,7 +8,7 @@ xml.rss "version"       => "2.0",
 do
   xml.channel do
     xml.title page_title
-    xml.link formatted_images_url(:rss)
+    xml.link images_url
     xml.pubDate Asset.last_updated(Image).rfc822
     xml.description publication.description
     @images.each do |image|
@@ -25,7 +25,7 @@ do
         end
         xml.pubDate image.updated_at.rfc822
         xml.guid image_url(image)
-        xml.author h(image.created_by.full_name)
+        xml.dc :creator, h(image.created_by.full_name)
       end
     end
   end

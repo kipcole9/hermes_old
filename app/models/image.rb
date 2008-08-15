@@ -31,16 +31,16 @@ class Image < ActiveRecord::Base
     find :first, :conditions => ['assets.name = ? OR filename = ?', name, name]
   end
   
-  def self.random(current_user, orient = :any, num = 1)
+  def self.random(current_user, publication, orient = :any, num = 1)
     case orient
     when :portrait
-      results = viewable_by(current_user).portrait.find(:all, :limit => num, :order => "rand()")
+      results = viewable_by(current_user).published.published_in(publication).portrait.find(:all, :limit => num, :order => "rand()")
     when :landscape
-      results = viewable_by(current_user).landscape.find(:all, :limit => num, :order => "rand()")
+      results = viewable_by(current_user).published.published_in.landscape.find(:all, :limit => num, :order => "rand()")
     when :square
-      results = viewable_by(current_user).square.find(:all, :limit => num, :order => "rand()")
+      results = viewable_by(current_user).published.published_in.square.find(:all, :limit => num, :order => "rand()")
     else
-      results = viewable_by(current_user).find(:all, :limit => num, :order => "rand()")
+      results = viewable_by(current_user).published.published_in.find(:all, :limit => num, :order => "rand()")
     end
     num == 1 ? results.first : results
   end

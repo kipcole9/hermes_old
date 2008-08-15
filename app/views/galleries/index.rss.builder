@@ -8,7 +8,7 @@ xml.rss "version"       => "2.0",
 do
   xml.channel do
     xml.title page_title
-    xml.link galleries_url()
+    xml.link galleries_url
     xml.pubDate Asset.last_updated("Gallery").rfc822
     xml.description publication.description
     @galleries.each do |gallery|
@@ -24,7 +24,7 @@ do
         xml.comments(gallery_url(gallery) + "/#comments") if gallery.comments.published.count > 0 
         xml.pubDate gallery.updated_at.rfc822
         xml.guid gallery_url(gallery)
-        xml.author h(gallery.created_by.full_name)
+        xml.dc :creator, h(gallery.created_by.full_name)
       end
     end
   end

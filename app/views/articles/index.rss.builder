@@ -24,7 +24,7 @@ do
         end
         xml.pubDate article.updated_at.rfc822
         xml.guid article_url(article)
-        xml.author h(article.created_by.full_name)
+        xml.dc :creator, h(article.created_by.full_name)
       end
     end
   end
