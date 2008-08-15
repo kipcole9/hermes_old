@@ -9,6 +9,7 @@ do
   xml.channel do
     xml.title page_title
     xml.link root_url
+    xml.atom :link, :href => formatted_articles_url(:rss), :rel => "self", :type => "application/rss+xml"
     xml.pubDate Asset.last_updated("Article").rfc822
     xml.description publication.description
     @articles.each do |article|

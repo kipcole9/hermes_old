@@ -9,6 +9,7 @@ do
   xml.channel do
     xml.title page_title
     xml.link galleries_url
+    xml.atom :link, :href => formatted_galleries_url(:rss), :rel => "self", :type => "application/rss+xml"
     xml.pubDate Asset.last_updated("Gallery").rfc822
     xml.description publication.description
     @galleries.each do |gallery|
