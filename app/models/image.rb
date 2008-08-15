@@ -32,15 +32,16 @@ class Image < ActiveRecord::Base
   end
   
   def self.random(current_user, publication, orient = :any, num = 1)
+    return nil unless publication && current_user
     case orient
     when :portrait
       results = viewable_by(current_user).published.published_in(publication).portrait.find(:all, :limit => num, :order => "rand()")
     when :landscape
-      results = viewable_by(current_user).published.published_in.landscape.find(:all, :limit => num, :order => "rand()")
+      results = viewable_by(current_user).published.published_in(publication).landscape.find(:all, :limit => num, :order => "rand()")
     when :square
-      results = viewable_by(current_user).published.published_in.square.find(:all, :limit => num, :order => "rand()")
+      results = viewable_by(current_user).published.published_in(publication).square.find(:all, :limit => num, :order => "rand()")
     else
-      results = viewable_by(current_user).published.published_in.find(:all, :limit => num, :order => "rand()")
+      results = viewable_by(current_user).published.published_in(publication).find(:all, :limit => num, :order => "rand()")
     end
     num == 1 ? results.first : results
   end
