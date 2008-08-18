@@ -377,6 +377,18 @@ div._comment {
   line-height: 11px;
   color:#777;
   }
+
+._thumbnail ._count {
+	position: relative;
+	font-size: 11px;
+	float: right;
+	top: 5px;
+	right: 5px;
+	z-index: 500;
+	line-height: 16px;
+	margin: 0;
+	padding:0;
+}
   
 /* For lightbox and search results */
 ._thumbsmallList {
