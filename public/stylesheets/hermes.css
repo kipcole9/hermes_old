@@ -383,9 +383,9 @@ div._comment {
 	font-size: 11px;
 	float: right;
 	top: 5px;
-	right: 5px;
+	right: 3px;
 	z-index: 500;
-	line-height: 11px;
+	line-height: 0px;
 	margin: 0;
 	padding:0;
 }
