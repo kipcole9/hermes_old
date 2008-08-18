@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080815093033) do
+ActiveRecord::Schema.define(:version => 20080818091718) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -87,7 +87,9 @@ ActiveRecord::Schema.define(:version => 20080815093033) do
   add_index "assets_categories", ["asset_id", "category_id"], :name => "asset_category_key", :unique => true
 
   create_table "bookmarks", :force => true do |t|
-    t.string "url"
+    t.string  "url"
+    t.boolean "ignore_url_errors",               :default => false
+    t.string  "http_response_code", :limit => 3
   end
 
   create_table "catalogs", :force => true do |t|

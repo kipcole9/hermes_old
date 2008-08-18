@@ -3,6 +3,8 @@
 <% hermes_form_for :bookmark, :url => get_url(@bookmark), :html => {:method => get_method, :id => "_formEdit"} do |form| %>
 	<h3>Bookmark Content</h3>
 	<%= form.text_field :url, :disabled => is_show?, :size => 45 %>
+	<%= form.check_box :ignore_url_errors, :disabled => is_show? %>
+	<%= form.text_field "Last HTTP response", :http_response_code, :disabled => true, :size => 5 %>
 	<%= render :partial => "shared/asset_summary", :locals => {:form => form} -%>
 <% end %>
 </div>
