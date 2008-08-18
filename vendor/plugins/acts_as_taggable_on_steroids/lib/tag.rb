@@ -110,8 +110,8 @@ class Tag < ActiveRecord::Base
     synonyms = {}
     tag_list = TagList.from(tags) if tags.is_a?(String)
     tag_list = tags if tags.is_a?(Array)
-    Synonym.find(:all, :conditions => ["synonym in (?)", tag_list]).each {|r| synonyms[r.synonym.to_sym] = r.name }
-    tag_list.map!{|k| synonyms[k.to_sym] ? synonyms[k.to_sym] : k }.join(',')
+    Synonym.find(:all, :conditions => ["synonym in (?)", tag_list]).each {|r| synonyms[r.synonym.downcase] = r.name }
+    tag_list.map!{|k| synonyms[k.downcase] ? synonyms[k] : k }.join(',')
   end
   
   # Build nested set from adjacency model

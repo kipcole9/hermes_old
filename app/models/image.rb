@@ -230,9 +230,23 @@ class Image < ActiveRecord::Base
     true
   end
   
+  def import_tags
+    logger.info "Image Import Tags"
+    image_exif = MiniExiftool.new(self.full_path_name)
+    self.tag_list = image_exif["Subject"]
+  end
+  
   def self.import_metadata
     all.each do |i|
       i.import_metadata
+      i.save!
+    end
+    true
+  end
+
+  def self.import_tags
+    all.each do |i|
+      i.import_tags
       i.save!
     end
     true

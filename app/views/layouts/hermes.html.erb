@@ -44,7 +44,7 @@
 
   <div id="_footer">
 	<%= Publication.current.copyright_notice rescue "" %><br />
-	<a href="http://technorati.com/faves?sub=addfavbtn&amp;add=http://www.noexpectations.com.au">			
+	<a href="http://technorati.com/faves?sub=addfavbtn&amp;add=<%= root_url %>">			
 		<%= image_tag("/images/social/Technorati_32x32.png") %> Add to Technorati Favorites
 	</a> | 
 	<a href="<%= privacy_publication_path(Publication.current) -%>">Privacy Policy</a> |

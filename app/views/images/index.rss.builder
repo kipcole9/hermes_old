@@ -21,8 +21,8 @@ do
           xml << h(render_description(image))
         end
         if image.comments.published.count > 0
-          xml.comments(image_url(article) + "/#comments") 
-          xml.wfw :commentRss, formatted_comments_image_url(article, :rss)
+          xml.comments(image_url(image) + "/#comments") 
+          xml.wfw :commentRss, formatted_comments_image_url(image, :rss)
         end
         xml.pubDate image.updated_at.rfc822
         xml.guid image_url(image)

@@ -22,7 +22,10 @@ do
     				:caption => gallery.title, :gallery => gallery}))
           xml << h(render_description(gallery))
         end
-        xml.comments(gallery_url(gallery) + "/#comments") if gallery.comments.published.count > 0 
+        if gallery.comments.published.count > 0
+          xml.comments(gallery_url(gallery) + "/#comments") 
+          xml.wfw :commentRss, formatted_comments_gallery_url(gallery, :rss)
+        end
         xml.pubDate gallery.updated_at.rfc822
         xml.guid gallery_url(gallery)
         xml.dc :creator, h(gallery.created_by.full_name)
