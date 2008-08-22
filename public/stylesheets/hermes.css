@@ -381,10 +381,10 @@ div._comment {
 ._thumbnail ._count {
 	position: relative;
 	font-size: 9px;
-	float: right;
-	top: 5px;
-	right: 3px;
-	z-index: 5000;
+	top: 3px;
+	right: 0px;
+	width: 20;
+	text-align: right;
 	line-height: 0px;
 	margin: 0;
 	padding:0;
