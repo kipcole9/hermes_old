@@ -869,7 +869,8 @@ div._spinner img {
 ._smallMap {
 	width: 290px;
 	height: 250px;
-	white-space: normal; 
+	white-space: normal;
+	overflow: hidden;
 }
 
 ._largeMap {
@@ -877,6 +878,7 @@ div._spinner img {
 	width: 900px;
 	height: 500px;
 	z-index: 5000;
+	overflow: hidden;
 	}
 	
 div._infoWindow {  /* Container window for our info content */
