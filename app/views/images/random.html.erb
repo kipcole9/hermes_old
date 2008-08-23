@@ -1,0 +1,58 @@
+<% 
+	sidebar :asset_search
+	sidebar :image_tag_cloud
+%>
+<% content_for :head do %>
+	<%= "<meta name=\"description\" content=\"#{h publication.description}\" />" %>
+	<%= "<meta name=\"author\" content=\"#{h publication.created_by.full_name}\" />" if publication.created_by.full_name %>
+	<%= "<meta name=\"copyright\" content=\"#{h publication.copyright_notice}\" />" if publication.copyright_notice %>
+	<%= "<meta name=\"keywords\" content=\"#{h publication.tag_list}\" />" unless publication.tag_list.blank? %>
+	<%= "<meta name=\"date\" content=\"#{h Asset.maximum('updated_at').iso8601}\" />" %>
+	<%= auto_discovery_link_tag(:rss, formatted_images_url(params.remove("page").merge(:format => "rss"))) %>
+	<%= auto_discovery_link_tag(:atom, formatted_images_url(params.remove("page").merge(:format => "atom"))) %>
+<% end %>
+
+<div class="_article clearfix">
+	<!-- <% category = params[:category] ? params[:category].capitalize + " " : "" %>
+ 	<h2><%= "#{category}Image Index" -%></h2> -->
+	<h2 id="heading">Random Images</h2>
+	<div id="_thumbnailList" class="_thumbnailList">
+		<% @images.each do |i| %>
+			<%= render :partial => "slide", :locals => {:image => i} %>
+		<% end %>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function getRandomImage() {
+		if (imagesAreLoaded())
+			new Ajax.Request('random_slide?'+((new Date().getTime())).floor(), {
+				method: 'GET',
+				onSuccess: function(response) {
+					replaceImage(response.responseText);
+			}
+		})
+	}
+	
+	function replaceImage(image_data) {
+		var images = $$('._thumbnail'), n = Math.floor(Math.random()*images.length);
+		var e = new Element('p').update(image_data).down()
+		images[n].morph('opacity:0', 
+			{ afterFinish: function() {
+				images[n].update(e.innerHTML);
+				images[n].morph('opacity:1', {});
+				}
+			}
+		)
+	}
+	
+	function imagesAreLoaded() {
+		var images = $$('._thumbnail img'), status = 1;
+		images.each(function(image, index) {
+			if(!image.complete) status = 0;
+		});
+		return status;
+	}
+	
+	document.observe("dom:loaded", function() {setInterval("getRandomImage()", 5000);})
+</script>
