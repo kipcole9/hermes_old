@@ -33,12 +33,17 @@ class ImagesController < AssetsController
 
   def random
     respond_to do |format|
+      format.js do
+        render :partial => "sidebars/image_random.html.erb", :locals => {:ajax => true}
+      end
+    end
+  end
+  
+  def roulette
+    respond_to do |format|
       format.html do
         @images = Image.published_in(publication).published.viewable_by(current_user) \
           .order('rand()').limit(9)
-        end
-      format.js do
-        render :partial => "sidebars/image_random.html.erb", :locals => {:ajax => true}
       end
     end
   end
@@ -79,18 +84,6 @@ class ImagesController < AssetsController
     @images = Image.published_in(publication).published.viewable_by(current_user) \
       .order('view_count DESC').limit(30).pager(unescape(params[:tags]), params[:page], page_size)
     @heading = "Popular Image Index"
-    respond_to do |format|
-      format.html {render :action => :index}
-      format.rss
-      format.atom
-      format.xml
-    end
-  end
-  
-  def roulette
-    @images = Image.published_in(publication).published.viewable_by(current_user) \
-      .order('rand()').limit(30).pager(unescape(params[:tags]), params[:page], page_size)
-    @heading = "Random Image Index"
     respond_to do |format|
       format.html {render :action => :index}
       format.rss
