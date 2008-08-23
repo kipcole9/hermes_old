@@ -8,8 +8,8 @@
 	<%= "<meta name=\"copyright\" content=\"#{h publication.copyright_notice}\" />" if publication.copyright_notice %>
 	<%= "<meta name=\"keywords\" content=\"#{h publication.tag_list}\" />" unless publication.tag_list.blank? %>
 	<%= "<meta name=\"date\" content=\"#{h Asset.maximum('updated_at').iso8601}\" />" %>
-	<%= auto_discovery_link_tag(:rss, formatted_images_url(params.remove("page").merge(:format => "rss"))) %>
-	<%= auto_discovery_link_tag(:atom, formatted_images_url(params.remove("page").merge(:format => "atom"))) %>
+	<%= auto_discovery_link_tag(:rss, formatted_images_url(params.remove("page").merge(:format => "rss", :action => "index"))) %>
+	<%= auto_discovery_link_tag(:atom, formatted_images_url(params.remove("page").merge(:format => "atom", :action => "index"))) %>
 <% end %>
 
 <div class="_article clearfix">
