@@ -5,7 +5,7 @@
 	<% display_caption = (caption || image.title).truncate(23) %>
 	<% description = gallery ? gallery.description : image.description %>
 	<% link_as = image.catalog.link_as %>
-	<div id="image_<%= number_with_delimiter image.id -%>" class="_thumbnail" >
+	<div id="image_<%= image.id -%>" class="_thumbnail" >		
 		<% if current_user.is_admin? %>
 			<div class="_count"><%= image.view_count %></div>
 		<% end %>

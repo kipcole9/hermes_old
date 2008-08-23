@@ -33,11 +33,20 @@ class ImagesController < AssetsController
 
   def random
     respond_to do |format|
-      format.html
+      format.html do
+        @images = Image.published_in(publication).published.viewable_by(current_user) \
+          .order('rand()').limit(9)
+        end
       format.js do
         render :partial => "sidebars/image_random.html.erb", :locals => {:ajax => true}
       end
     end
+  end
+  
+  def random_slide
+    @images = Image.published_in(publication).published.viewable_by(current_user) \
+      .order('rand()').limit(1)
+    render :partial => "slide", :locals => {:image => @images.first}
   end
 
   def page_size
