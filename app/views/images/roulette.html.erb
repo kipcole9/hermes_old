@@ -36,14 +36,23 @@
 	
 	function replaceImage(image_data) {
 		var images = $$('._thumbnail'), n = Math.floor(Math.random()*images.length);
-		var e = new Element('p').update(image_data).down()
-		images[n].morph('opacity:0', 
-			{ afterFinish: function() {
-				images[n].update(e.innerHTML);
-				images[n].morph('opacity:1', {});
+		var e = new Element('p').update(image_data).down();
+		transitionImage(images[n], e);
+	}
+	
+	function transitionImage(image, content) {
+		image.morph('opacity:0', 
+			{ 	duration: 2.0,
+				afterFinish: function() {
+				image.update(content.innerHTML);
+				fadeUpImage(image);
 				}
 			}
 		)
+	}
+	
+	function fadeUpImage(image) {
+		image.morph('opacity:1', {duration: 2.0})
 	}
 	
 	function imagesAreLoaded() {
