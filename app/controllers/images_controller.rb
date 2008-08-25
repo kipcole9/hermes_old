@@ -40,6 +40,7 @@ class ImagesController < AssetsController
   end
   
   def roulette
+
     respond_to do |format|
       format.html do
         @images = Image.published_in(publication).published.viewable_by(current_user) \
@@ -50,7 +51,7 @@ class ImagesController < AssetsController
   
   def random_slide
     @images = Image.published_in(publication).published.viewable_by(current_user) \
-      .order('rand()').limit(1)
+      .order('rand()').limit(1).find(:all, :conditions => ["images.id NOT IN (?)", params[:current]])
     render :partial => "slide", :locals => {:image => @images.first}
   end
 
