@@ -131,18 +131,21 @@ h2 a:hover, h3 a:hover {
   float:right;
   }
 
+/* Page footer */
 #_footer {
   clear: both;
-  position: relative;
-  top: 10px;
   color:#777;
   font-size: 75%;
-  padding-top: 5px;
-  margin-bottom: 1em;
+  margin-top: 40px;
   text-align: center;
   border-top: 2px solid #555;
   letter-spacing: 0.1em;
-  }  
+  }
+
+#_footer p {
+	position: relative;
+	top: -8px;
+}
 
 #_footer img {
   position: relative;
@@ -151,9 +154,10 @@ h2 a:hover, h3 a:hover {
   height: 16px;
   width: 16px;
 }
+
+
 /* Header
------------------------------------------------ */
-  
+----------------------------------------------- */  
 div#_header h1 {
   margin:5px 5px 0;
   padding:20px 20px .25em;
