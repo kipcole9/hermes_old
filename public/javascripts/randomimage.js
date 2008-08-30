@@ -4,7 +4,6 @@
 function getRandomImage() {
 	if (imagesAreLoaded())
 		new Ajax.Request('random_slide?'+ currentImages(), {
-			// ((new Date().getTime())).floor()
 			method: 'GET',
 			onSuccess: function(response) {
 				replaceImage(response.responseText);

@@ -17,6 +17,6 @@ javascripts:
   - geoRssOverlay  
 stylesheets: 
 - base: 
-  - hermes
+  - application
 - lightview:  
   - lightview

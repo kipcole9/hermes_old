@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 
   before_filter :set_publication
+  before_filter :set_theme
   before_filter :save_environment
   #before_filter :adjust_format_for_iphone 
   before_filter :set_timezone
@@ -24,7 +25,7 @@ class ApplicationController < ActionController::Base
   include SimpleSidebar
   helper SimpleSidebarHelper  
   
-  layout :current_layout
+  #layout :current_layout
   
   # Rescue_from incompatible with AWS (weird cookie overflow exception)
   def rescue_action_in_public(exception)
@@ -93,6 +94,10 @@ protected
       unless Publication.current
   end
   
+  def set_theme
+    prepend_view_path "#{RAILS_ROOT}/vendor/themes/#{publication.theme}" if publication.theme
+  end
+  
   def save_environment
     User.current_user = logged_in? ? current_user : nil
     User.environment = request.env
@@ -103,8 +108,10 @@ protected
     Publication.current = publication
   end
     
+  # Not currently used (trying new theming approach)
   def current_layout
-    ["rss","xml","atom"].include?(params[:format]) ? nil : publication.theme
+    return nil if ["rss","xml","atom"].include?(params[:format])
+    publication.theme
   end
   
   def set_timezone
