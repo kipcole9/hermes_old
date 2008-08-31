@@ -681,7 +681,6 @@ div#_form fieldset {
 	font-size: 0.75em;
 	font-weight: normal;
 	margin: 0;
-
 	padding-left: 2px;
 	padding-right: 2px;
 }
@@ -782,8 +781,8 @@ div._login {
 	}
 	
 /* The div which we fill in from dynamic search */
-div#_searchImageResults {
-	margin-top: 4px;
+div#_searchImageResults > h4 {
+	margin-top: 8px;
 	}
 	
 /* For index listings 
@@ -861,10 +860,10 @@ div ._articleCentre {
 img._spinner {
 	display: inline;
 	position: relative;
-	top: 3px;
+	top: 2px;
 	vertical-align: center;
-	width: 15px;
-	height: 15px;
+	width: 13px;
+	height: 13px;
 	margin: 0;
 	padding: 0;
 }

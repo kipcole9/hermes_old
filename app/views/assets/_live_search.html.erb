@@ -1,4 +1,3 @@
 <% @assets.group_by(&:content_type).each do |asset_type, assets|  %>
-	<h4><%= asset_type.pluralize %></h4>
-	<%= render :partial => "#{asset_type.pluralize.downcase}/live_search", :locals => {:assets => assets.map(&:content)} rescue "<p>No #{asset_type.pluralize} can be displayed.</p>" %>
+	<%= render :partial => "#{asset_type.pluralize.downcase}/live_search", :locals => {:assets => assets.map(&:content)} rescue nil %>
 <% end %>
