@@ -6,7 +6,7 @@ class ArticlesController < AssetsController
         .included_in_index(current_user) \
         .conditions(marshall_params).order('assets.created_at DESC') \
         .with_category(params[:category]) \
-        .tagged_with(params[:tags]) \
+        .tagged_with(unescape(params[:tags])) \
         .page(params[:page])  
   end
   

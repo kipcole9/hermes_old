@@ -306,7 +306,7 @@ private
                     .conditions(marshall_params) \
                     .included_in_index(current_user) \
                     .tagged_with(unescape(params[:tags])) \
-                    .with_category(params[:category]) \
+                    .with_category(unescape(params[:category])) \
                     .order('assets.created_at DESC') \
                     .page(params[:page], page_size)  
       if @objects.blank?

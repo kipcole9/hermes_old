@@ -35,7 +35,7 @@ module ActiveRecord
           named_scope :recent,     lambda {|num| {:order => "created_at DESC", :limit => num, :include => :asset } }
           named_scope :included_in_index, lambda { |user|
             unless user.is_admin?
-              {:conditions => "assets.include_in_index = 1", :include => :asset}
+              {:conditions => "assets.include_in_index = 1", :joins => :asset}
             else
               { }
             end
@@ -44,8 +44,14 @@ module ActiveRecord
           named_scope :order,      lambda {|order| { :order => order } }
           named_scope :limit,      lambda {|limit| { :limit => limit } }
           
-          named_scope :tagged_with, lambda {|*tags| 
-            tags[0] ? self.tagged_with_options(tags) : { }
+          named_scope :tagged_with, lambda {|*tags|
+            if tags.first
+              options = tagged_with_options(tags.first)
+              subquery = "#{polymorph_table_name}.id IN (SELECT #{options[:select]} FROM assets #{options[:joins]} WHERE #{options[:conditions]})"
+              { :conditions => subquery }
+            else
+              { }
+            end
           }
           named_scope :with_category, lambda {|cat| 
             unless cat.blank?

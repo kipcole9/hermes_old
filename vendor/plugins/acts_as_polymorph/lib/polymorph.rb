@@ -81,8 +81,7 @@ module ActiveRecord
                 end
               end
 
-              { :select => "DISTINCT #{my_table_name}.*",
-                :include => :asset,
+              { :select => "DISTINCT #{polymorph_table_name}.id",
                 :joins => "INNER JOIN #{Tagging.table_name} \#{taggings_alias} ON \#{taggings_alias}.taggable_id = #{polymorph_table_name}.#{primary_key} " +
                           "INNER JOIN #{Tag.table_name} \#{tags_alias} ON \#{tags_alias}.id = \#{taggings_alias}.tag_id ",
                 :conditions => conditions.join(" AND ")
