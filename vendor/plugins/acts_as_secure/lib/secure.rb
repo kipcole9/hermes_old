@@ -21,9 +21,9 @@ module ActiveRecord
             { :conditions => ["assets.publications & ?", publication.bit_id], :include => :asset }
           }
           
-          named_scope :viewable_by, lambda { |user| 
-            if user
-              { :conditions => Asset.access_policy(user), :include => :asset }
+          named_scope :viewable_by, lambda { |*user| 
+            if user[0]
+              { :conditions => Asset.access_policy(user[0]), :include => :asset }
             else
               { :conditions => Asset.access_policy(User.anonymous) }
             end
@@ -37,25 +37,28 @@ module ActiveRecord
             unless user.is_admin?
               {:conditions => "assets.include_in_index = 1", :include => :asset}
             else
-              {:conditions => "1 = 1"}
+              { }
             end
           }
           named_scope :conditions, lambda {|where| { :conditions => where } }
           named_scope :order,      lambda {|order| { :order => order } }
           named_scope :limit,      lambda {|limit| { :limit => limit } }
+          
+          named_scope :tagged_with, lambda {|*tags| 
+            tags[0] ? self.tagged_with_options(tags) : { }
+          }
           named_scope :with_category, lambda {|cat| 
-              unless cat.blank?
-                {:conditions => "#{table_name}.id in (select #{table_name}.id \
-                    from articles join assets on articles.id = assets.content_id and assets.content_type = '#{self.name}' \
-                        join assets_categories on assets.id = assets_categories.asset_id \
-                        join categories on categories.id = assets_categories.category_id \
-                        where categories.name = '#{cat}')" }
-              else
-                {:conditions => "1 = 1" }
-              end
-            }
-                
-                              
+            unless cat.blank?
+              {:conditions => "#{table_name}.id in (select #{table_name}.id \
+                  from articles join assets on articles.id = assets.content_id and assets.content_type = '#{self.name}' \
+                      join assets_categories on assets.id = assets_categories.asset_id \
+                      join categories on categories.id = assets_categories.category_id \
+                      where categories.name = '#{cat}')" }
+            else
+              { }
+            end
+          } 
+                       
           def find_by_name_or_id(param)
             return nil unless param 
             if (param.is_a?(String) && param.is_integer?) || param.is_a?(Fixnum)
@@ -70,17 +73,10 @@ module ActiveRecord
             find(:first, :conditions => ["assets.name = ?",param], :include => :asset)
           end
           
-          def pager(tags, num, per_page = 10)
-            tags ? page_tagged_with(tags, num, per_page) : page(num, per_page)
-          end
-          
           def page(num, per_page =  10)
             find(:all, :page => {:size => per_page, :current => num})
           end
-          
-          def page_tagged_with(tags, num, per_page = 10)
-            find_tagged_with(tags, :page => {:size => per_page, :current => num})
-          end
+
 
           # Calculate the tag counts for all tags.
           # 
@@ -108,6 +104,7 @@ module ActiveRecord
           end
           
           class_eval <<-END_EVAL
+            
             def self.find_options_for_tag_counts(options = {})
               options.assert_valid_keys :start_at, :end_at, :conditions, :at_least, :at_most, :order, :limit
               options = options.dup

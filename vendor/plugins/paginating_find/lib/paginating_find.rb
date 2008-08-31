@@ -87,8 +87,6 @@ module PaginatingFind
           options[:limit] = (page_size) < total_size ? page_size : total_size
           
           if cached_scoped_methods
-            # :with_scope options were specified, so 
-            # the with_scope method must be invoked
             self.with_scope(cached_scoped_methods) do
               find_without_pagination(*(args << options))
             end

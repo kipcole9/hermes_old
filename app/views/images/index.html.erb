@@ -14,8 +14,6 @@
 <% end %>
 
 <div class="_article clearfix">
-	<!-- <% category = params[:category] ? params[:category].capitalize + " " : "" %>
- 	<h2><%= "#{category}Image Index" -%></h2> -->
 	<h2><%= formatted_index_heading -%></h2>
 	<%= render :partial => "shared/page_numbers", :locals => {:collection => @images} %>
 	<div id="_thumbnailList" class="_thumbnailList">

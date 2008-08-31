@@ -305,9 +305,10 @@ private
                     .published.published_in(publication) \
                     .conditions(marshall_params) \
                     .included_in_index(current_user) \
+                    .tagged_with(unescape(params[:tags])) \
                     .with_category(params[:category]) \
                     .order('assets.created_at DESC') \
-                    .pager(unescape(params[:tags]), params[:page], page_size)  
+                    .page(params[:page], page_size)  
       if @objects.blank?
         respond_to do |format|
           format.html { flash[:notice] = "#{class_name}: found no items!" }

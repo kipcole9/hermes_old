@@ -56,7 +56,7 @@ class Asset < ActiveRecord::Base
     else
       { :conditions => Asset.access_policy(User.anonymous) }
     end
-  }   
+  }
   named_scope :published, lambda { {:conditions => Asset.published_policy} }
   named_scope :included_in_index, lambda { |user|
     unless user.is_admin?
