@@ -531,6 +531,10 @@ div#_form form label {
 	width: 100px;
 }	/* To better format for comment entry */
 
+#_searchImageResults > h4 {
+	margin-bottom: 3px;
+}
+
 div#_form div.buttongroup {
 	float:left; 
 	margin:0px; 
@@ -614,7 +618,7 @@ div#_form fieldset {
 ._sidebarContent {    /* One sidebar */
   border: 1px solid #333;
   color: #999;
-  padding: 4px;
+  padding: 3px 2px 8px 4px;
   margin-bottom: 0.5em
   }
 
@@ -668,8 +672,7 @@ div#_form fieldset {
 	font-size: 0.75em;
 	font-weight: normal;
 	margin: 0;
-	margin-top: 0.3em;
-	margin-bottom: 0.3em;
+
 	padding-left: 2px;
 	padding-right: 2px;
 }
@@ -736,7 +739,6 @@ div._sidebarForm p {
 div._sidebarForm form {
 	margin: 0;
 	padding: 0;
-	margin-bottom: 4px;
 }
 	
 div._sidebarForm form label {
@@ -772,19 +774,9 @@ div._login {
 	
 /* The div which we fill in from dynamic search */
 div#_searchImageResults {
-
+	margin-top: 4px;
 	}
 	
-div._helpText {  /* goes with the search results - the text under the search box */
-	position: relative;
-	top: 0px;
-	text-indent: 47px;
-	padding: 0;
-	margin: 0;
-	font-size: 70%;
-	text-transform: uppercase;
-}
-
 /* For index listings 
 ----------------------*/
 div._index {
@@ -856,16 +848,12 @@ div ._articleCentre {
 	
 /* For progress spinners
 ------------------------ */
-div._spinner {
-	position: relative;
-	top: -20px;
-	left: -40px;
-	float: right;
-	margin: 0;
-	padding: 0;
-	}
 
-div._spinner img {
+img._spinner {
+	position: relative;
+	float: right;
+	top: -21px;
+	left: -49px;
 	width: 16px;
 	height: 16px;
 	margin: 0;
