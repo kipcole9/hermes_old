@@ -1,11 +1,7 @@
 <div class="_sidebarForm">	
 	<% form_remote_tag :url => {:action => :live_search} do %>
 	  <p>Image: <%= text_field_tag :search, "", :size => 23 %></p>
-	  <div class="_spinner">
-		<div id="imageSpinner" style="display:none;">
-			<img src="/images/spinners/arrows.gif" alt="Spinner" />
-		</div>
-	  </div>
+	  <img src="/images/spinners/arrows.gif" id="imageSpinner" alt="Spinner" class="_spinner" style="display:none"/>
 	<% end %>
 </div>
 
@@ -17,5 +13,5 @@
 					 :with => 'tags',
 					 :url => {:controller=>"images", :action=>"live_search"},
 					 :loading => "Element.show('imageSpinner');Element.hide('_searchImageResults')",
-          		     :complete => "Element.hide('imageSpinner');Element.show('_searchImageResults')" %>
+          		     :complete => "Element.hide('imageSpinner');if ($('_searchImageResults').innerHTML.length > 1) Element.show('_searchImageResults');" %>
 <% end %>

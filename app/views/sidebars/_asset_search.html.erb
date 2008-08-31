@@ -1,7 +1,9 @@
 <div class="_sidebarForm">	
 	<% form_remote_tag :url => {:controller => :assets, :action => :live_search} do %>
-	  <p>Search: <%= text_field_tag :search, "", :size => 23 %></p>
-	  <img src="/images/spinners/arrows.gif" id="imageSpinner" alt="Spinner" class="_spinner" style="display:none"/>
+	  <p>
+		Search: <%= text_field_tag :search, "", :size => 23 %>
+	  	<img src="/images/spinners/arrows.gif" id="imageSpinner" alt="Spinner" class="_spinner" style="display:none"/>
+	  </p>
 	<% end %>
 </div>
 

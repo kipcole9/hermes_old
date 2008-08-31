@@ -17,6 +17,15 @@ body {
   font-size: medium;
   }
 
+textarea {
+  font-family: Tahoma, Verdana, sans-serif;
+  font-size: medium;
+  font-weight: normal;
+  letter-spacing: 1px;
+  text-align:left;
+  color:#ccc;
+}
+
 .dimmed {
 	color: #555;
 }
@@ -507,6 +516,7 @@ div#_form div._formField {
 	/* border-bottom: 1px solid #333; */
 	padding:0px 0px;
 	vertical-align:top;
+	margin-bottom: 1px;
 	clear: both;
 	} /* For master record information */
 
@@ -519,12 +529,10 @@ div#_form div._formDetail {
 div#_form form label {
 	width:175px; 
 	margin: 0;
-	padding: 0;
-	padding-top: 3px;
 	float:left;
 	text-align: left;
 	font-weight: normal;
-	font-size:1em;
+	font-size: 1em;
 	} /* this is the text label on the left of each input */
 	
 ._comment > #_formEdit > ._formField label {
@@ -551,7 +559,8 @@ div#_form div.buttongroup input {
 	} /* set the distance between button and its label text */
 
 /* postions the submit button by selecting a div with attribute type SUBMIT - IDWIMIE */
-div#_form input {
+div#_form input, div#_form textarea {
+	padding: 0;
 	color: #ccc;
 	background: #333;
 	border: 1px solid #555;
@@ -593,12 +602,12 @@ div#_form fieldset {
 /* Input for text-areas */
 ._formText {
   	text-align:left;
-	padding-left: 3px;
-	padding-right: 3px;
+	margin-bottom: 1px;
   	color:#ccc;
 	background: #333;
 	border: 1px solid #555;
 	font-size: small;
+	overflow: auto;
 	}
 	
 
@@ -850,12 +859,12 @@ div ._articleCentre {
 ------------------------ */
 
 img._spinner {
+	display: inline;
 	position: relative;
-	float: right;
-	top: -21px;
-	left: -49px;
-	width: 16px;
-	height: 16px;
+	top: 3px;
+	vertical-align: center;
+	width: 15px;
+	height: 15px;
 	margin: 0;
 	padding: 0;
 }
