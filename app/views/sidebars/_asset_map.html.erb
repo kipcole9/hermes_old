@@ -9,12 +9,14 @@
 		@map.overlay_init(GMarker.new([@asset.latitude,@asset.longitude]))
 	%>
 
-	<%= GMap.header :host => request.host, :with_vml => false -%>
-	<script type="text/javascript">
-	//<![CDATA[
-		<%= @map.to_html(:no_script_tag => true) -%>
-	//]]>
-	</script>
-	
+    <% content_for :javascripts do %>
+		<%= GMap.header :host => request.host, :with_vml => false -%>
+		<script type="text/javascript">
+			//<![CDATA[
+			<%= @map.to_html(:no_script_tag => true) -%>
+			//]]>
+		</script>
+	<% end %>
+
 
 <% end %>	

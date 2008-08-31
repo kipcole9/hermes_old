@@ -12,8 +12,10 @@
 <div id="_searchImageResults" class="clearfix" style="display: none">
 </div>
 
-<%= observe_field "search" , :frequency => 1, :update => "_searchImageResults",
+<% content_for :javascripts do %>
+	<%= observe_field "search" , :frequency => 1, :update => "_searchImageResults",
 					 :with => 'tags',
 					 :url => {:controller=>"assets", :action=>"live_search"},
 					 :loading => "Element.show('imageSpinner');Element.hide('_searchImageResults')",
           		     :complete => "Element.hide('imageSpinner');Element.show('_searchImageResults')" %>
+<% end %>
