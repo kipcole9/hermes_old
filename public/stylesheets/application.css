@@ -373,10 +373,14 @@ div._comment {
   }
   
 ._thumbnail p {
-  margin:-1px;
-  /* font-size:55%; */
+  width: 168px;	
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 9px;
   text-align:center;
+  white-space: nowrap;
   text-transform:uppercase;
   line-height: 11px;
   color:#777;

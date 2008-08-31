@@ -6,6 +6,7 @@
 	<link rel="icon" type="image/png" href="/hermes.png" />
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="<%= formatted_apis_assets_url :xml %>" />
 	<link rel="pingback" href="<%= xmlrpc_url %>" />
+	<%= javascript_include_merged :base %>	
 	<%= yield :head %>
 	<% if publication.theme && File.exist?("#{RAILS_ROOT}/public/stylesheets/#{publication.theme}.css") %>
 		<%= stylesheet_link_merged publication.theme.to_sym %>
@@ -56,7 +57,7 @@
 	</p>
   </div>
 </div>
-<%= javascript_include_merged :base %>
+
 <%= yield :javascripts %>
 <%= render :partial => 'shared/google_analytics' %>
 </body>

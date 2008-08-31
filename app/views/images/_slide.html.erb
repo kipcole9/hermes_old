@@ -2,7 +2,7 @@
 	<% gallery = gallery rescue nil %>
 	<% caption = caption rescue nil %>
 	<% url = gallery ? gallery_path(gallery) : image_path(image) %>
-	<% display_caption = (caption || image.title).truncate(21) %>
+	<% display_caption = (caption || image.title).truncate(30, "&hellip;") %>
 	<% description = gallery ? gallery.description : image.description %>
 	<% link_as = image.catalog.link_as %>
 	<div id="image_<%= image.id -%>" class="_thumbnail" >		
