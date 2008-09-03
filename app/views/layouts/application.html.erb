@@ -34,16 +34,18 @@
   	<%= yield %>
   </div>
   
-  <div id="_sidebar">
-    <ol id="_sidebarList">
-		<% if flash[:notice] -%>
-			<li class="_sidebarContent red">
-				<%= flash[:notice] %>
-			</li>
-		<% end %>
-		<%= render_sidebars %>
-    </ol>
-  </div>  
+  <% if flash[:notice] || flash[:error] || controller.sidebars.length > 0 %>	
+	  <div id="_sidebar">
+	    <ol id="_sidebarList">
+			<% if flash[:notice] -%>
+				<li class="_sidebarContent red">
+					<%= flash[:notice] %>
+				</li>
+			<% end %>
+			<%= render_sidebars %>
+	    </ol>
+	  </div>
+  <% end %>
 
   <div id="_footer">
 	<p>
