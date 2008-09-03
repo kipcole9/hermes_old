@@ -10,7 +10,9 @@
 
 	<div class="_comment" id="_form">
 	<% hermes_form_for :comment, :url => comments_url, :html => {:method => :post, :id => "_formEdit"} do |form| %>
-		<%= hidden_field_tag :asset_id, comment_form.asset_id, :name => "comment[asset_id]"  %>
+		<div style="display:none">
+			<%= hidden_field_tag :asset_id, comment_form.asset_id, :name => "comment[asset_id]"  %>
+		</div>
 		<% unless logged_in? %>
 			<%= form.text_field "Name", :created_by_name, :size => 45 %>
 			<%= form.text_field "Email", :created_by_email, :size => 45 %>
@@ -18,7 +20,9 @@
 		<% end %>
 		<%= form.text_area "Comment", :content, :size => "54x7" %>
 		<div class="small" style="margin-left:102px">Currently no html or other formatting will be rendered.</div>
-		<%= submit_tag "Submit" %>
+		<div>
+			<%= submit_tag "Submit" %>
+		</div>	
 	<% end %>
 	</div>
 </div>	

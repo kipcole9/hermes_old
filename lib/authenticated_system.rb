@@ -15,8 +15,7 @@ module AuthenticatedSystem
     # Store the given user in the session and in the User object -> used by security_system.
     def current_user=(new_user)
       session[:user] = (new_user.nil? || new_user.is_a?(Symbol)) ? nil : new_user.id
-      @current_user = new_user
-      User.current_user = @current_user
+      @current_user = User.current_user = new_user
     end
     
     # Check if the user is authorized

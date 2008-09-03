@@ -23,9 +23,9 @@ class Defensio
                           :permalink => :mandatory},
     :audit_comment    => {:action => "audit-comment", :owner_url => :mandatory, :user_ip => :mandatory,
                           :article_date => :mandatory, :comment_author => :mandatory, :comment_type => :mandatory,
-                          :comment_content => :optional, :comment_author_email => :optional, "test-force" => :optional,
+                          :comment_content => :optional, :comment_author_email => :optional, :test_force => :optional,
                           :comment_author_url => :optional, :permalink => :optional, :referrer => :optional, 
-                          "user-logged-in" => :optional, "trusted-user" => :optional, :openid => :optional},
+                          :user_logged_in => :optional, :trusted_user => :optional, :openid => :optional},
     :report_false_negative => {:action => "report-false-negatives", :signatures => :mandatory, :owner_url => :mandatory},
     :report_false_positive => {:action => "report-false-positives", :signatures => :mandatory, :owner_url => :mandatory},
     :get_stats             => {:action => "get-stats", :owner_url => :mandatory}
@@ -67,7 +67,9 @@ class Defensio
     CONFIG[:api_version] ||= "1.2"
     CONFIG[:server]      ||=  SERVER
     CONFIG[:debug]       ||=  true
-    CONFIG[:api_key]     = Publication.current.defensio_api_key if Publication.current and Publication.current.defensio_api_key
+    if RAILS_ENV == "production"
+      CONFIG[:api_key]     = Publication.current.defensio_api_key if Publication.current and Publication.current.defensio_api_key
+    end
     if !validate_key
       raise(InvalidAPIKey, "API Key '#{CONFIG[:api_key]}' is invalid") 
     end unless CONFIG[:no_validate_key]
@@ -90,9 +92,9 @@ class Defensio
   def audit_comment(article, comment, options = {})
     raise NoArticle if article.nil?
     raise NoComment if comment.nil?
-    options[:referrer] = User.environment['HTTP_REFERER'] if User.environment['HTTP_REFERER']
-    options["user-logged-in"] = User.logged_in? ? "true" : "false"
-    options["trusted-user"] = User.current_user.is_admin? ? "true" : "false"
+    options[:referrer] ||= User.environment['HTTP_REFERER'] if defined?(User) && User.respond_to?("environment") && User.environment['HTTP_REFERER']
+    options[:user_logged_in] ||= User.logged_in? ? "true" : "false" if defined?(User) && User.respond_to?("logged_in?")
+    options[:trusted_user] ||= User.current_user.is_admin? ? "true" : "false" if defined?(User)
     merged_options = CONFIG.merge(extract_options(article)).merge(extract_options(comment)).merge(options)
     @response = post(API[:audit_comment], merged_options)
     success?(@response)    
@@ -153,14 +155,14 @@ private
   
   def post(api, options)
     request = create_request(api, options)
-    puts "Defensio request: #{server_url(api[:action], options)}" if options[:debug]
+    RAILS_DEFAULT_LOGGER.debug "Defensio request: #{server_url(api[:action], options)}"
     response = Net::HTTP.post_form(URI.parse(server_url(api[:action], options)), request)
     if response.class == Net::HTTPOK
       result =  YAML::load(response.body)["defensio-result"]
-      puts "Defensio result: #{result.inspect}" if options[:debug]
+      RAILS_DEFAULT_LOGGER.debug "Defensio result: #{result.inspect}"
       return result
     else
-      puts "Error: Received:\n================\n#{response.body}\n================" if options[:debug] && response.body
+      RAILS_DEFAULT_LOGGER.debug "Error: Received:\n================\n#{response.body}\n================" if response.body
       raise InvalidRequest, response.inspect
     end
   end
