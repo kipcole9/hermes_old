@@ -67,6 +67,7 @@ class Defensio
     CONFIG[:api_version] ||= "1.2"
     CONFIG[:server]      ||=  SERVER
     CONFIG[:debug]       ||=  true
+    CONFIG[:api_key]     = Publication.current.defensio_api_key if Publication.current and Publication.current.defensio_api_key
     if !validate_key
       raise(InvalidAPIKey, "API Key '#{CONFIG[:api_key]}' is invalid") 
     end unless CONFIG[:no_validate_key]

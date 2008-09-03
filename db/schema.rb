@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080818091718) do
+ActiveRecord::Schema.define(:version => 20080901065300) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -285,18 +285,19 @@ ActiveRecord::Schema.define(:version => 20080818091718) do
     t.integer "bit_id",                     :limit => 20
     t.string  "theme"
     t.string  "domain"
-    t.integer "articles_per_page",          :limit => 11, :default => 10
-    t.integer "comments_disabled_after",    :limit => 11, :default => 0
-    t.boolean "default_publication",                      :default => false
-    t.integer "publish_status",             :limit => 11, :default => 1
+    t.integer "articles_per_page",          :limit => 11,  :default => 10
+    t.integer "comments_disabled_after",    :limit => 11,  :default => 0
+    t.boolean "default_publication",                       :default => false
+    t.integer "publish_status",             :limit => 11,  :default => 1
     t.text    "publish_status_description"
     t.string  "pop_server"
-    t.integer "port_number",                :limit => 11, :default => 110
+    t.integer "port_number",                :limit => 11,  :default => 110
     t.string  "email_userid"
     t.string  "email_password"
     t.string  "admin_email"
     t.string  "google_analytics"
     t.string  "google_maps"
+    t.string  "defensio_api_key",           :limit => 100
   end
 
   create_table "related_assets", :force => true do |t|

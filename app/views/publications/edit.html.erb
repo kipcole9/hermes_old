@@ -1,7 +1,7 @@
 <%
 	sidebar :asset_search
-	sidebar :image_random
 	sidebar :asset_map if @asset && @asset.mappable?
+	sidebar :image_random
 %>
 <div id="_form">
 <%= render :partial => "shared/form_heading", :locals => {:asset => @publication} %>
@@ -38,10 +38,13 @@
 	<%= form.text_field :email_userid, :disabled => is_show?, :size => 20 %>
 	<%= form.text_field :email_password, :disabled => is_show?, :size => 30 %>
 
-	<h3>Google Information</h3>
+	<h3>Google API Keys</h3>
 	<%= form.text_field :google_analytics, :disabled => is_show?, :size => 30 %>
 	<%= form.text_field :google_maps, :disabled => is_show?, :size => 30 %>
-		
+	
+	<h3>Spam Protection API Keys</h3>
+	<%= form.text_field :defensio_api_key, :disabled => is_show?, :size => 30 %>		
+			
 	<h3>Location</h3>
 	<%= form.text_field :location, :disabled => is_show?, :size => 30 %>
 	<%= form.text_field :city, :disabled => is_show?, :size => 30 %>

@@ -87,49 +87,6 @@ module ActiveRecord
                 :conditions => conditions.join(" AND ")
               }.reverse_merge!(options)
             end
-            
-            # This is the original code
-            def self.x_find_options_for_find_tagged_with(tags, options = {})
-              tags = tags.is_a?(Array) ? TagList.new(tags.map(&:to_s)) : TagList.from(tags)
-              options = options.dup
-
-              return {} if tags.empty?
-
-              conditions = []
-              conditions << sanitize_sql(options.delete(:conditions)) if options[:conditions]
-              #conditions << sanitize_sql(scope(:find)[:conditions]) if scope(:find)
-              conditions.compact!
-
-              taggings_alias, tags_alias = "#{polymorph_name}_taggings", "#{polymorph_name}_tags"
-
-              if options.delete(:exclude)
-                conditions << <<-END
-                  #{polymorph_table_name}.id NOT IN
-                    (SELECT #{Tagging.table_name}.taggable_id FROM #{Tagging.table_name}
-                      INNER JOIN #{Tag.table_name} ON #{Tagging.table_name}.tag_id = #{Tag.table_name}.id
-                      WHERE \#{tags_condition(tags)} AND #{Tagging.table_name}.taggable_type = #{quote_value(polymorph_class_name)})
-                END
-              else
-                if options.delete(:match_all)
-                  conditions << <<-END
-                    (SELECT COUNT(*) FROM #{Tagging.table_name}
-                      INNER JOIN #{Tag.table_name} ON #{Tagging.table_name}.tag_id = #{Tag.table_name}.id
-                      WHERE #{Tagging.table_name}.taggable_type = #{quote_value(polymorph_class_name)} AND
-                            taggable_id = #{polymorph_table_name}.id AND
-                            \#{tags_condition(tags)}) = \#{tags.size}
-                  END
-                else
-                  conditions << tags_condition(tags, tags_alias)
-                end
-              end
-
-              { :select => "DISTINCT #{my_table_name}.*", 
-                :joins => "INNER JOIN #{polymorph_table_name} ON #{my_table_name}.id = #{polymorph_table_name}.content_id AND #{polymorph_table_name}.content_type = '#{self.name}' " +
-                          "INNER JOIN #{Tagging.table_name} \#{taggings_alias} ON \#{taggings_alias}.taggable_id = #{polymorph_table_name}.#{primary_key} " +
-                          "INNER JOIN #{Tag.table_name} \#{tags_alias} ON \#{tags_alias}.id = \#{taggings_alias}.tag_id ",
-                :conditions => conditions.join(" AND ")
-              }.reverse_merge!(options)
-            end
 
             def self.tags_condition(tags, table_name = Tag.table_name)
               condition = tags.map { |t| sanitize_sql(["\#{table_name}.name LIKE ?", t]) }.join(" OR ")

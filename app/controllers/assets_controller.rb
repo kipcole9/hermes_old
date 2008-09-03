@@ -302,11 +302,12 @@ private
     def retrieve_assets
       user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
       @objects = asset_obj.viewable_by(user) \
-                    .published.published_in(publication) \
+                    .published \
+                    .published_in(publication) \
                     .conditions(marshall_params) \
-                    .included_in_index(current_user) \
+                    .included_in_index(user) \
                     .tagged_with(unescape(params[:tags])) \
-                    .with_category(unescape(params[:category])) \
+                    .category_of(unescape(params[:category])) \
                     .order('assets.created_at DESC') \
                     .page(params[:page], page_size)  
       if @objects.blank?
