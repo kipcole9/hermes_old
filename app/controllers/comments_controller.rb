@@ -3,9 +3,13 @@ class CommentsController < ApplicationController
   before_filter :login_required, :except => [ :create ]
   before_filter :comments_open?, :only => [:create, :edit]
   before_filter :retrieve_comment, :only => [:ham, :spam]
+  before_filter :retrieve_comments, :only => :index
   
   def index
-    @comments = Comment.all
+    respond_to do |format|
+      format.rss
+      format.html
+    end
   end
   
   def create
@@ -69,6 +73,12 @@ class CommentsController < ApplicationController
       end      
     end
   end
+  
+protected
+
+  def page_size
+    20
+  end
 
 private
 
@@ -83,5 +93,10 @@ private
   
   def retrieve_comment
     @comment = Comment.find(params[:id])
-  end  
+  end 
+
+  def retrieve_comments
+    @comments = Comment.page(params[:page], page_size)
+  end
+  
 end
