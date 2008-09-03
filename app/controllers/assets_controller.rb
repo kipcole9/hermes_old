@@ -336,7 +336,7 @@ private
     
     def log_asset_show
       if @asset
-        AssetView.log(publication.id, @asset, current_user, request.env["HTTP_USER_AGENT"], User.environment["IP"])
+        AssetView.log(publication.id, @asset, current_user, request.env["HTTP_USER_AGENT"], User.environment["IP"], request.env["HTTP_REFERER"])
         Asset.increment_view_count(@asset.attributes["id"])
       end
     end

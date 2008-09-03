@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080901065300) do
+ActiveRecord::Schema.define(:version => 20080903102519) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20080901065300) do
     t.string   "user_agent"
     t.datetime "created_at"
     t.integer  "publication_id", :limit => 11
+    t.string   "referrer"
   end
 
   create_table "assets", :force => true do |t|
