@@ -9,7 +9,11 @@ do
   xml.channel do
     xml.title "Recent Comments"
     xml.link root_url
-    xml.pubDate @comments.load_page.first.updated_at.rfc822
+    if @comments.size > 0
+      xml.pubDate @comments.load_page.first.updated_at.rfc822
+    else
+      xml.pubDate Asset.maximum(:updated_at).rfc822
+    end    
     xml.description publication.description
     @comments.each do |comment|
       xml.item do
