@@ -1,12 +1,13 @@
 <% if image -%>
-	<% gallery = gallery rescue nil -%>
-	<% caption = caption rescue nil -%>
+	<% gallery = nil unless local_assigns[:gallery] -%>
+	<% caption = nil unless local_assigns[:caption] -%>
+	<% prefix = local_assigns[:prefix] ? prefix + "_" : "" %>
 	<% url = gallery ? gallery_path(gallery) : image_path(image) -%>
 	<% long_caption = caption || image.title -%>
 	<% display_caption = long_caption.truncate(25) -%>
 	<% description = gallery ? gallery.description : image.description -%>
 	<% link_as = image.catalog.link_as -%>
-	<div id="image_<%= image.id -%>" class="<%= (image.orientation == 'p' ? '_thumbsmall_p' : '_thumbsmall_l') -%>" >
+	<div id="<%= prefix %>image_<%= image.id -%>" class="<%= (image.orientation == 'p' ? '_thumbsmall_p' : '_thumbsmall_l') -%>" >
 		<a href="<%= url -%>" >
 			<img alt="<%= long_caption -%>" title="<%= long_caption -%>"
 				src="<%= serve_image_link(image, :type => :thumbnail) -%>" />

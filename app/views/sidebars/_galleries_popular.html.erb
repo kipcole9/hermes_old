@@ -13,7 +13,7 @@
 </h4>
 <% galleries.each do |g|%>
 	<%= render :partial => "images/thumbnail", :locals => {:image => g.popular_image(current_user), 
-		:caption => g.title, :gallery => g}  %>
+		:caption => g.title, :gallery => g, :prefix => "popular" }  %>
 <% end %>
 
 <% if !(ajax rescue nil) %>
