@@ -15,8 +15,8 @@ module ActiveRecord
           
           polymorph_name = configuration[:name].to_s.downcase
           polymorph_class_name = polymorph_name.capitalize
-          polymorph_table_name = Inflector.pluralize(polymorph_name)
-          my_table_name = Inflector.pluralize(base_class.name).downcase
+          polymorph_table_name = ActiveSupport::Inflector.pluralize(polymorph_name)
+          my_table_name = ActiveSupport::Inflector.pluralize(base_class.name).downcase
           as_name = configuration[:as].to_s.downcase
           
           class_eval <<-END_EVAL
