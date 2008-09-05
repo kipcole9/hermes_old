@@ -25,10 +25,11 @@ class ApplicationController < ActionController::Base
   include SimpleSidebar
   helper SimpleSidebarHelper  
   
-  #layout :current_layout
-  
   # Rescue_from incompatible with AWS (weird cookie overflow exception)
   def rescue_action_in_public(exception)
+    status = response_code_for_rescue(exception)
+    render_optional_error_file status
+    log_exception(exception) if status != :not_found
     case(exception)
     when ::ActionController::UnknownAction
       page_not_found
@@ -107,13 +108,7 @@ protected
     User.environment["IP"] = request.env["HTTP_X_REAL_IP"] || request.remote_addr || request.remote_ip
     Publication.current = publication
   end
-    
-  # Not currently used (trying new theming approach)
-  def current_layout
-    return nil if ["rss","xml","atom"].include?(params[:format])
-    publication.theme
-  end
-  
+
   def set_timezone
    unless logged_in?
      Time.zone = browser_timezone if browser_timezone
