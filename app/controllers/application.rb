@@ -28,13 +28,12 @@ class ApplicationController < ActionController::Base
   # Rescue_from incompatible with AWS (weird cookie overflow exception)
   def rescue_action_in_public(exception)
     status = response_code_for_rescue(exception)
-    render_optional_error_file status
     log_exception(exception) if status != :not_found
-    case(exception)
-    when ::ActionController::UnknownAction
+    case(status)
+    when :not_found
       page_not_found
     else
-      super
+      render_optional_error_file status
     end
   end
 
