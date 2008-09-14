@@ -4,6 +4,7 @@
 	sidebar :galleries_recent
 	sidebar :galleries_popular
 %>
+
 <% content_for :head do %>
 	<%= "<meta name=\"description\" content=\"#{h publication.description}\" />" %>
 	<%= "<meta name=\"author\" content=\"#{h publication.created_by.full_name}\" />" if publication.created_by.full_name %>
@@ -12,7 +13,8 @@
 	<%= "<meta name=\"date\" content=\"#{h Asset.maximum('updated_at').iso8601}\" />" %>
 	<%= auto_discovery_link_tag(:rss, formatted_galleries_url(params.remove("page").merge(:format => "rss"))) %>
 	<%= auto_discovery_link_tag(:atom, formatted_galleries_url(params.remove("page").merge(:format => "atom"))) %>
-<% end %>
+	<%= stylesheet_link_merged :lightview %>	
+<% end %>	
 	
 <div class='_article'>
 	<% category = params[:category] ? params[:category].capitalize + " " : "" %>
