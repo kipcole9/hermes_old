@@ -23,6 +23,15 @@ class CommentsController < ApplicationController
     redirect_back_or_default("/")
   end
   
+  def delete
+    if Comment.delete_all(["id IN (?)", params[:comment_ids]])
+      flash[:notice] = "Selected comments were deleted"
+    else
+      flash[:notice] = "Could not delete selected comments"
+    end
+    redirect_back_or_default('/')
+  end
+  
   def destroy
     if Comment.delete(params[:id])
       respond_to do |format|
