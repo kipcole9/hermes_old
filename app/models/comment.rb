@@ -2,7 +2,7 @@ class Comment < ActiveRecord::Base
   belongs_to                    :asset
   belongs_to                    :created_by, :class_name => 'User', :foreign_key => "created_by"
   before_validation_on_create   :set_comment_status
-  before_save                   :set_ip_address, :set_comment_type, :defensio_spam_check
+  before_create                 :set_ip_address, :set_comment_type, :defensio_spam_check
   
   validates_presence_of   :asset
   validate do |comment|
