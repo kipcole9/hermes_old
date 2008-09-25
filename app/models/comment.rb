@@ -46,7 +46,7 @@ class Comment < ActiveRecord::Base
   end
   
   def user_ip
-    User.ip_address
+    User.environment["IP"]
   end
   
   def check_content
@@ -60,18 +60,20 @@ class Comment < ActiveRecord::Base
 
 private
   def defensio_spam_check
-    defensio = Defensio.new(:no_validate_key => true)
-    article = self.asset.content
-    if defensio.audit_comment(article, self)
-      self.signature = defensio.response["signature"]
-      self.spam = defensio.response["spam"]
-      self.spaminess = defensio.response["spaminess"]
-      self.status = self.spam? ? Asset::STATUS[:draft] : Asset::STATUS[:published]
-    else
-      logger.warning "Comment: Defensio failure: setting comment to draft"
-      self.status = Asset::STATUS[:draft]
+    if  !self.spam?
+      defensio = Defensio.new(:no_validate_key => true)
+      article = self.asset.content
+      if defensio.audit_comment(article, self)
+        self.signature = defensio.response["signature"]
+        self.spam = defensio.response["spam"]
+        self.spaminess = defensio.response["spaminess"]
+        self.status = self.spam? ? Asset::STATUS[:draft] : Asset::STATUS[:published]
+      else
+        logger.warning "Comment: Defensio failure: setting comment to draft"
+        self.status = Asset::STATUS[:draft]
+      end
+      self.status = Asset::STATUS[:draft] if self.asset.moderate_comments?
     end
-    self.status = Asset::STATUS[:draft] if self.asset.moderate_comments?
   end 
     
   def set_comment_status
@@ -93,6 +95,7 @@ private
     source_title = source_title.blank? ? 'site' : source_title
     "Pingback from \'<a href=\"#{sourceURI}\">#{source_title}\'.</a>"
   end
+  
 end
 
 
