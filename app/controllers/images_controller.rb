@@ -40,7 +40,6 @@ class ImagesController < AssetsController
   end
   
   def roulette
-
     respond_to do |format|
       format.html do
         @images = Image.published_in(publication).published.viewable_by(current_user) \
@@ -62,7 +61,7 @@ class ImagesController < AssetsController
   # called via Ajax
   def live_search
     if !params[:tags].blank?
-      @images = Image.viewable_by(current_user).find_tagged_with(params[:tags])
+      @images = Image.viewable_by(current_user).find_tagged_with(unescape(params[:tags]))
     else
       @images = []
     end
@@ -71,7 +70,7 @@ class ImagesController < AssetsController
 
   def recent
     @images = Image.published_in(publication).published.viewable_by(current_user) \
-      .order('created_at DESC').limit(30).pager(unescape(params[:tags]), params[:page], page_size)
+      .order('created_at DESC').limit(30).tagged_with(unescape(params[:tags])).page(params[:page], page_size)
     @heading = "Recent Image Index"
     respond_to do |format|
       format.html {render :action => :index}
@@ -83,7 +82,7 @@ class ImagesController < AssetsController
 
   def popular
     @images = Image.published_in(publication).published.viewable_by(current_user) \
-      .order('view_count DESC').limit(30).pager(unescape(params[:tags]), params[:page], page_size)
+      .order('view_count DESC').limit(30).tagged_with(unescape(params[:tags])).page(params[:page], page_size)
     @heading = "Popular Image Index"
     respond_to do |format|
       format.html {render :action => :index}
@@ -94,14 +93,7 @@ class ImagesController < AssetsController
   end
   
   def serve
-    if splits = params[:id].match(/(.+)-(thumbnail|slide|display|full)$/)
-      image_name = splits[1]
-      image_type = splits[2]
-    else
-      image_name = params[:id]
-      image_type = "full"
-    end
-    
+    image_name, image_type = image_from_param(params[:id])
     if image = Image.published_in(publication).published.viewable_by(current_user).find_by_name(image_name)
       path_name = image.send("#{image_type}_path_name")
     end
@@ -129,6 +121,17 @@ class ImagesController < AssetsController
   end
 
 protected
+
+  def image_from_param(param)
+    if splits = param.match(/(.+)-(thumbnail|slide|display|full)$/)
+      image_name = splits[1]
+      image_type = splits[2]
+    else
+      image_name = param
+      image_type = "full"
+    end
+    return image_name, image_type
+  end
   
   def retrieve_this_jpg
     if @object = Image.viewable_by(current_user).find_by_filename(collect_filename)
