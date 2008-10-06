@@ -29,6 +29,7 @@
  			|   <%= logged_in? ? "<a href=\"#{logout_path}\" >Logout '#{current_user.login}'</a>" : 
 								 "<a href=\"#{login_path}\" >Login</a>" -%>
  	  </div>
+	  <!-- <p><%= request.env["HTTP_USER_AGENT"] %></p> -->
   </div>
   <div id="_content">
   	<%= yield %>
