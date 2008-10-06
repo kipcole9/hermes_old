@@ -3,18 +3,18 @@
 # This is the actual config file used to keep the mongrels of
 # hermes running.
 
-RAILS_ROOT = "/u/apps/hermes/current"
-RAILS_SHARED = "/u/apps/hermes/shared"
+RAILS_ROOT    = "/u/apps/hermes/current"
+RAILS_SHARED  = "/u/apps/hermes/shared"
+BIN_DIR       = "/usr/local/bin"
 
 %w{8000 8001 8002}.each do |port|
   God.watch do |w|
     w.name = "hermes-mongrel-#{port}"
     w.group = "hermes"
     w.interval = 30.seconds # default      
-    w.start = "mongrel_rails start -c #{RAILS_ROOT} -p #{port} \
-      -P #{RAILS_SHARED}/log/mongrel.#{port}.pid -e production -d"
-    w.stop = "mongrel_rails stop -P #{RAILS_SHARED}/log/mongrel.#{port}.pid"
-    w.restart = "mongrel_rails restart -P #{RAILS_SHARED}/log/mongrel.#{port}.pid"
+    w.start = "#{BIN_DIR}/mongrel_rails start -c #{RAILS_ROOT} -p #{port} -P #{RAILS_SHARED}/log/mongrel.#{port}.pid -e production -d"
+    w.stop = "#{BIN_DIR}/mongrel_rails stop -P #{RAILS_SHARED}/log/mongrel.#{port}.pid"
+    w.restart = "#{BIN_DIR}/mongrel_rails restart -P #{RAILS_SHARED}/log/mongrel.#{port}.pid"
     w.start_grace = 10.seconds
     w.restart_grace = 10.seconds
     w.pid_file = File.join(RAILS_SHARED, "log/mongrel.#{port}.pid")
