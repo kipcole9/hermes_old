@@ -3,7 +3,6 @@ set :repository,  "git@github.com:kipcole9/hermes.git"
 
 set :user, "kip"
 set :runner, "kip"
-
 set :run_method, :run
 set :ssh_options, { :forward_agent => true, :port => 9876 }
 

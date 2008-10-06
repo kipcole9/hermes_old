@@ -19,9 +19,11 @@ namespace(:deploy) do
     run "ln -nsf #{release_path}/vendor/deployment_plugins/nginx_streaming #{release_path}/vendor/plugins/ngix_streaming" 
   end
 
-  desc "Restart mongrel_cluster" 
-  task :restart do 
-    run "/etc/init.d/mongrel_cluster restart" 
+  [ :stop, :start, :restart ].each do |t|
+    desc "#{t.to_s.capitalize} mongrels using god"
+    task t, :roles => :app do
+      sudo "god #{t.to_s} hermes"
+    end
   end
   
   desc "Create asset packages for production" 

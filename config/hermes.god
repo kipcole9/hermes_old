@@ -25,6 +25,7 @@ BIN_DIR       = "/usr/local/bin"
       start.condition(:process_running) do |c|
         c.interval = 5.seconds
         c.running = false
+        c.notify = 'kip'
       end
     end
     
@@ -32,11 +33,13 @@ BIN_DIR       = "/usr/local/bin"
       restart.condition(:memory_usage) do |c|
         c.above = 150.megabytes
         c.times = [3, 5] # 3 out of 5 intervals
+        c.notify = 'kip'
       end
     
       restart.condition(:cpu_usage) do |c|
         c.above = 50.percent
         c.times = 5
+        c.notify = 'kip'
       end
     end
     
@@ -50,7 +53,24 @@ BIN_DIR       = "/usr/local/bin"
         c.retry_in = 10.minutes
         c.retry_times = 5
         c.retry_within = 2.hours
+        c.notify = 'kip'
       end
     end
   end
+end
+
+God::Contacts::Email.message_settings = {
+  :from => 'admin@noexpectations.com.au'
+}
+
+God::Contacts::Email.server_settings = {
+  :address => "smtp.com",
+  :port => 25,
+  :domain => "noexpectations.com.au",
+  :authentication => :plain
+}
+
+God.contact(:email) do |c|
+  c.name = 'kip'
+  c.email = 'kip@noexpectations.com.au'
 end
