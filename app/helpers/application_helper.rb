@@ -25,7 +25,7 @@ module ApplicationHelper
     link_to link_text, "/u/kml/#{kml_file_name}.kml"
   end
     
-  def render_description(asset)
+  def render_description(asset, options = {})
     return "" unless asset.description
     description = asset.description.sub(/<%= *image/,"<%= image_rss")
     description = description.sub(/<%= *thumb/,"<%= image_rss")
