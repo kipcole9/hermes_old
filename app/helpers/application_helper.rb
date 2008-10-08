@@ -16,7 +16,7 @@ module ApplicationHelper
   end
   
   def link_to_gallery(gallery_name, options = {})
-    return options[:text] unless galery = Gallery.viewable_by(current_user).find_by_name(gallery_name)
+    return options[:text] unless gallery = Gallery.viewable_by(current_user).find_by_name_or_id(gallery_name)
     link_text = options[:text] || gallery.title
     link_to link_text, gallery_path(gallery)
   end
