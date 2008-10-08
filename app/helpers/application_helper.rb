@@ -15,6 +15,16 @@ module ApplicationHelper
     link_to link_text, image_path(image)
   end
   
+  def link_to_gallery(gallery_name, options = {})
+    return options[:text] unless galery = Gallery.viewable_by(current_user).find_by_name(gallery_name)
+    link_text = options[:text] || gallery.title
+    link_to link_text, gallery_path(gallery)
+  end
+      
+  def link_to_kml(kml_file_name, link_text)
+    link_to link_text, "/u/kml/#{kml_file_name}.kml"
+  end
+    
   def render_description(asset)
     return "" unless asset.description
     description = asset.description.sub(/<%= *image/,"<%= image_rss")

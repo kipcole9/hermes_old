@@ -8,6 +8,8 @@ User-Agent: *
 Allow: /
 Disallow: /assets/live_search/
 Disallow: /images/live_search/
+Disallow: /images/random/
+Disallow: /Portfolios/
 Disallow: /signup
 Disallow: /login
 Disallow: /logout
