@@ -1,10 +1,13 @@
 <h3>
 	<%= "by #{article.created_by.full_name} on #{article.created_at.strftime("%A, %B %d %Y at %H:%M %Z")}" -%>
+	<% if current_user.is_admin? && article.view_count > 0 %>
+		<%= "(#{pluralize(article.view_count, "view")})" %>
+	<% end %>
 	<% if !article.comments_none? %>
 		<% if (@comment_count ||= article.comments.published.not_spam.count) > 0 %>
 			<%= "(#{pluralize(@comment_count, "comment")})" %>
 		<% end %>
-	<% end %>
+	<% end %>	
 	<% links = [] %>
 	<% if article.can_update?(current_user) %>
 		<% links << link_to("Edit", edit_url(article)) %>
