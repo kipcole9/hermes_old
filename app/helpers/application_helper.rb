@@ -24,6 +24,10 @@ module ApplicationHelper
   def link_to_kml(kml_file_name, link_text)
     link_to link_text, "/kml/#{kml_file_name}.kml"
   end
+  
+  def link_to_google_map(kml_file_name, link_text)
+    link_to link_text, "http://maps.google.com?q=" + CGI.escape("http://www.noexpectations.com.au/kml/#{kml_file_name}.kml")
+  end
     
   def render_description(asset)
     return "" unless asset.description
