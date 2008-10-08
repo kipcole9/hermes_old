@@ -25,7 +25,7 @@ module ApplicationHelper
     link_to link_text, "/u/kml/#{kml_file_name}.kml"
   end
     
-  def render_description(asset, options = {})
+  def render_description(asset)
     return "" unless asset.description
     description = asset.description.sub(/<%= *image/,"<%= image_rss")
     description = description.sub(/<%= *thumb/,"<%= image_rss")
@@ -60,7 +60,7 @@ module ApplicationHelper
     end
   end
   
-  def image_rss(name)
+  def image_rss(name, options = {})
     if i = Image.viewable_by(current_user).published.published_in(publication).find_by_name(name)
       render :partial => "images/thumbnail_rss.html.erb", :locals => {:image => i}
     else
