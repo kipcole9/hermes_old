@@ -22,7 +22,7 @@ module ApplicationHelper
   end
       
   def link_to_kml(kml_file_name, link_text)
-    link_to link_text, "/u/kml/#{kml_file_name}.kml"
+    link_to link_text, "/kml/#{kml_file_name}.kml"
   end
     
   def render_description(asset)
