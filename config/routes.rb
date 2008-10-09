@@ -39,6 +39,8 @@ ActionController::Routing::Routes.draw do |map|
   # Assets routes
   map.resources :articles,  :collection => {:list => :get, :recent => :get, :popular => :get, :live_search => :post},
                             :member => {:comments => :get}
+  map.category  '/articles/category/:category', :controller => 'articles', :action => 'index'
+                            
   map.resources :assets,    :collection => {:live_search => :post, :apis => :get}
   map.resources :images,    :member => {:serve => :get, :comments => :get}, 
                             :collection => {:recent => :get, :popular => :get, :random => :post, :roulette => :get, 

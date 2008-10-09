@@ -335,12 +335,16 @@ private
     end
     
     def log_asset_show
-      if @asset
+      if @asset and !is_search_bot?(request.env["HTTP_USER_AGENT"])
         AssetView.log(publication.id, @asset, current_user, request.env["HTTP_USER_AGENT"], User.environment["IP"], request.env["HTTP_REFERER"])
-        Asset.increment_view_count(@asset.attributes["id"])
+        Asset.increment_view_count(@asset.attributes["id"]) 
       end
     end
     
+    def is_search_bot?(agent)
+      agent.match(/(googlebot|yahoo! slurp|msnbot|cuiller)/i)
+    end
+      
     def remember_location
       store_location
     end
