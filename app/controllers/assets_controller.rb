@@ -16,6 +16,7 @@ class AssetsController < ApplicationController
   
   after_filter  :log_show, :only => [:show]
   ASSET_ACTIONS = ["live_search", "apis"]
+  BOTS          = /(googlebot|yahoo! slurp|msnbot|cuiller)/i
   
   # Proxies: implement in concrete Asset sub-class as required
   # Normally nothing is required (the correct template will get rendered)
@@ -342,7 +343,7 @@ private
     end
     
     def is_search_bot?(agent)
-      agent.match(/(googlebot|yahoo! slurp|msnbot|cuiller)/i)
+      agent.match(BOTS)
     end
       
     def remember_location
