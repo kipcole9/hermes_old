@@ -21,7 +21,7 @@ xml.kml "version" => "1.0", :xmlns => "http://earth.google.com/kml/2.2" do
             xml.name image.title
             gps_note = image.google_geocoded ? "<p><i>Geocoded by Google - location accuracy is to the #{Google_geocode_accuracy[image.geocode_accuracy]} level only.</i></p>" : \
                                                "<p><i>Geocoded from a GPS tracklog - accuracy usually within 3m.</i></p>"
-            xml.description h("<p><img src=\"#{image_url(image)}-display/serve\" ></p>" + render_description(image) + gps_note)
+            xml.description "<p><img src=\"#{image_url(image)}-display/serve\" ></p>" + render_description(image) + gps_note
             xml.styleUrl "#style_image_pushpin"
             xml.Point do
               xml.coordinates "#{image.longitude},#{image.latitude},0"
