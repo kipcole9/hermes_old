@@ -30,7 +30,7 @@ module HermesControllerExtensions
     unless @formatted_index_heading
       category = params[:category] ? "#{params[:category].capitalize} " : ""
       args = display_params ? " #{display_params}" : ""
-      tags = params[:tags] ? " (tagged with #{params[:tags]})" : ""
+      tags = params[:tags] ? " (tagged with '#{params[:tags]}')" : ""
       @formatted_index_heading = "#{category}#{class_name.pluralize}#{args}#{tags}"
     end
     @formatted_index_heading
@@ -98,10 +98,10 @@ module HermesControllerExtensions
       sql_text = []
       params.each do |k, v|
         if is_column?(k)
-          sql_text << "#{k.humanize} is #{v}"
+          sql_text << "#{k.humanize} is '#{v}'"
         end
       end
-      sql_params = " with " + sql_text.join(" and ") if sql_text.length > 0
+      sql_params = " where " + sql_text.join(" and ") if sql_text.length > 0
       @display_params = sql_params || nil
     end
     @display_params

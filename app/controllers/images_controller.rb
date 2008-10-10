@@ -1,6 +1,10 @@
 class ImagesController < AssetsController
   skip_before_filter    :verify_authenticity_token, :only => :update
 
+  def index_kml
+    render :action => "index"
+  end
+
   def update_jpg
     head :status => 406 unless Mime::Type.lookup(request.env['CONTENT_TYPE']) == Mime::Type.lookup_by_extension(:jpg)
     if RAILS_ENV == "development"

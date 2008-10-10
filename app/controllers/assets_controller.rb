@@ -29,6 +29,7 @@ class AssetsController < ApplicationController
       format.rss
       format.atom
       format.xml  { render :xml => @objects.to_xml }      
+      format.any  { send("index_#{params[:format]}") } if respond_to?("index_#{params[:format]}")
     end
   end
 

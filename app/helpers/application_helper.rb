@@ -80,6 +80,10 @@ module ApplicationHelper
     end
   end
   
+  def sanitize_params(params)
+    params.remove("controller").remove("action").remove("format")
+  end
+  
   def publication
     controller.publication
   end
