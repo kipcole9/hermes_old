@@ -1,5 +1,9 @@
 class GalleriesController < AssetsController
   
+  def show_kml
+    render :action => "show"
+  end
+  
   def recent
     respond_to do |format|
       format.html 

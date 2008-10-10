@@ -1,5 +1,5 @@
 <h3>
-	<%= "by #{article.created_by.full_name} on #{article.created_at.strftime("%A, %B %d %Y at %H:%M %Z")}" -%>
+	<%= "by #{article.created_by.full_name} on #{article.created_at.strftime("%A, %B %d, %Y at %H:%M %Z")}" -%>
 	<% if current_user.is_admin? && article.view_count > 0 %>
 		<%= "(#{pluralize(article.view_count, "view")})" %>
 	<% end %>
