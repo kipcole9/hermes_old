@@ -12,13 +12,13 @@ module ApplicationHelper
   def link_to_image(image_name, options = {})
     return options[:text] unless image = Image.viewable_by(current_user).find_by_name_or_filename(image_name)
     link_text = options[:text] || image.title
-    link_to link_text, image_path(image)
+    link_to link_text, image_url(image)
   end
   
   def link_to_gallery(gallery_name, options = {})
     return options[:text] unless gallery = Gallery.viewable_by(current_user).find_by_name_or_id(gallery_name)
     link_text = options[:text] || gallery.title
-    link_to link_text, gallery_path(gallery)
+    link_to link_text, gallery_url(gallery)
   end
       
   def link_to_kml(kml_file_name, link_text)
