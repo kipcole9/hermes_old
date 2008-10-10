@@ -24,6 +24,17 @@ module HermesSitemap
             xml.changefreq  "weekly"
             xml.priority    PRIORITY[a.content_type] || "0.5"
           end
+          if asset.is_a?(Gallery)
+            xml.url do
+              xml.loc       polymorphic_url(asset) + ".kml"
+              xml.lastmod     asset.updated_at.iso8601
+              xml.changefreq  "weekly"
+              xml.priority    PRIORITY[a.content_type] || "0.5"              
+              xml.geo :geo do
+                xml.geo :format, "kml"
+              end
+            end
+          end
         else
           puts "Nil asset content for #{a.id.to_s}:#{a.name} of type #{a.content_type} found - skipping."
         end

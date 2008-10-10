@@ -1,8 +1,12 @@
 xml.instruct!
-xml.kml "version" => "1.0", :xmlns => "http://earth.google.com/kml/2.2" do
+xml.kml :xmlns => "http://www.opengis.net/kml/2.2", "xmlns:atom" => "http://www.w3.org/2005/Atom" do
   xml.Document do
     xml.name h("No Expectations Selected Images")
     xml.description h(page_title)
+    xml.atom :author do
+      xml.atom :name, "Kip Cole"
+    end
+    xml.atom :link, href="http://www.noexpectations.com.au"
     xml.Style :id => "style_image_pushpin" do
       xml.IconStyle do
         xml.scale "1.1"
