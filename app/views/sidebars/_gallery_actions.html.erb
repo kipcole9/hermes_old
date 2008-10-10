@@ -24,6 +24,14 @@
 			end
 		 %>
 	</li>
+	<li>
+		<%= link_to "#{image_tag("/images/icons/photo.png")} Show gallery in Google Maps", 
+					"http://maps.google.com/?q=" + h(formatted_gallery_url(@gallery, :kml)) %>
+	</li>
+	<li>
+		<%= link_to "#{image_tag("/images/icons/photo.png")} Download kml file for this gallery", 
+					h(formatted_gallery_url(@gallery, :kml)) %>
+	</li>	
 </ul>	
 
 	
