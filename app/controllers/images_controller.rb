@@ -4,6 +4,14 @@ class ImagesController < AssetsController
   def index_kml
     render :action => "index"
   end
+  
+  def show_kml
+    if @image.mappable?
+      render :action => "show"
+    else
+      head :status => 404
+    end
+  end
 
   def update_jpg
     head :status => 406 unless Mime::Type.lookup(request.env['CONTENT_TYPE']) == Mime::Type.lookup_by_extension(:jpg)

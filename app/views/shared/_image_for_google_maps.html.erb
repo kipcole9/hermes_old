@@ -1,0 +1,25 @@
+<%
+	if image.orientation == "p"
+		height = image.height / 3
+		width = image.width / 3
+	else
+		height = image.height / 2
+		width = image.width / 2
+	end
+%>
+<p>
+	<a href=<%= image_url(image) %> >
+		<img src="<%= image_url(image) %>-display/serve" height=<%= height %>px width=<%= width %>px >
+	</a>
+</p>
+<p>
+	<%= render_description image %>
+<p>
+	<i>
+		<% if image.google_geocoded %>
+			Geocoded by Google - location accuracy is to the <%= Google_geocode_accuracy[image.geocode_accuracy] %> level only.
+		<% else %>
+		    Geocoded from a GPS tracklog - accuracy usually within 3m.
+		<% end %>
+	</i>
+</p>

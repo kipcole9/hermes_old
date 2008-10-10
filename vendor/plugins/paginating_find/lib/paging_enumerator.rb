@@ -56,6 +56,18 @@ class PagingEnumerator
     self
   end
   
+  # Return the first entry in the result set
+  def first
+    load_page unless results
+    results.first
+  end
+  
+  # Return indexed item of result set
+  def [](index)
+    load_page unless results
+    results[index]
+  end
+  
   def move!(page)
     raise ArgumentError, "manually moving pages is only supported when auto paging is disabled" if auto
     if page < self.first_page
