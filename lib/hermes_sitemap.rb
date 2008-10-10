@@ -24,9 +24,11 @@ module HermesSitemap
             xml.changefreq  "weekly"
             xml.priority    PRIORITY[a.content_type] || "0.5"
           end
+          
+          # All assets should allow kml generation - we need to add that to other assets first though
           if asset.is_a?(Gallery)
             xml.url do
-              xml.loc       polymorphic_url(asset) + ".kml"
+              xml.loc         polymorphic_url(asset) + ".kml"
               xml.lastmod     asset.updated_at.iso8601
               xml.changefreq  "weekly"
               xml.priority    PRIORITY[a.content_type] || "0.5"              
