@@ -1,4 +1,3 @@
-
 # Accuracy returned by Google when geocoding an asset
 Google_geocode_accuracy = [
   "Unknown",
