@@ -19,7 +19,8 @@ xml.kml "version" => "1.0", :xmlns => "http://earth.google.com/kml/2.2" do
         if image.latitude && image.longitude
           xml.Placemark do
             xml.name image.title
-            gps_note = image.google_geocoded ? "<p><i>Geocoded by Google</i></p>" : "<p><i>Located with GPS.</i></p>"
+            gps_note = image.google_geocoded ? "<p><i>Geocoded by Google - location accuracy is to the #{Google_geocode_accuracy[image.geocode_accuracy]} level only.</i></p>" : \
+                                               "<p><i>Geocoded from a GPS tracklog - accuracy usually within 3m.</i></p>"
             xml.description "<p><img src=\"#{image_url(image)}-display/serve\" ></p>" + render_description(image) + gps_note
             xml.styleUrl "#style_image_pushpin"
             xml.Point do
