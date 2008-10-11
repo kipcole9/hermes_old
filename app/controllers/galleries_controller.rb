@@ -8,6 +8,10 @@ class GalleriesController < AssetsController
     render :action => "show"
   end
   
+  def show_rs2
+    render :action => "photofeed"
+  end
+  
   def recent
     respond_to do |format|
       format.html 
