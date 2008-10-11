@@ -31,6 +31,10 @@
 	<li>
 		<%= link_to "#{image_tag("/images/icons/photo.png")} Download kml file for this gallery", 
 					h(formatted_gallery_url(@gallery, :kml)) %>
+	</li>
+	<li>
+		<%= link_to "#{image_tag("/images/icons/photo.png")} Subscribe to Photofeed for this gallery", 
+					h(formatted_gallery_url(@gallery, :rss)) %>
 	</li>	
 </ul>	
 

@@ -4,6 +4,10 @@ class GalleriesController < AssetsController
     render :action => "show"
   end
   
+  def show_rss
+    render :action => "show"
+  end
+  
   def recent
     respond_to do |format|
       format.html 
