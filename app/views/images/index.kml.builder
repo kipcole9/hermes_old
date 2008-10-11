@@ -7,7 +7,7 @@ xml.kml :xmlns => "http://www.opengis.net/kml/2.2", "xmlns:atom" => "http://www.
                                           :url => images_url(sanitize_params(params)))
     add_pushpin_style(xml)
     
-    xml.folder do
+    xml.Folder do
       xml.name "Selected Images"
       xml.open "1"
       @images.each do |image|

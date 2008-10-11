@@ -1,5 +1,5 @@
 module HermesGeoExtensions
-  DEFAULT_PUSHPIN_IMAGE     = "/images/icons/photo.png"
+  DEFAULT_PUSHPIN_IMAGE     = "images/icons/photo.png"
   DEFAULT_PUSHPIN_STYLE     = "style_image_pushpin"
 
   def add_document_basic_data(xml, asset, options = {})
