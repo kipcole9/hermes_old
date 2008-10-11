@@ -11,7 +11,7 @@ module HermesImageImport
   # => Add to the database
   def upload_images(dir = nil)
     @catalog = Catalog.default
-    proc = lambda {|file, folder| upload_image(file, folder) }
+    proc = lambda {|file, folder| upload_image(file, :folder => folder) }
     directory = dir || @catalog.source
     process_folder(directory, proc)   
   end

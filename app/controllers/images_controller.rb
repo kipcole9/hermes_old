@@ -36,10 +36,12 @@ class ImagesController < AssetsController
   end
   
   def show_jpg
-    if @image
-      render :status => 200, :text => @image.updated_at.utc.iso8601
+    if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"] == HERMES_IMAGE_UPLOADER_USER_AGENT
+      # Image uploader is only interested to know if the image exists and its update time
+      @image ? render(:status => 200, :text => @image.updated_at.utc.iso8601) : head(:status => 404)
     else
-      head :status => 404
+      # We're serving an image
+      serve_image(params[:id])
     end
   end
 
@@ -103,9 +105,14 @@ class ImagesController < AssetsController
       format.xml
     end
   end
-  
-  def serve
-    image_name, image_type = image_from_param(params[:id])
+
+protected
+  def ignore_not_found?(target_id, format)
+    params[:format] == "jpg"
+  end
+
+  def serve_image(image_file)
+    image_name, image_type = image_from_param(image_file)
     if image = Image.published_in(publication).published.viewable_by(current_user).find_by_name(image_name)
       path_name = image.send("#{image_type}_path_name")
     end
@@ -116,7 +123,7 @@ class ImagesController < AssetsController
         # use cached version
         head :status => 304
       else
-        headers['Content-Description'] = params[:id]
+        headers['Content-Description'] = image_file
         headers['Last-Modified'] = image.updated_at.httpdate
         expires_in 10.years, :private => false
         
@@ -131,8 +138,6 @@ class ImagesController < AssetsController
       head :status => 404
     end
   end
-
-protected
 
   def image_from_param(param)
     if splits = param.match(/(.+)-(thumbnail|slide|display|full)$/)

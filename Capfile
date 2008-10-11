@@ -4,9 +4,10 @@ load 'config/deploy'
 set :sitemap_path, "#{shared_path}/config/sitemap.xml"
 
 namespace(:deploy) do
-  desc "Symlink the database config to the current release directory." 
+  desc "Symlink the database and other configs to the current release directory." 
   task :symlink_database_yml do 
     run "ln -nsf #{shared_path}/config/database.yml #{release_path}/config/database.yml" 
+    run "ln -nsf #{shared_path}/config/hermes_upload.yml #{release_path}/config/hermes_upload.yml" 
   end
 
   desc "Symlink the sitemap to the current release directory." 

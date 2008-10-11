@@ -1,25 +1,23 @@
 module HermesUpload
   require 'rest_client'
   require 'cgi'
-   
-  #URI = "http://kip:crater123@localhost:3000/"
-  URI = "http://kip:crater123@www.noexpectations.com.au/"
     
-  def upload_image(filename, folder = nil)
+  def upload_image(filename, options = {})
     raise "File #{filename} was not found to import" unless File.exists?(filename)
     raise "Only Jpeg image uploads supported" unless File.extname(filename) == ".jpg"
-    updated_at = update_time(filename)
+    target_uri = HERMES_UPLOAD[:url]
+    updated_at = update_time(filename, target_uri)
     if updated_at && updated_at >= File.mtime(filename)
       puts "File #{filename} has not been modified, skipping upload."
       return
     end
     params = {}
     filename_url = CGI.escape(File.basename(filename))
-    params["folder"] = folder || File.basename(File.dirname(filename))
+    params["folder"] = options[:folder] || File.basename(File.dirname(filename))
     params["file_mtime"] = File.mtime(filename).utc.iso8601
-    uri = "#{URI}images/#{filename_url}"
+    uri = "#{target_uri.with_slash}images/#{filename_url}"
     url = uri + "?" + url_combine(params)
-    result = RestClient.put url, File.read(filename), :content_type => "image/jpg"
+    result = RestClient.put url, File.read(filename), :content_type => "image/jpg", :user_agent => HERMES_UPLOAD[:user_agent]
   rescue RestClient::RequestFailed => e
     case e.http_code
     when 204
@@ -38,9 +36,9 @@ module HermesUpload
     
   end
    
-  def update_time(filename)
-    url = "#{URI}images/#{CGI.escape(File.basename(filename))}"
-    result = RestClient.get(url)
+  def update_time(filename, target_uri)
+    url = "#{target_uri.with_slash}images/#{CGI.escape(File.basename(filename))}"
+    result = RestClient.get(url, :user_agent => HERMES_UPLOAD[:user_agent])
     return result.to_time
   rescue RestClient::ResourceNotFound => e
     return nil

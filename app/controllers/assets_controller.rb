@@ -243,6 +243,7 @@ protected
   def after_update_object(sucess = true); true; end
   def before_destroy_object; end
   def after_destroy_object(success = true); true; end
+  def ignore_not_found?(target, format); false; end
   
 private
     def create_asset
@@ -293,7 +294,7 @@ private
           format.any do
             send("retrieve_this_#{params[:format]}")
           end if respond_to?("retrieve_this_#{params[:format]}")
-        end
+        end unless ignore_not_found?(target_id, params[:format])
       else
         @asset = @object.asset if target_obj.respond_to?("polymorph_class")        
       end
