@@ -30,7 +30,7 @@ do
         xml.guid image_url(image)
         xml.dc :creator, h(image.created_by.full_name)
         xml.georss :point, "#{image.latitude} #{image.longitude}" if image.mappable?
-        xml.media :content, :url => "#{image_url(image)}-display/serve", :medium => "image", :type => "image/jpeg"
+        xml.media :content, :url => "#{serve_image_link(image, :type => :display)}", :medium => "image", :type => "image/jpeg"
         xml.media :title, image.title
         xml.media :credit, :role => "photographer" do
           xml << image.created_by.full_name

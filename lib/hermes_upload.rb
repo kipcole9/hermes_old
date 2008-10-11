@@ -7,6 +7,7 @@ module HermesUpload
     raise "Only Jpeg image uploads supported" unless File.extname(filename) == ".jpg"
     target_uri = HERMES_UPLOAD[:url]
     updated_at = update_time(filename, target_uri)
+    puts "#{filename} database: #{updated_at}; file: #{File.mtime(filename).utc}"
     if updated_at && updated_at >= File.mtime(filename)
       puts "File #{filename} has not been modified, skipping upload."
       return

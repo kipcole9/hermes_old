@@ -12,6 +12,10 @@ class ImagesController < AssetsController
       head :status => 404
     end
   end
+  
+  def index_rs2
+    render :action => "photofeed"
+  end
 
   def update_jpg
     head :status => 406 unless Mime::Type.lookup(request.env['CONTENT_TYPE']) == Mime::Type.lookup_by_extension(:jpg)
@@ -27,6 +31,7 @@ class ImagesController < AssetsController
     head :status => 502 unless image = Image.import(tmp_file, params)
     is_new = image.new_record?
     if image.save
+      logger.info "Imported #{File.basename(tmp_file)}.  Update time is now #{image.updated_at}."
       is_new ? head(:status => 201, :location => image_url(image, {})) : head(:status => 204)
     else
       image.errors.add("Name", "is '#{image.name}'")

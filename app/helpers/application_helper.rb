@@ -3,11 +3,10 @@ module ApplicationHelper
   include HermesHelper
   
   def serve_image_link(image, options = {})
-    image_name = image.class.name == Image.name ? image.name : image
+    image_name = image.is_a?(Image) ? image.name : image
     image_filename = "#{image_name}-#{options[:type].to_s}" if options[:type]
     image_link = image_filename || image_name
     formatted_image_url(image_link, :jpg)
-    #serve_image_url(image_link)
   end
   
   def link_to_image(image_name, options = {})
