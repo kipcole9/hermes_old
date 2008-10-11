@@ -14,6 +14,15 @@ module HermesSitemap
       assets = Asset.viewable_by(User.anonymous).published_in(Publication.current).published. \
           find(:all, :conditions => ["content_type in (?)", INCLUDE_ASSETS], :order => "content_type ASC")
 
+      # Root url
+      root_lastmod        = Article.last.updated_at.iso8601 rescue Time.now.iso8601
+      xml.url do
+        xml.loc           root_url
+        xml.lastmod       root_lastmod
+        xml.changefreq    "daily"
+        xml.priority      "0.9"
+      end
+
       # Each asset
       assets.each do |a|
         asset = a.content
@@ -26,7 +35,7 @@ module HermesSitemap
           end
           
           # All assets should allow kml generation - we need to add that to other assets first though
-          if asset.is_a?(Gallery)
+          if asset.is_a?(Gallery) || asset.is_a?(Image)
             xml.url do
               xml.loc         polymorphic_url(asset) + ".kml"
               xml.lastmod     asset.updated_at.iso8601
