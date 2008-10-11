@@ -4,7 +4,7 @@ module HermesGeoExtensions
 
   def add_document_basic_data(xml, asset, options = {})
     xml.name(options[:name] || asset.title)
-    xml.description render_to_string :inline => (options[:description] || asset.description) unless options[:no_description]
+    xml.description render_to_string(:inline => (options[:description] || asset.description)) unless options[:no_description]
     xml.atom :author do
       xml.atom :name, (options[:author] || asset.created_by.full_name)
       xml.atom :uri, root_url
