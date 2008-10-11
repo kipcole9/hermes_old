@@ -10,7 +10,7 @@
 
 <div id='gallery_links' style='display:none' >
 	<% images.each do |i| %>
-		<a id='<%= "gallery_#{i.id}" -%>' href='<%= serve_image_url(i.name, :type => :full) -%>'
+		<a id='<%= "gallery_#{i.id}" -%>' href='<%= formatted_image_url(i.name + "-full", :jpg) -%>'
 			 class='lightview' title='<%= i.title -%>' rel='gallery[myset]' >
 			<%= i.title -%>
 		</a>
