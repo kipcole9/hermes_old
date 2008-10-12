@@ -9,7 +9,7 @@
 %>
 <p>
 	<a href=<%= image_url(image) %> >
-		<img src="<%= image_url(image) %>-display/serve" height=<%= height %>px width=<%= width %>px >
+		<img src="<%= serve_image_link(image, :type => :display) %>" height=<%= height %>px width=<%= width %>px >
 	</a>
 </p>
 <p>
