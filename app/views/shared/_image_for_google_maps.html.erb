@@ -16,12 +16,11 @@
 	<%= render_description image %>
 <p>
 	<i>
-		<% case image.geocode_method %>
-		<% when Asset::GEO_GOOGLE %>
+		<% if image.geocode_method == Asset::GEO_GOOGLE %>
 			Geocoded by Google - location accuracy is to the <%= Google_geocode_accuracy[image.geocode_accuracy] %> level only.
-		<% when Asset::GEO_GPS %>
+		<% elsif image.geocode_method == Asset::GEO_GPS %>
 		    Geocoded from a GPS tracklog - accuracy usually within 3m.
-		<% when Asset::GEO_MANUAL %>
+		<% elsif image.geocode_method == Asset::GEO_MANUAL %>
 			Geocoded by manual entry - accuracy usually to the Premise level.
 		<% end %>
 	</i>
