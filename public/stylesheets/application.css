@@ -885,6 +885,7 @@ img._spinner {
 	overflow: hidden;
 	}
 	
+	
 div._infoWindow {  /* Container window for our info content */
 	margin-top: -20px;
 	width: 250px;
@@ -924,6 +925,10 @@ div._infoWindow > ._thumbsmall_p {
 /*---------- For Pagination ------------*/
 ._rightAlign {
 	text-align: right;
+}
+
+._centerAlign {
+	text-align: center;
 }
 
 /* VML style declaration - required for IE (used my mapping) */

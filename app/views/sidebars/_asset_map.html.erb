@@ -2,15 +2,18 @@
 	<div id="_sidebarMap" class="_smallMap">
 	</div>
 	<% if current_user.is_admin? %>
-	<ul>
-		<li>
-			<%= link_to_remote "#{image_tag("/images/icons/photo.png")} Update location & zoom level", 
-						:method => :put,
-						:with => "'latitude=' + latitude + '&longitude=' + longitude + '&zoom=' + zoom",
-				    	:failure => "alert('HTTP Error ' + request.status + '!')"
-			 %>
-		</li>
-	</ul>
+		<ul>
+			<li id="mapstatus">
+			</li>
+		</ul>
+		<div class="_centerAlign">
+		 <%= submit_to_remote 'update_button', 'Update location and zoom level',
+		 	:method => :put,
+		    :update => 'mapstatus',
+			:with => "'latitude=' + latitude + '&longitude=' + longitude + '&zoom=' + zoom",
+			:failure => "alert('HTTP Error ' + request.status + '!')"
+		 %>	
+		</div>
 	<% end %>
 
     <% content_for :javascripts do %>
@@ -32,26 +35,32 @@
 					
 					map.setCenter(point, <%= @asset.map_zoom_level %>);
 					map.addOverlay(marker);
-					latitude = marker.getLatLng().lat();
-					longitude = marker.getLatLng().lng();
-					zoom = map.getZoom();
 					
-					GEvent.addListener(marker, "dragend", 
-						function(latLng) {
-							latitude = latLng.lat();
-							longitude = latLng.lng();
-							zoom = map.getZoom();
-						}
-					);
+					<% if current_user.is_admin? %>					
+						updateMapStatus();
+						GEvent.addListener(marker, "dragend", 
+							function(latLng) {
+								updateMapStatus();
+							}
+						);
 					
-					GEvent.addListener(map, "zoomend", 
-						function(oldLevel, newLevel) {
-							zoom = newLevel;
-						}
-					);
+						GEvent.addListener(map, "zoomend", 
+							function(oldLevel, newLevel) {
+								updateMapStatus()
+							}
+						);
+					<% end %>
 					map.addControl(new GSmallMapControl());
 				}
 			});
+			
+			function updateMapStatus() {
+				var latLng = marker.getLatLng();
+				latitude = latLng.lat();
+				longitude = latLng.lng();
+				zoom = map.getZoom();
+				$('mapstatus').innerHTML = "Lat: " + latitude.toFixed(3) + "; Lng: " + longitude.toFixed(3) + "; Zoom: " + zoom;
+			}
 			//]]>
 		</script>
 	<% end %>

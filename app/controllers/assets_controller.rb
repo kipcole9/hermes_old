@@ -266,9 +266,9 @@ private
 
     def send_ajax_update_response(status_ok)
       if status_ok
-        render :text => "Update successfull", :status => 204
+        render :text => "Update successful.", :status => 200
       else
-        render :text => "Update failed", :status => 422
+        render :text => "Update failed.", :status => 422
       end
     end
     
