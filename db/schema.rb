@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080903102519) do
+ActiveRecord::Schema.define(:version => 20081012071942) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -18,24 +18,24 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
 
   create_table "asset_permissions", :force => true do |t|
     t.string  "content_type"
-    t.integer "create_permission",         :limit => 20
-    t.integer "default_read_permission",   :limit => 20
-    t.integer "default_update_permission", :limit => 20
-    t.integer "default_delete_permission", :limit => 20
+    t.integer "create_permission",         :limit => 8
+    t.integer "default_read_permission",   :limit => 8
+    t.integer "default_update_permission", :limit => 8
+    t.integer "default_delete_permission", :limit => 8
   end
 
   create_table "asset_statuses", :force => true do |t|
     t.string  "name",        :limit => 50
-    t.integer "description", :limit => 11
+    t.integer "description"
   end
 
   create_table "asset_views", :force => true do |t|
-    t.integer  "asset_id",       :limit => 11
-    t.integer  "user_id",        :limit => 11
+    t.integer  "asset_id"
+    t.integer  "user_id"
     t.string   "ip_address",     :limit => 50
     t.string   "user_agent"
     t.datetime "created_at"
-    t.integer  "publication_id", :limit => 11
+    t.integer  "publication_id"
     t.string   "referrer"
   end
 
@@ -43,13 +43,13 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
     t.string   "name"
     t.string   "title"
     t.text     "description"
-    t.integer  "created_by",             :limit => 11
+    t.integer  "created_by"
     t.datetime "created_at"
-    t.integer  "updated_by",             :limit => 11
+    t.integer  "updated_by"
     t.datetime "updated_at"
-    t.integer  "view_count",             :limit => 11, :default => 0
-    t.integer  "status",                 :limit => 1
-    t.integer  "content_rating",         :limit => 1,  :default => 5
+    t.integer  "view_count",                           :default => 0
+    t.integer  "status"
+    t.integer  "content_rating",                       :default => 5
     t.string   "sublocation"
     t.string   "location"
     t.string   "city"
@@ -59,29 +59,30 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
     t.float    "altitude"
     t.float    "latitude"
     t.float    "longitude"
-    t.integer  "geocode_accuracy",       :limit => 2
+    t.integer  "geocode_accuracy"
     t.boolean  "google_geocoded",                      :default => false
-    t.integer  "allow_comments",         :limit => 1
+    t.integer  "allow_comments"
     t.boolean  "moderate_comments"
-    t.integer  "content_id",             :limit => 11
+    t.integer  "content_id"
     t.string   "content_type"
     t.datetime "dont_publish_before"
     t.datetime "dont_publish_after"
-    t.integer  "read_permissions",       :limit => 20
-    t.integer  "update_permissions",     :limit => 20
-    t.integer  "delete_permissions",     :limit => 20
-    t.integer  "publications",           :limit => 20
+    t.integer  "read_permissions",       :limit => 8
+    t.integer  "update_permissions",     :limit => 8
+    t.integer  "delete_permissions",     :limit => 8
+    t.integer  "publications",           :limit => 8
     t.boolean  "comments_require_login",               :default => false, :null => false
     t.string   "copyright_notice"
     t.boolean  "include_in_index",                     :default => true
     t.boolean  "allow_pingbacks",                      :default => true,  :null => false
+    t.integer  "map_zoom_level",         :limit => 2,  :default => 4
   end
 
   add_index "assets", ["name", "content_type"], :name => "index_on_name_and_content_type", :unique => true
 
   create_table "assets_categories", :id => false, :force => true do |t|
-    t.integer "asset_id",    :limit => 11
-    t.integer "category_id", :limit => 11
+    t.integer "asset_id"
+    t.integer "category_id"
   end
 
   add_index "assets_categories", ["asset_id", "category_id"], :name => "asset_id", :unique => true
@@ -94,14 +95,14 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
   end
 
   create_table "catalogs", :force => true do |t|
-    t.string  "catalog_type",                          :default => "Image"
+    t.string  "catalog_type",            :default => "Image"
     t.string  "source"
     t.string  "directory"
     t.string  "link_as"
-    t.integer "max_image_dimension",     :limit => 11, :default => 800
-    t.integer "max_thumbnail_dimension", :limit => 11, :default => 160
-    t.integer "max_slide_dimension",     :limit => 11
-    t.integer "max_display_dimension",   :limit => 11
+    t.integer "max_image_dimension",     :default => 800
+    t.integer "max_thumbnail_dimension", :default => 160
+    t.integer "max_slide_dimension"
+    t.integer "max_display_dimension"
     t.string  "upload_directory"
   end
 
@@ -114,14 +115,14 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
   add_index "categories", ["name"], :name => "name", :unique => true
 
   create_table "comments", :force => true do |t|
-    t.integer  "asset_id",         :limit => 11
+    t.integer  "asset_id"
     t.text     "content"
-    t.integer  "created_by",       :limit => 11
+    t.integer  "created_by"
     t.string   "created_by_email"
     t.string   "created_by_name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "status",           :limit => 11
+    t.integer  "status"
     t.boolean  "spam"
     t.float    "spaminess"
     t.string   "signature"
@@ -131,7 +132,7 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
   end
 
   create_table "content_ratings", :force => true do |t|
-    t.integer "rating",         :limit => 11
+    t.integer "rating"
     t.string  "name",           :limit => 20
     t.string  "description"
     t.boolean "default_rating"
@@ -144,8 +145,8 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
   add_index "countries", ["name"], :name => "name", :unique => true
 
   create_table "country_alternates", :force => true do |t|
-    t.string  "alternate_name",               :default => "", :null => false
-    t.integer "country_id",     :limit => 11,                 :null => false
+    t.string  "alternate_name", :default => "", :null => false
+    t.integer "country_id",                     :null => false
   end
 
   add_index "country_alternates", ["alternate_name"], :name => "index_alternate_country_name", :unique => true
@@ -158,8 +159,8 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
   create_table "images", :force => true do |t|
     t.string   "filename"
     t.string   "folder"
-    t.integer  "width",                 :limit => 11
-    t.integer  "height",                :limit => 11
+    t.integer  "width"
+    t.integer  "height"
     t.string   "owner",                 :limit => 25
     t.datetime "taken_at"
     t.string   "scene"
@@ -187,7 +188,7 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
     t.string   "flash",                 :limit => 10
     t.string   "white_balance",         :limit => 10
     t.string   "orientation",           :limit => 1
-    t.integer  "catalog_id",            :limit => 11
+    t.integer  "catalog_id"
   end
 
   add_index "images", ["filename"], :name => "index_images_on_filename", :unique => true
@@ -209,9 +210,9 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
   create_table "maps", :force => true do |t|
     t.float   "latitude_center"
     t.float   "longitude_center"
-    t.integer "zoom",             :limit => 2
-    t.integer "map_type",         :limit => 11
-    t.integer "object_id",        :limit => 11
+    t.integer "zoom"
+    t.integer "map_type"
+    t.integer "object_id"
     t.string  "object_type"
     t.string  "track_filename"
     t.text    "javascript"
@@ -222,7 +223,7 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
     t.string   "created_by_email", :limit => 50
     t.string   "website"
     t.text     "content"
-    t.integer  "created_by",       :limit => 11
+    t.integer  "created_by"
     t.string   "ip_address",       :limit => 20
     t.string   "browser"
     t.datetime "created_at"
@@ -233,14 +234,14 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
     t.binary  "server_url"
     t.string  "handle"
     t.binary  "secret"
-    t.integer "issued",     :limit => 11
-    t.integer "lifetime",   :limit => 11
+    t.integer "issued"
+    t.integer "lifetime"
     t.string  "assoc_type"
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
     t.string  "nonce"
-    t.integer "created", :limit => 11
+    t.integer "created"
   end
 
   create_table "open_id_authentication_settings", :force => true do |t|
@@ -249,9 +250,9 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
   end
 
   create_table "pages", :force => true do |t|
-    t.integer  "article_id", :limit => 11
+    t.integer  "article_id"
     t.string   "name"
-    t.integer  "position",   :limit => 11
+    t.integer  "position"
     t.string   "heading"
     t.text     "content"
     t.string   "markup",     :limit => 50
@@ -260,8 +261,8 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
   end
 
   create_table "paper_sizes", :force => true do |t|
-    t.integer "short_side_imperial", :limit => 11
-    t.integer "short_side_metric",   :limit => 11
+    t.integer "short_side_imperial"
+    t.integer "short_side_metric"
   end
 
   add_index "paper_sizes", ["short_side_metric"], :name => "key_metric_size", :unique => true
@@ -276,23 +277,23 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
   add_index "pingbacks", ["target_uri", "source_uri"], :name => "index_pingbacks_on_target_uri_and_source_uri", :unique => true
 
   create_table "publication_assets", :force => true do |t|
-    t.integer "publication_id", :limit => 11
-    t.integer "article_id",     :limit => 11
+    t.integer "publication_id"
+    t.integer "article_id"
   end
 
   add_index "publication_assets", ["publication_id", "article_id"], :name => "index_publication_articles_on_publication_id_and_article_id"
 
   create_table "publications", :force => true do |t|
-    t.integer "bit_id",                     :limit => 20
+    t.integer "bit_id",                     :limit => 8
     t.string  "theme"
     t.string  "domain"
-    t.integer "articles_per_page",          :limit => 11,  :default => 10
-    t.integer "comments_disabled_after",    :limit => 11,  :default => 0
+    t.integer "articles_per_page",                         :default => 10
+    t.integer "comments_disabled_after",                   :default => 0
     t.boolean "default_publication",                       :default => false
-    t.integer "publish_status",             :limit => 11,  :default => 1
+    t.integer "publish_status",                            :default => 1
     t.text    "publish_status_description"
     t.string  "pop_server"
-    t.integer "port_number",                :limit => 11,  :default => 110
+    t.integer "port_number",                               :default => 110
     t.string  "email_userid"
     t.string  "email_password"
     t.string  "admin_email"
@@ -302,16 +303,16 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
   end
 
   create_table "related_assets", :force => true do |t|
-    t.integer "article_id",         :limit => 11
-    t.integer "related_article_id", :limit => 11
+    t.integer "article_id"
+    t.integer "related_article_id"
     t.string  "title"
     t.string  "url"
   end
 
   create_table "slides", :force => true do |t|
-    t.integer "gallery_id", :limit => 11
-    t.integer "image_id",   :limit => 11
-    t.integer "position",   :limit => 11
+    t.integer "gallery_id"
+    t.integer "image_id"
+    t.integer "position"
   end
 
   add_index "slides", ["gallery_id", "image_id"], :name => "index_slides_on_gallery_id_and_image_id", :unique => true
@@ -325,8 +326,8 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
   add_index "synonyms", ["name"], :name => "index_synonyms_on_category"
 
   create_table "taggings", :force => true do |t|
-    t.integer  "tag_id",        :limit => 11
-    t.integer  "taggable_id",   :limit => 11
+    t.integer  "tag_id"
+    t.integer  "taggable_id"
     t.string   "taggable_type"
     t.datetime "created_at"
   end
@@ -336,17 +337,17 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
 
   create_table "tags", :force => true do |t|
     t.string  "name",      :limit => 50
-    t.integer "parent_id", :limit => 11
-    t.integer "lft",       :limit => 11
-    t.integer "rgt",       :limit => 11
+    t.integer "parent_id"
+    t.integer "lft"
+    t.integer "rgt"
   end
 
   add_index "tags", ["name"], :name => "index_categories_on_name"
 
   create_table "unknown_tags", :force => true do |t|
-    t.integer "position",     :limit => 11
+    t.integer "position"
     t.string  "name"
-    t.integer "tag_count",    :limit => 11, :default => 0
+    t.integer "tag_count",    :default => 0
     t.string  "add_to"
     t.string  "synonym_of"
     t.text    "found_in"
@@ -354,7 +355,7 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
   end
 
   create_table "users", :force => true do |t|
-    t.integer  "groups",                    :limit => 20,  :default => 0,     :null => false
+    t.integer  "groups",                    :limit => 8,   :default => 0,     :null => false
     t.string   "nick_name"
     t.string   "login"
     t.string   "given_name"
@@ -362,12 +363,12 @@ ActiveRecord::Schema.define(:version => 20080903102519) do
     t.string   "email"
     t.date     "birthday"
     t.text     "profile"
-    t.integer  "show_profile",              :limit => 4
+    t.integer  "show_profile",              :limit => 1
     t.string   "display_theme"
     t.string   "crypted_password",          :limit => 40
     t.string   "salt",                      :limit => 40
-    t.integer  "photo",                     :limit => 11
-    t.integer  "show_photo",                :limit => 4
+    t.integer  "photo"
+    t.integer  "show_photo",                :limit => 1
     t.boolean  "disabled",                                 :default => false
     t.string   "time_zone",                 :limit => 100
     t.string   "locale",                    :limit => 20

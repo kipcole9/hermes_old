@@ -12,6 +12,9 @@ class Asset < ActiveRecord::Base
   LAT                         = /\A([-+]?\d{1,2})[d°] *(\d{1,2})\' *(\d{1,2}\.?\d{1,4})\" *(N|S)\Z/
   LON                         = /\A([-+]?\d{1,3})[d°] *(\d{1,2})\' *(\d{1,2}\.?\d{1,4})\" *(E|W)\Z/
   DECIMAL                     = /\A[-+]?[0-9]*\.?[0-9]+\Z/
+  GEO_GOOGLE                  = 1
+  GEO_GPS                     = 2
+  GEO_MANUAL                  = 3
   
   before_save                 :set_permissions, :set_allow_comments, :set_publication, :set_status, :geocode
   before_validation_on_create :set_name
@@ -21,6 +24,7 @@ class Asset < ActiveRecord::Base
   validates_presence_of     :created_by
   validates_presence_of     :title
   validates_uniqueness_of   :name, :scope => :content_type, :message => 'already taken'
+  validates_numericality_of :map_zoom_level, :allow_nil => true
   validates_numericality_of :latitude, :allow_nil => true,
                             :greater_than => -90, :less_than => 90,
                             :message => "must be a number between -90 and 90"
@@ -210,7 +214,7 @@ class Asset < ActiveRecord::Base
     #  8	 Address level accuracy. (Since 2.59
     
     host ||= User.environment["HOST"] rescue "localhost"
-    if self.country && (self.latitude.blank? || self.longitude.blank? || self.google_geocoded?)
+    if self.country && (self.latitude.blank? || self.longitude.blank? || self.geocode_method == GEO_GOOGLE)
       geocode_keys = []
       geocode_keys << self.location if self.location
       geocode_keys << self.city if self.city
@@ -237,7 +241,7 @@ class Asset < ActiveRecord::Base
         self.latitude = results[0].latitude
         self.longitude = results[0].longitude
         self.geocode_accuracy = results[0].accuracy
-        self.google_geocoded = true
+        self.geocode_method = GEO_GOOGLE
       else
         logger.info "Asset: Could not geocode '#{self.name}' with '#{geocode_string}'. Result was #{results.status}"
       end

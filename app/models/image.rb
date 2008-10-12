@@ -217,6 +217,7 @@ class Image < ActiveRecord::Base
   def import_metadata
     logger.info "Image Import: Import metadata for '#{self.full_path_name}'"
     image_exif = MiniExiftool.new(self.full_path_name)
+    @geo_set_counter = 0
     MAP.each do |k, v|
       if k == :GPSLatitude
         set_latitude(image_exif)
@@ -227,6 +228,10 @@ class Image < ActiveRecord::Base
       end
     end
     self.created_by = User.find_by_email(image_exif["CreatorContactInfoCiEmailWork"]) || User.current_user
+    if @geo_set_counter == 2
+      self.geocode_method = Asset::GEO_GPS
+      self.geocode_accuracy = Google_geocode_accuracy["premise"]
+    end
     true
   end
   
@@ -307,6 +312,7 @@ private
       lat_decimal = lat_decimal * -1 if image_exif["GPSLatitudeRef"] == "South"
       #puts "Latitude decimal: '#{lat_decimal}'"
       send("latitude=", lat_decimal)
+      @geo_set_counter += 1
     end
   end
 
@@ -317,6 +323,7 @@ private
       lon_decimal = lon_decimal * -1 if image_exif["GPSLongitudeRef"] == "West"
       #puts "Longitude decimal: '#{lon_decimal}'"
       send("longitude=", lon_decimal)
+      @geo_set_counter += 1
     end
   end
  

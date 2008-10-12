@@ -1,22 +1,60 @@
 <% if @asset && @asset.mappable? %>
 	<div id="_sidebarMap" class="_smallMap">
 	</div>
-
-	<%
-		@map = GMap.new("_sidebarMap")
-		@map.control_init(:small_map => true)
-		@map.center_zoom_init([@asset.latitude,@asset.longitude],4)
-		@map.overlay_init(GMarker.new([@asset.latitude,@asset.longitude]))
-	%>
+	<% if current_user.is_admin? %>
+	<ul>
+		<li>
+			<%= link_to_remote "#{image_tag("/images/icons/photo.png")} Update location & zoom level", 
+						:method => :put,
+						:with => "'latitude=' + latitude + '&longitude=' + longitude + '&zoom=' + zoom",
+				    	:failure => "alert('HTTP Error ' + request.status + '!')"
+			 %>
+		</li>
+	</ul>
+	<% end %>
 
     <% content_for :javascripts do %>
 		<%= GMap.header :host => request.host, :with_vml => false -%>
 		<script type="text/javascript">
 			//<![CDATA[
-			<%= @map.to_html(:no_script_tag => true) -%>
+			var map, marker;
+			var point, latitude, longitude, zoom;
+			window.onload = addCodeToFunction(window.onload,function() {
+				if (GBrowserIsCompatible()) {
+					map = new GMap2(document.getElementById("_sidebarMap"));
+					point = new GLatLng(<%= @asset.latitude %>, <%= @asset.longitude %>);
+					
+					<% if current_user.is_admin? %>
+						marker = new GMarker(point, {draggable : true});
+					<% else %>
+						marker = new GMarker(point);
+					<% end %>					
+					
+					map.setCenter(point, <%= @asset.map_zoom_level %>);
+					map.addOverlay(marker);
+					latitude = marker.getLatLng().lat();
+					longitude = marker.getLatLng().lng();
+					zoom = map.getZoom();
+					
+					GEvent.addListener(marker, "dragend", 
+						function(latLng) {
+							latitude = latLng.lat();
+							longitude = latLng.lng();
+							zoom = map.getZoom();
+						}
+					);
+					
+					GEvent.addListener(map, "zoomend", 
+						function(oldLevel, newLevel) {
+							zoom = newLevel;
+						}
+					);
+					map.addControl(new GSmallMapControl());
+				}
+			});
 			//]]>
 		</script>
 	<% end %>
-
-
 <% end %>	
+
+

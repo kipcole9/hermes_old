@@ -75,6 +75,7 @@ class AssetsController < ApplicationController
   
   # DELETE
   def destroy
+    before_destroy_object
     respond_to do |format|
       format.html { destroy_html }
       format.xml  { destroy_xml  }
@@ -153,15 +154,22 @@ protected
   end
     
   def update_html
-    before_update_object
     if @object.update_attributes(params[param_name])
       after_update_object(true)
-      flash[:notice] = "#{asset_obj.name} updated successfully."
-      redirect_back_or_default("/")
+      if request.xhr?
+        send_ajax_update_response(true)
+      else
+        flash[:notice] = "#{asset_obj.name} updated successfully."
+        redirect_back_or_default("/")
+      end
     else
-      set_error_sidebar
       after_update_object(false)
-      render :action => "edit"
+      if request.xhr?
+        send_ajax_update_response(false)
+      else
+        set_error_sidebar
+        render :action => "edit"
+      end
     end
   end
 
@@ -176,7 +184,6 @@ protected
   end
   
   def destroy_html
-    before_destroy_object
     if @object.destroy
       after_destroy_object(true)
       flash[:notice] = "#{asset_obj.name} deleted successfully."
@@ -188,7 +195,6 @@ protected
   end
   
   def destroy_xml
-    before_destroy_object
     if @object.destroy
       after_destroy_object(true)
       head :status => 200
@@ -234,18 +240,38 @@ protected
     end
   end
   
+  # We might pass in lattitude and longitude which need reformatting
+  def before_update_object
+    if params[:latitude] && params[:longitude]
+      params[param_name] ||= {}
+      params[param_name][:latitude] = params[:latitude]
+      params[param_name][:longitude] = params[:longitude]
+      params[param_name][:map_zoom_level] = params[:zoom]
+      params[param_name][:geocode_method] = Asset::GEO_MANUAL
+      params[param_name][:geocode_accuracy] = Google_geocode_accuracy.size - 1
+    end
+  end
+  
   # Prototype methods for callbacks
   def before_retrieve_object; end
   def after_retrieve_object(success = true); true; end
   def before_create_object; end
   def after_create_object(success = true); true; end
-  def before_update_object; end
   def after_update_object(sucess = true); true; end
   def before_destroy_object; end
   def after_destroy_object(success = true); true; end
   def ignore_not_found?(target, format); false; end
   
 private
+
+    def send_ajax_update_response(status_ok)
+      if status_ok
+        render :text => "Update successfull", :status => 204
+      else
+        render :text => "Update failed", :status => 422
+      end
+    end
+    
     def create_asset
       @object = asset_obj.new
       instance_variable_set(instance_variable_singular, @object)
@@ -349,7 +375,7 @@ private
     end
       
     def remember_location
-      store_location
+      store_location unless params[:format] == "jpg"
     end
     
     def set_time_zone
