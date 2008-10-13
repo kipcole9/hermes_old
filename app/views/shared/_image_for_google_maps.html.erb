@@ -6,7 +6,6 @@
 		height = image.height / 2
 		width = image.width / 2
 	end
-	msg = geocode_message(image)
 %>
 <p>
 	<a href=<%= image_url(image) %> >
@@ -17,6 +16,6 @@
 	<%= render_description image %>
 <p>
 	<i>
-		<%= msg %>
+		<%= geocode_message(image) %>
 	</i>
 </p>
