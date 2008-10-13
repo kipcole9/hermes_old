@@ -12,6 +12,10 @@ class GalleriesController < AssetsController
     render :action => "photofeed"
   end
   
+  def index_kml
+    render :action => "index"
+  end
+  
   def recent
     respond_to do |format|
       format.html 

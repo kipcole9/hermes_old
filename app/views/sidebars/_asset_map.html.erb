@@ -1,11 +1,12 @@
 <% if @asset && @asset.mappable? %>
 	<div id="_sidebarMap" class="_smallMap">
 	</div>
+	<ul>
+		<li id="mapstatus">
+			<%= geocode_message(@asset) %>
+		</li>
+	</ul>	
 	<% if current_user.is_admin? %>
-		<ul>
-			<li id="mapstatus">
-			</li>
-		</ul>
 		<div class="_centerAlign">
 		 <%= submit_to_remote 'update_button', 'Update location and zoom level',
 		 	:method => :put,

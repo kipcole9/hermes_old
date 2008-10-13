@@ -115,6 +115,20 @@ module ApplicationHelper
   	end
 	end
 	
+	def geocode_message(asset)
+	  case asset.geocode_method
+  		when Asset::GEO_GOOGLE 
+  			msg = "Geocoded by Google - #{Google_geocode_accuracy[asset.geocode_accuracy]} level accuracy."
+  	  when Asset::GEO_GPS
+  	    msg = "Geocoded from a GPS tracklog - accuracy usually within 3m."
+  		when Asset::GEO_MANUAL 
+  			msg = "Geocoded by manual entry - accuracy usually within 10m."
+  		else
+  			msg = ""
+  	end
+  	msg
+	end
+	
   def base_uri
     # This is only used in a form_for, so we can discard any supplied parameters (there shouldn't be any anyway)
     unless @base_uri

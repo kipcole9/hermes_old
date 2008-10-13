@@ -1,6 +1,6 @@
 xml.instruct!
 xml.kml "xmlns:atom" => "http://www.w3.org/2005/Atom", :xmlns => "http://www.opengis.net/kml/2.2" do
-  xml.Document do
+  xml.Document :id => @gallery.name do
     add_document_basic_data(xml, @gallery)
     add_pushpin_style(xml)
     xml.Folder do

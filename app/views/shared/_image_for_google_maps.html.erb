@@ -6,17 +6,7 @@
 		height = image.height / 2
 		width = image.width / 2
 	end
-	
-	case image.geocode_method
-		when Asset::GEO_GOOGLE 
-			msg = "Geocoded by Google - location accuracy is to the #{Google_geocode_accuracy[image.geocode_accuracy]} level only."
-	    when Asset::GEO_GPS
-	    	msg = "Geocoded from a GPS tracklog - accuracy usually within 3m."
-		when Asset::GEO_MANUAL 
-			msg = "Geocoded by manual entry - accuracy usually to the Premise level."
-		else
-			msg = ""
-	end
+	msg = geocode_message(image)
 %>
 <p>
 	<a href=<%= image_url(image) %> >
