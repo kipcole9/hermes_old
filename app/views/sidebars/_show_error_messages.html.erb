@@ -1,7 +1,6 @@
-<h4>Errors prevented an update to the database</h4>
+<h4>Database could not be updated</h4>
 <p>
-	Please correct the <%= @error_object.errors.count == 1 ? '' :  "#{@error_object.errors.count} " -%>
-	error<%= @error_object.errors.count == 1 ? '' : 's' %> 
+	Please correct the <%= pluralize(@error_object.errors.count, "error") %>
 	below and submit again.
 </p>
 <ul>
