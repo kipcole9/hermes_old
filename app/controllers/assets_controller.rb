@@ -378,7 +378,7 @@ private
     end
     
     def is_search_bot?(agent)
-      agent.match(BOTS)
+      agent && agent.match(BOTS)
     end
     
     def is_gis_browser?(agent)
