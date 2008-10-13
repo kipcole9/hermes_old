@@ -38,8 +38,8 @@ module HermesControllerExtensions
 
   # Displays ActiveRecord error messages as first sidebar
   def set_error_sidebar(obj = nil)
-    @object = obj || @object
-    if @object.errors.count > 0
+    @error_object = obj || @object
+    if @error_object.errors.count > 0
       sidebar :show_error_messages , :layout => "sidebars/sidebars_error_layout"
       sidebar_move :show_error_messages, :top
     end

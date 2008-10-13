@@ -1,11 +1,11 @@
 <h4>Errors prevented an update to the database</h4>
 <p>
-	Please correct the <%= @object.errors.count == 1 ? '' :  "#{@object.errors.count} " -%>
-	error<%= @object.errors.count == 1 ? '' : 's' %> 
+	Please correct the <%= @error_object.errors.count == 1 ? '' :  "#{@error_object.errors.count} " -%>
+	error<%= @error_object.errors.count == 1 ? '' : 's' %> 
 	below and submit again.
 </p>
 <ul>
-	<% @object.errors.each_full do |msg| %>
+	<% @error_object.errors.each_full do |msg| %>
 		<li><%= msg %></li>
 	<% end %>
 </ul>

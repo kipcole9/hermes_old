@@ -7,15 +7,19 @@ class Bookmark < ActiveRecord::Base
   require 'hpricot'
 
   before_save :check_url_and_title
+  
+  def url=(val)
+    super(URI.escape(val))
+  end
 
 private
   def check_url_and_title
     begin
       response = Net::HTTP.get_response(URI.parse(self.url)) if self.url
-    rescue URI::InvalidURIError
+    rescue
       logger.error "Bookmark: Net::HTTP thinks '#{self.url}' is a bad url"
       self.errors.add("url", "appears to be bad")
-      return false
+      return false unless self.ignore_url_errors
     end
     
     if response
