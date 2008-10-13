@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081012071942) do
+ActiveRecord::Schema.define(:version => 20081013011427) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(:version => 20081012071942) do
     t.datetime "created_at"
     t.integer  "publication_id"
     t.string   "referrer"
+    t.string   "format",         :limit => 5
   end
 
   create_table "assets", :force => true do |t|
@@ -60,7 +61,7 @@ ActiveRecord::Schema.define(:version => 20081012071942) do
     t.float    "latitude"
     t.float    "longitude"
     t.integer  "geocode_accuracy"
-    t.boolean  "google_geocoded",                      :default => false
+    t.integer  "geocode_method",                       :default => 0
     t.integer  "allow_comments"
     t.boolean  "moderate_comments"
     t.integer  "content_id"

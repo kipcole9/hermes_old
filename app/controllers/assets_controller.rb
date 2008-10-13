@@ -356,18 +356,19 @@ private
     # Log the view. Also increment view_count.  We do it this way to avoid changing the
     # updated_at column (which we use to mean update to metadata)
     def log_show
-      respond_to do |format|
-        format.html { log_asset_show }
-        format.xml  { log_asset_show }
-        format.any  {                }
+      if @asset and !is_search_bot?(request.env["HTTP_USER_AGENT"])
+        respond_to do |format|
+          format.html { log_asset_show("html") }
+          format.xml  { log_asset_show("xml")  }
+          format.kml  { log_asset_show("kml")  }
+          format.any  {                        }
+        end
       end
     end
     
-    def log_asset_show
-      if @asset and !is_search_bot?(request.env["HTTP_USER_AGENT"])
-        AssetView.log(publication.id, @asset, current_user, request.env["HTTP_USER_AGENT"], User.environment["IP"], request.env["HTTP_REFERER"])
-        Asset.increment_view_count(@asset.attributes["id"]) 
-      end
+    def log_asset_show(format)
+      AssetView.log(publication.id, @asset, current_user, request.env["HTTP_USER_AGENT"], User.environment["IP"], request.env["HTTP_REFERER"], format)
+      Asset.increment_view_count(@asset.attributes["id"]) 
     end
     
     def is_search_bot?(agent)

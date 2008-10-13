@@ -17,6 +17,7 @@ module HermesGeoExtensions
       xml.Placemark do
         xml.name image.title
         xml.description render_to_string(:partial => "shared/image_for_google_maps.html.erb", :locals => {:image => image})
+        xml.atom :link, :href => (options[:url] || polymorphic_url(image))
         xml.styleUrl "#" + (options[:style] || DEFAULT_PUSHPIN_STYLE)
         add_asset_extended_data(xml, image) if options[:extended_data]
         xml.Point do
