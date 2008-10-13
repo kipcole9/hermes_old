@@ -382,7 +382,7 @@ private
     end
     
     def is_gis_browser?(agent)
-      agent.match(GIS_BROWSERS)
+      agent && agent.match(GIS_BROWSERS)
     end
       
     def remember_location
