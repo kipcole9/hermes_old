@@ -55,7 +55,7 @@
 						);
 				
 						GEvent.addListener(map, "click", 
-							function(latLng) {
+							function(overlay, latLng, overlayLatLng) {
 								marker.setLatLng(latLng);
 								updateMapStatus()
 							}
