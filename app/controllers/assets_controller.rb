@@ -16,7 +16,8 @@ class AssetsController < ApplicationController
   
   after_filter  :log_show, :only => [:show]
   ASSET_ACTIONS = ["live_search", "apis"]
-  BOTS          = /(googlebot|yahoo! slurp|msnbot|cuiller)/i
+  BOTS          = /(Googlebot|yahoo! slurp|msnbot|cuiller)/i
+  GIS_BROWSERS  = /GoogleEarth/i
   
   # Proxies: implement in concrete Asset sub-class as required
   # Normally nothing is required (the correct template will get rendered)
@@ -361,6 +362,10 @@ private
           format.html { log_asset_show("html") }
           format.xml  { log_asset_show("xml")  }
           format.kml  { log_asset_show("kml")  }
+          
+          # Note that GoogleEarth declares a user-agent when getting kml, but not getting jpg
+          # So basically this won't work until that is fixed
+          format.jpg  { log_asset_show("jpg") if is_gis_browser?(request.env["HTTP_USER_AGENT"])  }
           format.any  {                        }
         end
       end
@@ -374,9 +379,16 @@ private
     def is_search_bot?(agent)
       agent.match(BOTS)
     end
+    
+    def is_gis_browser?(agent)
+      agent.match(GIS_BROWSERS)
+    end
       
     def remember_location
-      store_location unless params[:format] == "jpg"
+      respond_to do |format|
+        format.html { store_location }
+        format.any  {                }
+      end
     end
     
     def set_time_zone

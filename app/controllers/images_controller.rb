@@ -119,6 +119,7 @@ protected
   def serve_image(image_file)
     image_name, image_type = image_from_param(image_file)
     if image = Image.published_in(publication).published.viewable_by(current_user).find_by_name(image_name)
+      @asset = image.asset    # So log show will work
       path_name = image.send("#{image_type}_path_name")
     end
     
@@ -133,6 +134,7 @@ protected
         expires_in 10.years, :private => false
         
         # Mongrel dones't support x-sendfile, and thats what we use in development
+        log_show
         if RAILS_ENV == "production"
           send_file path_name, :disposition => 'inline', :x_sendfile => true
         else
