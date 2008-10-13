@@ -8,10 +8,10 @@
 	</ul>	
 	<% if current_user.is_admin? %>
 		<div class="_centerAlign">
-		 <%= submit_to_remote 'update_button', 'Update location and zoom level',
+		 <%= submit_to_remote 'update_button', 'Update geo data',
 		 	:method => :put,
 		    :update => 'mapstatus',
-			:with => "'latitude=' + latitude + '&longitude=' + longitude + '&zoom=' + zoom + '&map_type=' + map_type",
+			:with => "'latitude=' + latitude + '&longitude=' + longitude + '&zoom=' + zoom + '&map_type=' + map_type + '&has_moved=' + has_moved",
 			:failure => "alert('HTTP Error ' + request.status + '!')"
 		 %>	
 		</div>
@@ -23,6 +23,7 @@
 			//<![CDATA[
 			var map, marker;
 			var point, latitude, longitude, zoom, map_type;
+			var has_moved = "no";
 			var M_NORMAL_MAP 	= "Normal";
 			var M_SATELLITE_MAP = "Satellite";
 			var M_HYBRID_MAP 	= "Hybrid";
@@ -45,12 +46,14 @@
 						updateMapStatus();
 						GEvent.addListener(marker, "dragend", 
 							function(latLng) {
+								setHasMoved();
 								displayMapStatus();
 							}
 						);
 					
 						GEvent.addListener(map, "zoomend", 
 							function(oldLevel, newLevel) {
+								setHasMoved();
 								displayMapStatus();
 							}
 						);
@@ -58,6 +61,7 @@
 						GEvent.addListener(map, "click", 
 							function(overlay, latLng, overlayLatLng) {
 								marker.setLatLng(latLng);
+								setHasMoved();
 								displayMapStatus()
 							}
 						);	
@@ -97,6 +101,10 @@
 				if (mtype == M_NORMAL_MAP) 		{ map.setMapType(G_NORMAL_MAP); }
 				if (mtype == M_SATELLITE_MAP) 	{ map.setMapType(G_SATELLITE_MAP); }
 				if (mtype == M_HYBRID_MAP) 		{ map.setMapType(G_HYBRID_MAP); }
+			};
+			
+			function setHasMoved() {
+				has_moved = "yes";
 			};
 			//]]>
 		</script>
