@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081013011427) do
+ActiveRecord::Schema.define(:version => 20081013041715) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -72,11 +72,12 @@ ActiveRecord::Schema.define(:version => 20081013011427) do
     t.integer  "update_permissions",     :limit => 8
     t.integer  "delete_permissions",     :limit => 8
     t.integer  "publications",           :limit => 8
-    t.boolean  "comments_require_login",               :default => false, :null => false
+    t.boolean  "comments_require_login",               :default => false,    :null => false
     t.string   "copyright_notice"
     t.boolean  "include_in_index",                     :default => true
-    t.boolean  "allow_pingbacks",                      :default => true,  :null => false
+    t.boolean  "allow_pingbacks",                      :default => true,     :null => false
     t.integer  "map_zoom_level",         :limit => 2,  :default => 4
+    t.string   "map_type",               :limit => 10, :default => "Normal"
   end
 
   add_index "assets", ["name", "content_type"], :name => "index_on_name_and_content_type", :unique => true

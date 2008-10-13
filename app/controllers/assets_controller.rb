@@ -248,6 +248,7 @@ protected
       params[param_name][:latitude] = params[:latitude]
       params[param_name][:longitude] = params[:longitude]
       params[param_name][:map_zoom_level] = params[:zoom]
+      params[param_name][:map_type] = params[:map_type]
       params[param_name][:geocode_method] = Asset::GEO_MANUAL
       params[param_name][:geocode_accuracy] = Google_geocode_accuracy.size - 1
     end
