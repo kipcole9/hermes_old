@@ -131,7 +131,6 @@ protected
       flash[:notice] = "#{asset_obj.name} created successfully."
       redirect_back_or_default('/') if after_create_object(true)
     else
-      raise @object.errors.inspect
       flash[:notice] = "Could not create #{asset_obj.name}"
       set_error_sidebar
       if after_create_object(false)
