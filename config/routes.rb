@@ -44,7 +44,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :assets,    :collection => {:live_search => :post, :apis => :get}
   map.resources :images,    :member => {:comments => :get}, 
                             :collection => {:recent => :get, :popular => :get, :random => :post, :roulette => :get, 
-                                            :live_search => :post, :random_slide => :get}
+                            :random_slide => :get}
   map.resources :galleries, :collection => {:recent => :get, :popular => :get, :refresh_all => :post},
                             :member => {:comments => :get}
   map.resources :maps,      :collection => {:world => :get}

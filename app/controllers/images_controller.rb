@@ -76,16 +76,6 @@ class ImagesController < AssetsController
   def page_size
     12
   end
-  
-  # called via Ajax
-  def live_search
-    if !params[:tags].blank?
-      @images = Image.viewable_by(current_user).find_tagged_with(unescape(params[:tags]))
-    else
-      @images = []
-    end
-    render :partial => "live_search", :locals => {:images => @images}
-  end
 
   def recent
     @images = Image.published_in(publication).published.viewable_by(current_user) \

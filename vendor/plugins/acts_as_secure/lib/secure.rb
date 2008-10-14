@@ -40,7 +40,7 @@ module ActiveRecord
           named_scope :tagged_with, lambda {|*tags|
             options = (tags.last && tags.last.is_a?(Hash)) ? tags.pop : {}
             if tags.first
-              sql = tagged_with_options(tags.first, options)
+              sql = tagged_with_options(Tag.unsynonym(tags.first), options)
               subquery = "#{polymorph_table_name}.id IN (SELECT #{sql[:select]} FROM #{polymorph_table_name} #{sql[:joins]} WHERE #{sql[:conditions]})"
               { :conditions => subquery, :include => :asset }
             else

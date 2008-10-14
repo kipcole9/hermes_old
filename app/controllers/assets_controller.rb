@@ -99,7 +99,7 @@ class AssetsController < ApplicationController
     unless params[:tags].blank?
       @assets = Asset.published_in(publication).published.viewable_by(current_user) \
           .included_in_index(current_user) \
-          .order('assets.content_type').find_tagged_with(params[:tags])
+          .order('assets.content_type').find_tagged_with(Tag.unsynonym(params[:tags]))
     else
       @assets = []
     end
@@ -131,7 +131,7 @@ protected
       flash[:notice] = "#{asset_obj.name} created successfully."
       redirect_back_or_default('/') if after_create_object(true)
     else
-      flash[:notice] = "Could not create #{asset_obj.name}"
+      flash[:notice] = "Could not create #{asset_obj.name}."
       set_error_sidebar
       if after_create_object(false)
         @object = asset_obj.new(params[param_name])
@@ -167,6 +167,7 @@ protected
       if request.xhr?
         send_ajax_update_response(false)
       else
+        flash[:notice] = "Could not update #{asset_obj.name}."
         set_error_sidebar
         render :action => "edit"
       end
@@ -188,6 +189,7 @@ protected
       after_destroy_object(true)
       flash[:notice] = "#{asset_obj.name} deleted successfully."
     else
+      flash[:notice] = "Could not delete #{asset_obj.name}."
       set_error_sidebar
       after_destroy_object(false)
     end
