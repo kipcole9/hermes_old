@@ -14,12 +14,17 @@ config.action_controller.perform_caching             = false
 config.action_view.debug_rjs                         = true
 
 # Don't care if the mailer can't send
+MAILER_CREDENTIALS = YAML::load_file("#{RAILS_ROOT}/config/mailer_credentials.yml")["#{RAILS_ENV}"].symbolize_keys
 config.action_mailer.raise_delivery_errors          = true
+config.action_mailer.perform_deliveries             = true
 config.action_mailer.delivery_method                :smtp
-config.action_mailer.smtp_settings                  = {
-  :address              => "smtp.com",
-  :port                 => 25,
-  :domain               => "noexpectations.com.au"
+config.action_mailer.smtp_settings = {
+  :address        => 'smtp.bizmail.yahoo.com',
+  :port           => 25,
+  :domain         => 'bizmail.yahoo.com',
+  :authentication => :login,
+  :user_name      => MAILER_CREDENTIALS[:user],
+  :password       => MAILER_CREDENTIALS[:password]
 }
 
 config.time_zone = 'Sydney'

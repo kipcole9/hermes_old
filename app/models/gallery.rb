@@ -1,6 +1,8 @@
 class Gallery < ActiveRecord::Base
   acts_as_polymorph
   acts_as_secure
+  acts_as_mappable            :default_units => :kms, :lat_column_name => 'latitude', :lng_column_name => 'longitude', :delegate => :asset
+    
   has_many      :slides, :order => "position", :dependent => :destroy
   has_many      :images, :through => :slides
   after_save    :refresh

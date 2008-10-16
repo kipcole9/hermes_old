@@ -5,6 +5,7 @@ class Asset < ActiveRecord::Base
   belongs_to                  :updated_by, :class_name => 'User', :foreign_key => "updated_by"
   has_many                    :comments, :dependent => :destroy
   has_many                    :asset_views, :dependent => :destroy
+  acts_as_mappable            :default_units => :kms, :lat_column_name => 'latitude', :lng_column_name => 'longitude'
   acts_as_taggable
   
   STATUS                      = AssetStatus.status_array

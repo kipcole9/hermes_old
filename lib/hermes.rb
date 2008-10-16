@@ -28,6 +28,8 @@ module Hermes
   
   class BadPolymorphicSave < Error; end
   
+  class HostParameterRequired < Error; end
+  
   def default_url_options
     {:host => Publication.current.domain}
   end

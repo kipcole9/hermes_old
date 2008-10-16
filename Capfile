@@ -8,6 +8,7 @@ namespace(:deploy) do
   task :symlink_database_yml do 
     run "ln -nsf #{shared_path}/config/database.yml #{release_path}/config/database.yml" 
     run "ln -nsf #{shared_path}/config/hermes_upload.yml #{release_path}/config/hermes_upload.yml" 
+    run "ln -nsf #{shared_path}/config/mailer_credentials.yml #{release_path}/config/mailer_credentials.yml" 
   end
 
   desc "Symlink the sitemap to the current release directory." 

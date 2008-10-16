@@ -3,6 +3,7 @@ log/*.log
 tmp/**/*
 config/database.yml
 config/hermes_upload.yml
+config/mailer_credentials.yml
 public/sitemap.xml
 vendor/rails/**/*
 

@@ -6,6 +6,7 @@ class Image < ActiveRecord::Base
   include ActionController::UrlWriter
   acts_as_polymorph  
   acts_as_secure
+  acts_as_mappable            :default_units => :kms, :lat_column_name => 'latitude', :lng_column_name => 'longitude', :delegate => :asset
   
   before_validation_on_create     :make_title
                                         
