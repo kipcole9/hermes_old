@@ -109,7 +109,7 @@ class AssetsController < ApplicationController
   # Serve the api service discovery document
   def apis
     respond_to do |format|
-      format.xml
+      format.xml :layout => false
     end
   end
   
