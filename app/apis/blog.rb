@@ -13,7 +13,7 @@ module Blog
     #member :guid,        :string
     member :postid,      :string
     #member :pubDate,     :string
-    member :dateCreated, :date
+    member :dateCreated, :datetime
     
     # Items supported for MoveableType API
     member :mt_allow_comments,  :string

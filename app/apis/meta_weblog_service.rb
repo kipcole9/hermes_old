@@ -68,7 +68,7 @@ private
 
   def post_options(struct, publish)
     {:title => struct.title, :description => struct.mt_excerpt, :content => struct.description, 
-      :author => struct.author, :categories => encode_categories(struct.categories), :publishDate => parse_date(struct.dateCreated), 
+      :author => struct.author, :categories => encode_categories(struct.categories), :publishDate => struct.dateCreated, 
       :keywords => struct.mt_tags, :allow_comments => encode_allow_comments(struct.mt_allow_comments),
       :more_text => struct.mt_text_more, :allow_pingbacks => encode_allow_pings(struct.mt_allow_pings),
       :convert_breaks => struct.mt_convert_breaks, :status => encode_status(publish)
