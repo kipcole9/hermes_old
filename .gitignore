@@ -1,6 +1,7 @@
 .DS_Store
 log/*.log
 tmp/**/*
+tmp/*
 config/database.yml
 config/hermes_upload.yml
 config/mailer_credentials.yml
