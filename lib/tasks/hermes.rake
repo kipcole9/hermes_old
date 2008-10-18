@@ -67,7 +67,7 @@ namespace :hermes do
   desc "Import image email"
   task(:import_image_email => :environment) do
     Publication.current = Publication.default
-    mail_config = YAML::load_file("#{RAILS_ROOT}/config/hermes_upload.yml")["#{RAILS_ENV}"].symbolize_keys    
+    mail_config = YAML::load_file("#{RAILS_ROOT}/config/mailer_credentials.yml")["#{RAILS_ENV}"].symbolize_keys    
     handler = HermesMail.new(:host => mail_config[:mail_host], :user => mail_config[:image_mail_user], :password => mail_config[:image_mail_password])
     puts "About to import image emails."
     handler.get_mail(:delete => true) do |m|

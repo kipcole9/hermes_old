@@ -85,3 +85,12 @@ namespace(:web) do
     stream "tail -f /usr/local/nginx/logs/access.log"
   end
 end
+  
+namespace(:mail) do
+  desc "Get image emails and import"
+  task :get_images do
+    run <<-EOF
+      cd #{shared_path} && cd ../current && rake RAILS_ENV=production hermes:import_image_email
+    EOF
+  end
+end

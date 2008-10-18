@@ -26,7 +26,6 @@ class ApplicationController < ActionController::Base
   include SimpleSidebar
   helper SimpleSidebarHelper  
   
-  # Rescue_from incompatible with AWS (weird cookie overflow exception)
   def rescue_action_in_public(exception)
     status = response_code_for_rescue(exception)
     log_exception(exception) if status != :not_found

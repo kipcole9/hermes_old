@@ -118,11 +118,11 @@ module ApplicationHelper
 	def geocode_message(asset)
 	  case asset.geocode_method
   		when Asset::GEO_GOOGLE 
-  			msg = "Geocoded by Google - #{Google_geocode_accuracy[asset.geocode_accuracy]} level accuracy."
+  			msg = "Geocoded by Google - #{Google_geocode_accuracy[asset.geocode_accuracy]} accuracy."
   	  when Asset::GEO_GPS
-  	    msg = "Geocoded from a GPS tracklog - accuracy usually within 3m."
+  	    msg = "Geocoded with a GPS - accuracy to within 3m."
   		when Asset::GEO_MANUAL 
-  			msg = "Geocoded by manual entry - accuracy usually within 10m."
+  			msg = "Geocoded manually - accuracy to within 10m."
   		else
   			msg = ""
   	end
