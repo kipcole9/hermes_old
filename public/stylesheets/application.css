@@ -885,6 +885,13 @@ img._spinner {
 	overflow: hidden;
 	}
 	
+._articleMap {
+	width: 580px;
+	height: 500px;
+	white-space: normal;
+	overflow: hidden;	
+}	
+	
 	
 div._infoWindow {  /* Container window for our info content */
 	margin-top: -20px;

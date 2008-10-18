@@ -42,6 +42,10 @@ class User < ActiveRecord::Base
     self.current_user = authenticate(login, password)
   end
   
+  def self.authorise_and_set(email)
+    self.current_user = self.find_by_email(email)
+  end
+  
   def self.logged_in?
     self.current_user != self.anonymous
   end

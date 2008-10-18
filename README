@@ -9,5 +9,15 @@ build ones own system to achieve that.
 This is definitely not ready for use.  Although I expect to be in production on my
 own site soon, it is not really useable by anyone else. Don't even try.
 
+==TODO
+
+1.  Images "near here" with distance and direction.  Ajax load below the image.
+2.  Paging of Articles
+3.  Templating of Category pages (ie. if ?category=zzzz  then use article_zzz template name if it exists.)
+4.  Edit image page
+5.  Image upload allow parameters (for cases where the image has not metadata - like from a camera phone.  Especially 'title')
+6.  Admin provide larger map for geolocating.  Ajax load below the image (before comments).
+7.  Image Gallery to allow dynamic definition
+8.  Refactor map javascript.
 
 

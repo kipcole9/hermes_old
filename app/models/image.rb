@@ -64,6 +64,12 @@ class Image < ActiveRecord::Base
     asset.description = c
   end
   
+  def flash=(f)
+    unless f && f == "No flash function"
+      super(f)
+    end
+  end
+  
   def aperture=(v)
     if v
       a = v.is_a?(Float) ? v.to_s.sub("\.0",'') : v
@@ -193,17 +199,21 @@ class Image < ActiveRecord::Base
   # Import an image into the Image catalog if the image has not been imported, or if has
   # been updated/edited since last import
   def self.import(file, options = {})
+    options.symbolize_keys!
     if File.exist?(file) then
       image_filename = File.basename(file)
       unless image = find_by_filename(image_filename)
         image = Image.new
         image.filename = image_filename
         image.catalog = Catalog.default
-        image.folder = options["folder"].with_slash
+        image.title = options[:title] if options[:title]
+        image.folder = options[:folder].with_slash
       end
-      if image.updated_at.nil? || (options["file_mtime"].to_time.utc > image.updated_at.utc)
-        make_image_files(file, options["folder"]) 
+      if image.updated_at.nil? || (options[:file_mtime] && (options[:file_mtime].to_time.utc > image.updated_at.utc)) || options[:file_mtime].nil?
+        make_image_files(file, options[:folder])
         image.import_metadata
+        image.description = options[:description] if options[:description]
+        image.tag_list = options[:tags] if options[:tags]
         image.geocode
       else
         logger.info "Image Import: '#{file}' already imported (and up-to-date)"
@@ -225,11 +235,11 @@ class Image < ActiveRecord::Base
       elsif k == :GPSLongitude
         set_longitude(image_exif)
       else
-        send("#{v.to_s}=", image_exif[k.to_s])
+        send("#{v.to_s}=", image_exif[k.to_s]) if image_exif[k.to_s]
       end
     end
     self.created_by = User.find_by_email(image_exif["CreatorContactInfoCiEmailWork"]) || User.current_user
-    if @geo_set_counter == 2
+    if @geo_set_counter == 2 # Which means both lat and lng were set
       self.geocode_method = Asset::GEO_GPS
       self.geocode_accuracy = Google_geocode_accuracy["premise"]
     end

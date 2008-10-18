@@ -3,17 +3,19 @@ require 'net/pop'
 #require 'action_mailer'
 
 class HermesMail
-  MAIL_HOST     = "pop.bizmail.yahoo.com"
-  MAIL_USER     = "image@noexpectations.com.au"
-  MAIL_PASSWORD = "image123"
   TMP_DIR       = "#{RAILS_ROOT}/tmp"
+  attr_accessor :mail_host, :mail_port, :mail_user, :mail_password
   
-  def initialize
-
+  def initialize(options = {})
+    @mail_host = options[:host]
+    @mail_port = options[:port] || 110
+    @mail_user = options[:user]
+    @mail_password = options[:password]
   end
   
-  def self.test
-    self.get_mail(MAIL_HOST, 110, MAIL_USER, MAIL_PASSWORD) do |m|
+  def self.test(options= {})
+    handler = self.new(options)
+    handler.get_mail do |m|
       puts "From: #{m.from}"
       puts "Subject: #{m.subject}"
       m.body.each do |s, v|
@@ -22,21 +24,21 @@ class HermesMail
           puts "#{i}:  #{vv}"
         end
       end
-      m.images.each do |s, v|
-        puts "Image file #{v}"
+      m.images.each do |i|
+        puts "Image file #{i}"
       end
     end
   end
   
-  def self.get_mail(host, port = nil, user = nil, password = nil, &block)
-    raise Hermes::HostParameterRequired unless host
-    Net::POP3.start(host, port || 110,
-                    user, password) do |pop|
+  def get_mail(options = {}, &block)
+    raise Hermes::HostParameterRequired unless @mail_host
+    Net::POP3.start(@mail_host, @mail_port, @mail_user, @mail_password) do |pop|
       if pop.mails.empty?
         RAILS_DEFAULT_LOGGER.info 'HermesMail: No mail.'
       else
         pop.each_mail do |m|   # or "pop.mails.each ..."
           yield IncomingMailHandler.receive(m.pop)
+          m.delete if options[:delete] == true
         end
         RAILS_DEFAULT_LOGGER.info "HermesMail: #{pop.mails.size} mails popped."
         pop.mails.size
@@ -85,11 +87,11 @@ class HermesMail
         File.open(filepath, "wb") do |f|
           f.write( part.body )
         end
-        message.images[filename] = filepath
+        message.images.push filepath
       when "html", "plain"
         # Hash of types; arrayed in order
-        message.body[ext(part)] = [] unless message.body[ext(part)]
-        message.body[ext(part)].push part.body
+        message.body[ext(part).to_sym] = [] unless message.body[ext(part).to_sym]
+        message.body[ext(part).to_sym].push part.body
       end
     end
 
@@ -137,11 +139,35 @@ class HermesMail
   end
   
   class Message
-    attr_accessor :from, :subject, :body, :images
+    TAGS = /<tags>(.*)<\/tags>/i
+    CATEGORY = /<category>(.*)<\/category>/i
+    
+    attr_accessor :from, :subject, :body, :images, :options
     
     def initialize
       self.body = {}
-      self.images = {}
+      self.images = []
+      self.options = {}
     end
+    
+    def extract_options
+      self.options[:description] = self.body[:plain] ? self.body[:plain].join(" ").gsub("\n",' ').gsub("\r",' ').strip : nil
+      if self.options[:description]
+        if tags = options[:description].match(TAGS)
+          self.options[:tags] = tags[1].strip
+          self.options[:description] = self.options[:description].sub(TAGS, '')
+        end
+        
+        if category = self.options[:description].match(CATEGORY)
+          self.options[:category] = category[1].strip
+          self.options[:description] = self.options[:description].sub(CATEGORY, '')
+        end
+      end
+      self.options[:description] = options[:description].gsub(/ +/, " ") if options[:description]
+      self.options[:title] = self.subject
+      self.options[:folder] = "email"
+      self.options
+    end
+        
   end
 end

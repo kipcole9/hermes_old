@@ -1,5 +1,5 @@
 <% if @asset && @asset.mappable? %>
-	<div id="_sidebarMap" class="_smallMap">
+	<div id="sidebarMap" class="_smallMap">
 	</div>
 	<ul>
 		<li id="mapstatus">
@@ -19,95 +19,7 @@
 
     <% content_for :javascripts do %>
 		<%= GMap.header :host => request.host, :with_vml => false -%>
-		<script type="text/javascript">
-			//<![CDATA[
-			var map, marker;
-			var point, latitude, longitude, zoom, map_type;
-			var has_moved = "no";
-			var M_NORMAL_MAP 	= "Normal";
-			var M_SATELLITE_MAP = "Satellite";
-			var M_HYBRID_MAP 	= "Hybrid";
-			window.onload = addCodeToFunction(window.onload,function() {
-				if (GBrowserIsCompatible()) {
-					map = new GMap2(document.getElementById("_sidebarMap"));
-					point = new GLatLng(<%= @asset.latitude %>, <%= @asset.longitude %>);
-					
-					<% if current_user.is_admin? %>
-						marker = new GMarker(point, {draggable : true});
-					<% else %>
-						marker = new GMarker(point);
-					<% end %>					
-					
-					setMapType("<%= @asset.map_type %>")
-					map.setCenter(point, <%= @asset.map_zoom_level %>);
-					map.addOverlay(marker);
-					
-					<% if current_user.is_admin? %>					
-						updateMapStatus();
-						GEvent.addListener(marker, "dragend", 
-							function(latLng) {
-								setHasMoved();
-								displayMapStatus();
-							}
-						);
-					
-						GEvent.addListener(map, "zoomend", 
-							function(oldLevel, newLevel) {
-								setHasMoved();
-								displayMapStatus();
-							}
-						);
-				
-						GEvent.addListener(map, "click", 
-							function(overlay, latLng, overlayLatLng) {
-								marker.setLatLng(latLng);
-								setHasMoved();
-								displayMapStatus()
-							}
-						);	
-		
-						GEvent.addListener(map, "maptypechanged", 
-							function(latLng) {
-								displayMapStatus()
-							}
-						);											
-					<% end %>
-					map.addControl(new GSmallMapControl());
-					map.addControl(new GMapTypeControl());
-				}
-			});
-			
-			function updateMapStatus() {
-				var latLng = marker.getLatLng();
-				latitude = latLng.lat();
-				longitude = latLng.lng();
-				zoom = map.getZoom();
-				map_type = getMapType();
-			}
-			
-			function displayMapStatus() {
-				updateMapStatus();
-				$('mapstatus').innerHTML = "Lat: " + latitude.toFixed(3) + "; Lng: " + longitude.toFixed(3) + "; Zoom: " + zoom;
-			};
-			
-			function getMapType() {
-				var curr_map = map.getCurrentMapType();
-				if (curr_map == G_NORMAL_MAP) 		{ return M_NORMAL_MAP; }
-				if (curr_map == G_SATELLITE_MAP) 	{ return M_SATELLITE_MAP; }
-				if (curr_map == G_HYBRID_MAP) 		{ return M_HYBRID_MAP; }
-			};
-			
-			function setMapType(mtype) {
-				if (mtype == M_NORMAL_MAP) 		{ map.setMapType(G_NORMAL_MAP); }
-				if (mtype == M_SATELLITE_MAP) 	{ map.setMapType(G_SATELLITE_MAP); }
-				if (mtype == M_HYBRID_MAP) 		{ map.setMapType(G_HYBRID_MAP); }
-			};
-			
-			function setHasMoved() {
-				has_moved = "yes";
-			};
-			//]]>
-		</script>
+		<%= render :partial => "shared/map_manager.js.erb", :locals => {:map_id => 'sidebarMap'} %>
 	<% end %>
 <% end %>	
 

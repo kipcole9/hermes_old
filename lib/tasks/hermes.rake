@@ -64,4 +64,30 @@ namespace :hermes do
     Image.destroy_all
   end
   
+  desc "Import image email"
+  task(:import_image_email => :environment) do
+    Publication.current = Publication.default
+    mail_config = YAML::load_file("#{RAILS_ROOT}/config/hermes_upload.yml")["#{RAILS_ENV}"].symbolize_keys    
+    handler = HermesMail.new(:host => mail_config[:mail_host], :user => mail_config[:image_mail_user], :password => mail_config[:image_mail_password])
+    puts "About to import image emails."
+    handler.get_mail(:delete => true) do |m|
+      if (user = User.authorise_and_set(m.from))
+        if m.images.empty?
+          puts "No images found in the message '#{m.subject}' from #{m.from}"
+        else
+          options = m.extract_options
+          puts "Importing '#{m.subject}' from '#{m.from}'"
+          if image = Image.import(m.images.first, options)
+            image.save!
+            puts "Image #{m.images.first} was imported."
+          else
+            puts "Import #{m.images.first} failed."
+          end
+        end
+      else
+        puts "User #{m.from} is not authorised to send image emails."
+      end
+    end
+    puts "Finished importing image emails."
+  end
 end
