@@ -695,7 +695,7 @@ div#_form fieldset {
   padding-top: 2px;
   }
   
-._sidebarContent p {  /* used for sidebar image caption */
+._sidebarContent a > p {  /* used for sidebar image caption */
   margin: 0;
   font-size: 70%;
   text-align:center;
