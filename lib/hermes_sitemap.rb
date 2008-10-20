@@ -39,7 +39,7 @@ module HermesSitemap
           end
           
           # All assets should allow kml generation - we need to add that to other assets first though
-          if asset.is_a?(Gallery) || asset.is_a?(Image)
+          if (asset.is_a?(Gallery) || asset.is_a?(Image)) && asset.mappable?
             xml.url do
               xml.loc         polymorphic_url(asset) + ".kml"
               xml.lastmod     asset.updated_at.iso8601

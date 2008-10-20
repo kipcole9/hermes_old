@@ -9,7 +9,7 @@ class ImagesController < AssetsController
     if @image.mappable?
       render :action => "show"
     else
-      head :status => 404
+      page_not_found("Image '#{@image.title}' is not geocoded so kml cannot be rendered")
     end
   end
   

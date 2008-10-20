@@ -1,4 +1,4 @@
-<h4>Popular Images:</h4>
+<h2>Popular Images:</h2>
 <div class="_thumbsmallList clearfix">
 <% Image.popular(current_user, 6).each do |i|%>
 	<%= render :partial => "images/thumbnail", :locals => {:image => i} %>

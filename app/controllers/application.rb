@@ -50,6 +50,7 @@ class ApplicationController < ActionController::Base
       format.xml  { head :status => 404 }
       format.rss  { head :status => 404 }
       format.atom { head :status => 404 }
+      format.kml  { head :status => 404 }
     end
   end
   

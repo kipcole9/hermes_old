@@ -677,7 +677,7 @@ div#_form fieldset {
 	width: 16px;
 }
  
-._sidebarContent h4 {
+._sidebarContent h2 {
 	font-size: 0.75em;
 	font-weight: normal;
 	margin: 0;
@@ -695,7 +695,7 @@ div#_form fieldset {
   padding-top: 2px;
   }
   
-._sidebarContent h6 {  /* used for sidebar image caption */
+._sidebarContent caption {  /* used for sidebar image caption */
   margin: 0;
   font-size: 70%;
   text-align:center;

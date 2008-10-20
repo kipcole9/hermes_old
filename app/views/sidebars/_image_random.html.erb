@@ -6,7 +6,7 @@
 			<img alt="<%= h(image.title) -%>" title="<%= h(image.title) -%>"
 				src="<%= serve_image_link(image, :type => :display) -%>" />
 		</a>
-		<h6><%= image.title %></h6>
+		<p><%= image.title %></p>
 	<% if !(ajax rescue nil) %>
 		</div>
 		<% content_for :javascripts do %>

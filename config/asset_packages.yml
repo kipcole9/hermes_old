@@ -14,9 +14,13 @@ javascripts:
   - wms-gs
 - optional:  
   - markerGroup
-  - geoRssOverlay  
+  - geoRssOverlay 
+   
 stylesheets: 
 - base: 
   - application
+- hermes:
+  - reset
+  - hermes  
 - lightview:  
   - lightview

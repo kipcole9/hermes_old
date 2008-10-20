@@ -1,5 +1,5 @@
 <% categories = Category.published_in(publication).published.viewable_by(current_user).counts %>
-<h4>Sections:</h4>
+<h2>Sections:</h2>
 <ul>
 	<% categories.each do |category| %>
 		<li>

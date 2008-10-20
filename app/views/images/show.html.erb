@@ -1,6 +1,6 @@
 <%
 	sidebar :image_data
-	sidebar :image_actions
+	sidebar :image_actions if @asset.mappable?
 	sidebar :social_bookmarks
 	sidebar :image_gallery_list unless (@galleries = @image.galleries.viewable_by(current_user)).empty?
 	sidebar :asset_map if @asset.mappable?
