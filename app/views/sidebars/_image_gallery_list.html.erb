@@ -1,6 +1,6 @@
 <% if @image %>
 	<h2>This image is in these galleries:</h2>
-	<div class='clearfix'>
+	<div class='_thumbsmallList clearfix'>
 		<% @galleries.each do |g| %>
 			<%= render :partial => "images/thumbnail", :locals => {:image => g.popular_image(current_user), 
 				:caption => g.title, :gallery => g, :prefix => "gallery" } %>

@@ -1,9 +1,21 @@
-<div class="_sidebarForm" style="margin-top: 4px;">	
+<div class="_sidebarForm">	
 	<% form_remote_tag :url => {:controller => :assets, :action => :live_search} do %>
-	  <p>
-		Search: <%= text_field_tag :search, "", :size => 23 %>
-	  	<img src="/images/spinners/arrows.gif" id="imageSpinner" alt="Spinner" class="_spinner" style="display:none"/>
-	  </p>
+	  	  <table>
+	  	    <tr>
+	  	      <td id="_search_prompt">Tag Search:</td>
+	  	      <td id="_search_input">
+	            <%= text_field_tag :search, "", :size => 23 %>
+	  	        <img src="/images/spinners/arrows.gif" id="imageSpinner" alt="Spinner" class="_spinner" style="display:none"/>
+	  	      </td>
+	  	    </tr>  
+	        <tr>
+	          <td>
+	          </td>
+	          <td id="_search_help">
+	    	      Enter comma-separated tags
+            </td>
+          </tr>
+        </table>
 	<% end %>
 </div>
 

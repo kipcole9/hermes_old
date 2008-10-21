@@ -17,10 +17,13 @@ javascripts:
   - geoRssOverlay 
    
 stylesheets: 
-- base: 
+- base:
+  - reset
+  - application_base 
   - application
 - hermes:
   - reset
+  - hermes_base
   - hermes  
 - lightview:  
   - lightview

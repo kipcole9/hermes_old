@@ -1,20 +1,15 @@
 <% if @asset && @asset.mappable? %>
 	<div id="sidebarMap" class="_smallMap">
 	</div>
-	<ul>
-		<li id="mapstatus">
-			<%= geocode_message(@asset) %>
-		</li>
-	</ul>	
+  <p><%= geocode_message(@asset) %></p>
 	<% if current_user.is_admin? %>
-		<div class="_centerAlign">
-		 <%= submit_to_remote 'update_button', 'Update geo data',
+		 <%= submit_to_remote 'update_geo_button', 'Update geo data',
 		 	:method => :put,
-		    :update => 'mapstatus',
+		 	:html => {:id => "_updateGeo"},
+		  :update => 'mapstatus',
 			:with => "'latitude=' + latitude + '&longitude=' + longitude + '&zoom=' + zoom + '&map_type=' + map_type + '&has_moved=' + has_moved",
 			:failure => "alert('HTTP Error ' + request.status + '!')"
 		 %>	
-		</div>
 	<% end %>
 
     <% content_for :javascripts do %>

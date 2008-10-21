@@ -4,11 +4,10 @@
 	sidebar :image_tag_cloud
 	sidebar :image_random
 %>
-<div id="_form"
+<div id="_article"
 	<h2>User login</h2>
 	<% form_tag(sessions_path, :id => "_formEdit") do -%>
 		<h3>Please enter your login credentials</h3>
-	
 		<div class="_formField">
 			<label for="login">Login:</label>
 			<%= text_field_tag 'login', nil, :class => "_formText" %>

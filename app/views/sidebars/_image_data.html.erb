@@ -1,4 +1,5 @@
 <% if @image %>
+  <div class="_metadata">
 	<% @image.get_shot_data.each do |f| %>
 		<div class="clearfix">
 			<div class="columnFirst">
@@ -9,4 +10,5 @@
 			</div>
 		</div>
 	<% end %>
+	</div>
 <% end %>

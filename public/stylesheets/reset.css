@@ -35,7 +35,7 @@ blockquote:before, blockquote:after, q:before, q:after {
 }
 
 /* remember to define focus styles! */
-:focus{
+:focus {
 	outline:		0;
 }
 
@@ -65,11 +65,11 @@ a img{
 
 /* Clearing stuff.  Add the clearfix class to a containing div you want to clear at the end */
 .clearfix:after {
-	content: ".";
-	display: block;
-	height: 0;
-	clear: both;
-	visibility: hidden;
+	content: 		".";
+	display: 		block;
+	height: 		0;
+	clear: 			both;
+	visibility: 	hidden;
 	}
 .clearfix {display: inline-block;}
 

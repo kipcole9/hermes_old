@@ -6,11 +6,11 @@
 			<img alt="<%= h(image.title) -%>" title="<%= h(image.title) -%>"
 				src="<%= serve_image_link(image, :type => :display) -%>" />
 		</a>
-		<p><%= image.title %></p>
+		<p class="caption"><%= image.title %></p>
 	<% if !(ajax rescue nil) %>
 		</div>
-		<% content_for :javascripts do %>
+	<% end %>	
+	<% content_for :javascripts do %>
 			<%= periodically_call_remote  :update => '_random_image', :url => random_images_path, :frequency => 30 %>
-		<% end %>		
-	<% end %>
+	<% end %>		
 <% end %>

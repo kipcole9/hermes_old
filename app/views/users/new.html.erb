@@ -4,7 +4,7 @@
 	sidebar :image_tag_cloud
 	sidebar :image_random
 %>
-<div id="_form">
+<div class="_article">
 	<h2>User Registration</h2>
 	<p class="dimmed">
 		The information you enter here is for site administration purposes only.  No information
@@ -17,8 +17,9 @@
 		activation email to the email address you specify, so it needs to be a real proper working
 		email address. The email is sent immediately upon signup.
 	</p>
+
 	<% hermes_form_for :user, :url => users_url(), :html => {:method => :post, :id => "_formEdit"} do |form| %>
-		<h3>Please enter your registration details</h3>
+	  <h3>Please enter your registration details below:</h3>
 		<%= form.text_field "User name", :login, :disabled => is_show?, :size => 10 %>
 		<%= form.text_field "Given (first) name", :given_name, :disabled => is_show?, :size => 30 %>
 		<%= form.text_field "Family (last) name", :family_name, :disabled => is_show?, :size => 30 %>	

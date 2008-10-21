@@ -4,6 +4,6 @@
 		<img alt="<%= h(image.title) -%>" title="<%= h(image.title) -%>"
 			src="<%= serve_image_link(image, :type => :display) -%>" />
 	</a>
-	<p><%= image.display_caption %><p>
+	<p class="caption"><%= image.display_caption %></p>
 </div>
 <p><%= render :inline => image.description -%></p>

@@ -7,7 +7,7 @@
 	<% display_caption = long_caption.truncate(25) -%>
 	<% description = gallery ? gallery.description : image.description -%>
 	<% link_as = image.catalog.link_as -%>
-	<div id="<%= prefix %>image_<%= image.id -%>" class="<%= (image.orientation == 'p' ? '_thumbsmall_p' : '_thumbsmall_l') -%>" >
+	<div id="<%= prefix %>image_<%= image.id -%>" class='_thumbsmall' >
 		<a href="<%= url -%>" >
 			<img alt="<%= long_caption -%>" title="<%= long_caption -%>"
 				src="<%= serve_image_link(image, :type => :thumbnail) -%>" />

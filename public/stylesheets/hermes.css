@@ -1,78 +1,15 @@
-/* Style base elements */
+/*
+	Content Layout is defined here.  Typography (color, size, etc) should 
+	be defined in <theme>_base.css
+*/
 
-body {
-  background:		#000;
-  padding-top:		10px;
-  font-family: 		Verdana, sans-serif;
-  color:			#ccc;
-  }
-
-p {
-  line-height:		120%;
-  letter-spacing:	115%;
+#_body {
+  margin-top:		10px;
 }
 
-p + p {
-  margin-top:		0.5em;
-}
-
-textarea {
-  text-align:		left;
-  color:			#ccc;
-  }
- 
-/* Basic anchor styling */
-a:link {
-  color:#9ad;
-  text-decoration:none;
-  }
-a:visited, a:hover  {
-  color:#ad9;
-  text-decoration:none;
-  }
-a:hover {
-  text-decoration:underline;
-  }
-
-code {
-  border: 			1px solid #555;
-  background: 		#333;
-  margin:			10px 20px;
-  }
-
-blockquote {
-  float: left;
-  border-top:		1px solid #ad9;
-  border-bottom: 	1px solid #ad9;
-  padding: 			8px 8px 10px 8px;
-  margin-right: 	0.6em, 0.7em, 0.2em, 0.6em;
-  width: 			200px;
-  font-style: 		italic;
-  }
-
-h2, h3 {
-  font-weight: 		normal;
-  color:			#ad9;
-  }
-
-h2 {
-  font-size: 		1.3em;
-  }
-
-h3 {
-  font-size: 		1em;
-  }
-
-h2 a:visited, h3 a:visited, h2 a:hover, h3 a:hover {
-  color:#9ad;
-  }
-
-h2 a:hover, h3 a:hover {
-  text-decoration: underline;
-  }
-
-/* Content Layout
------------------------------------------------ */
+/*---------------------------------------
+	Basic fixed width 2-column document structure
+*/
 #_wrapper {
   width:			900px;
   margin: 			0 auto;
@@ -94,12 +31,11 @@ h2 a:hover, h3 a:hover {
   float:			right;
   }
 
-/* Page footer */
 #_footer {
   clear: 			both;
-  color:			#777;
   font-size: 		75%;
   margin-top: 		40px;
+  margin-bottom:	10px;
   padding-top:		5px;
   text-align: 		center;
   border-top: 		2px solid #555;
@@ -114,117 +50,111 @@ h2 a:hover, h3 a:hover {
 }
 
 
-/* Header - Page Banner with Publication title and
-   navigation bar
------------------------------------------------ */  
-div#_header h1 {
-  margin:			5px 5px 0;
-  padding:			20px 20px .25em;
-  border:			1px solid #555;
-  border-width:		1px 1px 0;
-  font-size:		150%;
-  line-height:		1.2em;
-  color:			#ccc;
-  letter-spacing:	.3em;
-  text-align: 		center;
-  }
-  
-
-
-/* Top of page menu bar 
------------------------------------------------*/
+/*--------------------------------------- 
+	Top of page menu bar 
+---------------------------------------*/
 div#_navigation {
   margin:			0 5px 5px;
   padding:			0 20px 20px;
-  border:			1px solid #555;
   border-width:		0 1px 1px;
   font-size:		74%;
   text-transform:	uppercase;
   letter-spacing:	.2em;
   text-align: 		center;
-  color:			#9ad;
   }
 
-div#_navigation a:visited, div#_navigation a:hover {
-  color:			#9ad;
+/*---------------------------------------
+	Element spacing. In general, define
+	how speciic elements are separated 
+	from each other here
+---------------------------------------*/
+p + p, p + form,
+._articleImage + p, p + ._articleImage, 
+p + ._thumbnailList {
+  margin-top:		0.7em;
+  }
+
+/* some sidebars: recent gallery, popular gallery, etc */
+h2 + ._thumbsmallList {
+  margin-top:		0.2em;
+  margin-bottom:	0.2em;
+  }
+
+/* Spacing between li elements */
+._article li + li {
+  margin-top: 		0.3em;
 }
-
-
-/* Article format: each article (and other assets generally)
-   are wrapped in this div
- */  
-._article {
-  padding-right: 	0.5em;
-  margin-bottom: 	0.5em;
-  clear: 			both;
-  }
 
 ._article + ._article {
   border-top: 		1px dotted #333;
   padding-top:		0.9em;
 }
 
-/* Article Heading */
-._article h2 {
-  color:			#9ad;
+/*---------------------------------------
+	Article format: each article 
+	(and other assets generally)
+   	are wrapped in this div
+---------------------------------------*/
+._article {
+  padding-right: 	0.5em;
   margin-bottom: 	0.5em;
-  font-size: 		1.3em;
+  clear: 			both;
+  }
+
+/* Article Heading */
+._article > h2 {
+  margin-bottom: 	0.5em;
   letter-spacing:	125%;
   }  
 
-._article h2 a:visited, ._article h2 a:hover {
-  color:			#9ad;
-}
-
 /* For byline on article summary */
-._article h3 {
-  color: 			#777;
-  font-size: 		70%;
-  margin-bottom: 	0.8em;
-  margin-top: 		-0.7em;
+._article > h3 {
+  margin-bottom: 	0.9em;
+  margin-top: 		-0.6em;
   }
 
 /* For page numbers */
-._article h4 {
-	color: 			#777;
+._article > h4 {
 	font-size: 		90%;
 	margin-bottom: 	0.7em;
 }
+
+._article > h5 {
+	margin-top:		0.5em;
+	margin-bottom:	0.5em;
+}
+
+._article ul {
+  list-style:		disc;
+  margin-left:		20px;
+  }
 
 /* Article Image - full width image in an article or article summary */
 ._articleImage {
   border:			2px solid #444;
   padding:			15px 14px 0px 14px;
-  background: 		#222;
-  margin-bottom:	0.3em;
-  margin-top:		0.3em;
+  display:			block;
   }
 
 ._articleImage img {
   max-width: 		540px;  /* Content div width - (2*border size) - (2*img padding size) */
   max-height: 		540px;
   }
-  
-._articleImage p {
-  margin:			3px;
-  font-size: 		78%;
-  text-align:		center;
-  text-transform:	uppercase;
-  color:			#777;
-  }
+
+._articleImage p.caption {
+  /* Placeholder for any subsequent special styling for caption */	
+}
 
 /* Article footer - important to use because it does a clear:both */
 ._articleFooter {
   font-size:		78%;
   text-transform:	uppercase;
   letter-spacing:	.2em;
-  color:			#777;
   padding-top: 		2em;
   clear: 			both;
   }
 
 ._articleFooter a:link, ._articleFooter a:visited, ._articleFooter a:hover {
-  color:#9ad;
   text-decoration: 	none;
   }
 
@@ -232,36 +162,59 @@ div#_navigation a:visited, div#_navigation a:hover {
   text-decoration: 	underline;
   }
 
-/* Content in the sidebar.  Can be multiples of these.
--------------------------------------------------------*/
+/*---------------------------------------
+	Comments displayed after an article
+	or other asset (image, gallery, etc)  
+---------------------------------------*/
+
+._comment {
+  margin-top: 		1em;
+  margin-bottom: 	1em;
+}
+
+/* For byline on article summary */
+._comment h3 {
+	margin-bottom: 	0.7em;
+	margin-top: 	0.2em;
+}
+
+._comment label {
+	width: 			100px;
+	text-align:		left;
+}
+
+._formField + ._small {
+	margin-top:		-5px;
+	margin-left:	108px;
+	font-size:		70%;
+}
+
+/*---------------------------------------
+	Content in the sidebar.  
+	Can be multiples of these.
+---------------------------------------*/
 
 ._sidebarContent {    /* One of possibly many sidebars */
   border: 			1px solid #333;
-  color: 			#999;
   padding: 			3px 2px 2px 4px;
   margin-bottom: 	0.5em
   }
 
 /* ul usually for list of available actions */
 ._sidebarContent ul {
-  color: 			#555;
   margin-bottom:	0.5em;
-  margin-top:		0.3em;
-}
+  }
 
 ._sidebarContent ul a,
 ._sidebarContent ul a:visited {
-  color:			#555;
   vertical-align:	baseline;
+  }
 
-}
-
-._sidebarContent ul a:hover
-{
-  background:		#666;
+._sidebarContent ul a:hover {
+  background:		#777;
   color:			white;
   text-decoration:	none;
-}
+  }
 
 ._sidebarContent ul a.selected,
 ._sidebarContent ul a.selected:visited,
@@ -271,40 +224,42 @@ div#_navigation a:visited, div#_navigation a:hover {
 
 }
 
-/* Instead of bullets we use inline images - its easier to
+/* 
+	Instead of bullets we use inline images- its easier to
 	provide different 'bullets' for each li in this case.  Hence
 	to make alignment of the image and text we tune the image
 	position and size as well
 */
 ._sidebarContent ul li {
-	padding-left: 	2px;
-	font-size:		12px;
-	vertical-align:	baseline;
-	margin-bottom:	0.2em;
-
+  padding-left: 	2px;
+  font-size:		12px;
+  vertical-align:	baseline;
+  margin-bottom:	0.2em;
 }
 
-._sidebarContent ul li img{
-	position:		relative;
-	top:			3px;
-	height: 		14px;
-	width: 			14px;
+._sidebarContent ul li img {
+  position:			relative;
+  top:				3px;
+  height: 			14px;
+  width: 			14px;
 }
 
 /* Sidebar headings */
 ._sidebarContent h2 {
-	color:			#999;
-	font-size: 		0.75em;
-	margin-top:		2px;
-	padding-left: 	2px;
-	padding-right: 	2px;
+  font-size: 		0.75em;
+  margin-top:		2px;
+  margin-bottom:	2px;
+  padding-left: 	2px;
+  padding-right: 	2px;
 }
 
 ._sidebar p, ._sidebarError p {
-	margin-left: 	0.5em;
+  margin-left: 	0.5em;
 }
 
-/* for random image */
+/*--------------------------------------- 
+	Random image sidebar
+---------------------------------------*/
 #_random_image {
 	padding-top: 	2px;
 }
@@ -312,25 +267,24 @@ div#_navigation a:visited, div#_navigation a:hover {
 #_random_image > a > img {
   width: 			290px;   /* sidebar div width - (2* border size) - (2 * padding) */
   text-align:		center;
-  }
+}
 
-#_random_image p {  /* used for sidebar image caption */
+#_random_image p.caption {  /* used for sidebar image caption */
+  margin-bottom:	2px;
   font-size: 		70%;
-  text-align:		center;
-  text-transform:	uppercase;
-  padding-top:		2px;
-  padding-bottom:	2px;
-  color:			#777;
-  }
+}
 
+/*--------------------------------------- 
+	This is a special sidebar where we render
+	database errors
+---------------------------------------*/	
 ._sidebarError {
   border: 			2px solid red;
-  color: 			#999;
   padding-bottom: 	0.5em;
   margin-bottom: 	0.5em
   }
 
-._sidebarError h4 {
+._sidebarError h2 {
   font-size: 		80%;
   background-color: red;
   text-align: 		center;
@@ -338,9 +292,11 @@ div#_navigation a:visited, div#_navigation a:hover {
   color: 			white;
 }
 
-/* Tag Cloud formatting */
+/*--------------------------------------- 
+	Tag Cloud formatting
+---------------------------------------*/
 #_tag_cloud {
-	margin-top:		0.5em;
+	margin-top:		0.1em;
 	margin-bottom:	0.3em;
 }
 .cloud1 {
@@ -362,62 +318,211 @@ div#_navigation a:visited, div#_navigation a:hover {
 	font-size: 		200%;
 	}
 
+/*---------------------------------------
+	Search sidebar
+---------------------------------------*/
 
-
-.red {
-	color: red;
+/* "Tag Search: "  */
+._sidebarForm {
+  margin-top:		5px;
+  margin-bottom:	2px;
 }
 
-/* For example search 
---------------------------------*/
-div._sidebarForm {
-	margin: 0;
-	padding: 0;
-	}
+#_search_prompt {
+  font-size: 		0.75em;
+  padding-right:	4px;
+  }
 
-div._sidebarForm p {
-	font-size: 0.75em;
-	margin: 0;
-	padding: 2px;
+#_search_input {
+	font-size:		70%;
 }
 
-div._sidebarForm form {
-	margin: 0;
-	padding: 0;
+#_search_help {
+  font-size: 		70%;
+  }
+
+/* help message under the search box */
+._sidebarForm p + p {
+  margin-left:		74px;
+  font-size:		70%;
+  margin-top:		-1px;
 }
 
-div._sidebarForm form label {
-	width:70px; 
-	float:left;
-	}
+/* Search input box */
+._sidebarForm input {
+  border: 			solid 1px #CDBE70;
+  background:		black;
+  font-size: 		100%;
+  margin:			0;
+  }
 
-div._sidebarForm input {
-	border: solid 1px #CDBE70;
-	background-color: #000;
-	color: #ddd;
-	padding-left: 2px;
-	}
+/* Category heading in search results */
+#_searchImageResults > h2 {
+  margin-top: 		8px;
+  margin-bottom:	0px;
+  font-style:		italic;
+  }
 
-div._sidebarForm input[type="submit"] {
-	display:inline; 
-	margin-right: 2px;
-	padding-left: 3px;
-	padding-right: 3px;
-  	color:#ccc;
-	background: #333;
-	border: 1px solid #555;
-	}
+/* List of articles returned */
+#_searchImageResults ol {
+  list-style:		disc;
+  margin-left:		20px;
+  }
 
-div._sidebarForm input[type="submit"]:hover {
-	background: #ad9;
-	color: #333;
-	}
+/* One article search result */
+#_searchImageResults a {
+  font-size:		75%;
+  }
 
-div._login {
-	line-height: 2em;
-	}
+/*---------------------------------------
+	For image thumbnails in a gallery view
+	NOTE: Very dependent on the knowledge
+	that thumbnails are generated at 
+	160px dimensions
+---------------------------------------*/
 
-/* The div which we fill in from dynamic search */
-div#_searchImageResults > h4 {
-	margin-top: 8px;
-	}
+._thumbnail {
+  margin-right: 	3px;			/* spacing between thumbnails	*/
+  margin-bottom: 	3px;
+  width: 			169px;
+  height: 			182px; 			/* so we can position the caption under the image */
+  padding: 			4px;
+  line-height: 		170px;
+  }
+
+._thumbnail img {
+  max-width: 		160px;
+  max-height: 		160px;
+  }
+
+._thumbnail p.caption {	
+  font-size: 		9px;
+  margin:			0;
+  }
+
+/* The count of the times the image has been viewed */
+._thumbnail ._count {
+  position: 		relative;
+  font-size: 		9px;
+  top: 				3px;
+  right: 			0px;
+  width: 			20;
+  text-align: 		right;
+  line-height: 		0px;
+  }
+
+/*---------------------------------------
+	Image search results
+---------------------------------------*/	
+._thumbsmall {
+  width: 			86px;
+  height: 			86px;
+  line-height: 		80px;		/* Same as image max size */
+  margin: 			2px;
+  padding: 			2px;
+  }
+
+._thumbsmall img {
+  max-width:		80px;
+  max-height:  		80px;
+  }
+
+/* When thumbnail is in an article, give it room */
+._article > ._thumbsmall {
+  margin-right: 	6px;
+  margin-left: 		0px;
+  }
+
+/*---------------------------------------
+	Google Maps
+---------------------------------------*/
+._smallMap, ._largeMap, ._articleMap {
+  white-space: 		normal;
+  overflow: 		hidden;
+  }
+
+._smallMap {
+  margin-top:		2px;
+  width: 			290px;
+  height: 			250px;
+  }
+
+._smallMap + p {
+  font-size:		70%;
+  margin:			0px;
+  margin-bottom:	2px;
+  padding:			0px;
+  text-align:		center;
+}
+
+input#_updateGeo {
+  margin:			0 auto;
+  margin-bottom:	2px;
+  margin-top:		2px;
+}
+
+._largeMap {
+  margin-top: 		0.5em;
+  margin-bottom:	0.5em;
+  width: 			900px;
+  height: 			500px;
+  }
+	
+._articleMap {
+  width: 			580px;
+  height: 			500px;
+  }	
+	
+/* Map infoWindows */
+._infoWindow {
+  margin-top: 		-20px;
+  width: 			250px;
+  height: 			80px;
+  margin: 			0;
+  padding: 			0;
+  }
+
+/* Text colour for infoWindows */
+._infoWindow h4, ._infoWindow a, ._infoWindow p {
+  color: 			black;
+  }
+
+._infoWindow h4 {
+  font-size: 		80%;
+  margin-bottom: 	2px;
+  }
+
+._infoWindow p {
+  font-size: 		70%;
+  margin-left: 		5px;
+  }
+
+._infoWindow > ._thumbsmall {
+  margin-right: 	4px;
+  margin-bottom:	4px;
+  }
+
+/*---------------------------------------
+	exif sidebar for images
+---------------------------------------*/
+._metadata {
+  margin-bottom:	0.3em;
+  margin-top:		0.2em;
+}
+
+.columnFirst, .columnSecond {
+  float:			left;
+  font-size:		75%;
+  line-height:		15px;
+}
+
+.columnFirst {
+  width: 			92px;
+  text-align: 		right;
+  margin-right: 	10px;
+  overflow: 		hidden;
+  }
+	
+.columnSecond {
+  width: 			185px;
+  }

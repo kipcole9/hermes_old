@@ -1,11 +1,9 @@
 <% galleries = assets unless local_assigns[:assets].nil? %>
-<h4>Galleries</h4>
-<div class="clearfix">
+<h2>Galleries</h2>
+<div class="_thumbsmallList clearfix">
 	<% galleries.each_with_index do |gallery, index|  %>
-		<div class="_thumbsmall"> 
-			<%= render :partial => "images/thumbnail", :locals => {:image => gallery.popular_image(current_user), 
+		<%= render :partial => "images/thumbnail", :locals => {:image => gallery.popular_image(current_user), 
 				:caption => gallery.title, :gallery => gallery} %>
-		</div>
 		<% if index == 20 %>
 			<% break %>
 		<% end %>

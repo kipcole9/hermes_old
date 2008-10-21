@@ -20,8 +20,7 @@
 	<h2><%= @gallery.title %></h2>
 	<%= render :partial => 'articles/article_byline', :locals => {:article => @gallery} -%>
 	<%= render :partial => "shared/page_numbers", :locals => {:collection => images} %>
-	<%= render :inline => @gallery.description -%>
-	<p></p>
+	<p><%= render :inline => @gallery.description -%></p>
 	<div id="thumbnailList" class="_thumbnailList clearfix">
 		<% images.each do |i| %>
 			<%= render :partial => "images/slide", :locals => {:image => i} %>
