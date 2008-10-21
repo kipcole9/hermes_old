@@ -1,10 +1,10 @@
 class GalleriesController < AssetsController
   
   def show_kml
-    if gallery.mappable?
+    if @gallery.mappable?
       render :action => "show"
     else
-      page_not_found("Gallery '#{@image.title}' is not geocoded so kml cannot be rendered")
+      page_not_found("Gallery '#{@gallery.title}' is not geocoded so kml cannot be rendered")
     end
   end
   
