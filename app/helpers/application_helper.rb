@@ -4,7 +4,7 @@ module ApplicationHelper
   
   def stylesheet_link_theme
     if publication.theme && File.exist?("#{RAILS_ROOT}/public/stylesheets/#{publication.theme}.css")
-      if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].match(/MSIE/)
+      if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].match("MSIE")
   		  stylesheet_link_merged("#{publication.theme}_ie".to_sym)
 		  else
 		    stylesheet_link_merged(publication.theme.to_sym)
