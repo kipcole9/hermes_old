@@ -1,7 +1,7 @@
 <% if @asset && @asset.mappable? %>
 	<div id="sidebarMap" class="_smallMap">
 	</div>
-  <p><%= geocode_message(@asset) %></p>
+  <p id='mapstatus'><%= geocode_message(@asset) %></p>
 	<% if current_user.is_admin? %>
 		 <%= submit_to_remote 'update_geo_button', 'Update geo data',
 		 	:method => :put,
@@ -12,7 +12,7 @@
 		 %>	
 	<% end %>
 
-    <% content_for :javascripts do %>
+  <% content_for :javascripts do %>
 		<%= GMap.header :host => request.host, :with_vml => false -%>
 		<%= render :partial => "shared/map_manager.js.erb", :locals => {:map_id => 'sidebarMap'} %>
 	<% end %>
