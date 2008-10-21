@@ -161,6 +161,11 @@ private
       result =  YAML::load(response.body)["defensio-result"]
       RAILS_DEFAULT_LOGGER.debug "Defensio result: #{result.inspect}"
       return result
+    elsif response.class == Net::HTTPNotFound
+      RAILS_DEFAULT_LOGGER.info "Defensio site was not found!"
+      RAILS_DEFAULT_LOGGER.info "Defensio request: #{server_url(api[:action], options)}"
+      RAILS_DEFAULT_LOGGER.info "Defensio result: #{result.inspect}"
+      return {}
     else
       RAILS_DEFAULT_LOGGER.debug "Error: Received:\n================\n#{response.body}\n================" if response.body
       raise InvalidRequest, response.inspect
