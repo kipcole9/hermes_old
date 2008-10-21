@@ -7,12 +7,8 @@
 	<link rel="icon" type="image/png" href="/hermes.png" />
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="<%= formatted_apis_assets_url :xml %>" />
 	<link rel="pingback" href="<%= xmlrpc_url %>" />
-	<%= yield :head %>
-	<% if publication.theme && File.exist?("#{RAILS_ROOT}/public/stylesheets/#{publication.theme}.css") %>
-		<%= stylesheet_link_merged publication.theme.to_sym %>
-	<% else %>
-		<%= stylesheet_link_merged :base %>
-	<% end %>
+	<%= stylesheet_link_theme %>
+	<%= yield :head %>	
 </head>
 
 <body id="_body">

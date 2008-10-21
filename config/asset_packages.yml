@@ -24,6 +24,15 @@ stylesheets:
 - hermes:
   - reset
   - hermes_base
-  - hermes  
+  - hermes
+- hermes_ie:
+  - reset
+  - hermes_base
+  - hermes
+  - hermes_ie
+- hermes_white:
+  - reset
+  - hermes_white_base
+  - hermes_white  
 - lightview:  
   - lightview

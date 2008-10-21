@@ -44,8 +44,8 @@ function transitionImage(image, content, source) {
 // and hence not fadeUp the image until it is fully loaded.
 function updateImage(image, content, source) {
 	var newItem = new Element('p').update(content).down();
-	var newImage = newItem.down();
-	var newImg = newImage.down();
+	var newImage = newItem.down().next();		// Should be the anchor tag
+	var newImg = newImage.down();				// The img tag
 	image.update(newImage);
 	image.insert({bottom: newItem.down('p')});
 	image.id = newItem.id;

@@ -2,6 +2,18 @@
 module ApplicationHelper
   include HermesHelper
   
+  def stylesheet_link_theme
+    if publication.theme && File.exist?("#{RAILS_ROOT}/public/stylesheets/#{publication.theme}.css")
+      if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].match(/MSIE/)
+  		  stylesheet_link_merged("#{publication.theme}_ie".to_sym)
+		  else
+		    stylesheet_link_merged(publication.theme.to_sym)
+	    end
+  	else
+  		stylesheet_link_merged :base
+  	end
+	end
+
   def serve_image_link(image, options = {})
     image_name = image.is_a?(Image) ? image.name : image
     image_filename = "#{image_name}-#{options[:type].to_s}" if options[:type]

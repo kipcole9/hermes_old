@@ -7,8 +7,8 @@
 
 
 body, input, textarea, select {
-  color:			#ccc;
-  background:		#000;
+  color:			#000;
+  background:		#fff;
   font-family: 		Verdana, sans-serif;
   }
 
@@ -26,7 +26,7 @@ p, ._article li {
 ---------------------------------------*/
 ._articleImage, ._thumbnail, ._thumbsmall,
 input, textarea, select {
-  background: 		#222;
+  background: 		#ccc;
 }
 
 h3, h4, label, p.caption, 
@@ -35,7 +35,7 @@ h3, h4, label, p.caption,
 ._sidebarContent ul, ._sidebarContent ul a,
 ._sidebarContent ul a:visited, 
 ._columnFirst {
-	color: 			#777;
+	color: 			#000;
 }
 
 ._sidebarError, ._sidebarContent, ._sidebarContent h2,
@@ -47,9 +47,13 @@ form h3, ._article h5, ._comment_author {
   color:			#ad9;
 }
 
-h2, a:visited, a:hover, a:link,
+h2 {
+  color:			#000;
+} 
+
+a:visited, a:hover, a:link,
 #_navigation {
-  color:			#9ad;
+  color:			#333;
 }
 
 #header, #_navigation, 
@@ -114,7 +118,7 @@ a:hover {
 	h1 is used only for the page heading
  */
 h1 {
-  color:			#ccc;
+  color:			#000;
   margin:			5px 5px 0;
   padding:			20px 20px .25em;
   border-width:		1px 1px 0;

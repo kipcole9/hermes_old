@@ -8,17 +8,9 @@
 	<% end %>
 </h2>
 
-<% if !(ajax rescue nil) %>
-	<div id="_galleryRecent" class="_thumbsmallList clearfix">
-<% end %>
-
-<div class="_thumbsmallList">
+<div class="_thumbsmallList clearfix">
   <% galleries.each do |g|%>
   	<%= render :partial => "images/thumbnail", :locals => {:image => g.popular_image(current_user), 
   		:caption => g.title, :gallery => g, :prefix => "recent"} %>
   <% end %>
 </div>
-
-<% if !(ajax rescue nil) %>
-	</div>
-<% end %>

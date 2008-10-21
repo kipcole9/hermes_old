@@ -197,7 +197,7 @@ h2 + ._thumbsmallList {
 ._sidebarContent {    /* One of possibly many sidebars */
   border: 			1px solid #333;
   padding: 			3px 2px 2px 4px;
-  margin-bottom: 	0.5em
+  margin-bottom: 	0.5em;
   }
 
 /* ul usually for list of available actions */
@@ -380,6 +380,7 @@ h2 + ._thumbsmallList {
 	that thumbnails are generated at 
 	160px dimensions
 ---------------------------------------*/
+
 ._thumbnail {
   margin-right: 	3px;			/* spacing between thumbnails	*/
   margin-bottom: 	3px;
@@ -412,7 +413,10 @@ h2 + ._thumbsmallList {
 
 /*---------------------------------------
 	Image search results
----------------------------------------*/
+	Recent Galleries
+	Popular Galleries
+---------------------------------------*/	
+
 ._thumbsmall {
   width: 			86px;
   height: 			86px;
