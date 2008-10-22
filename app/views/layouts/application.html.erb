@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-	<title><%= page_title rescue publication.title -%></title>
+	<title><%= page_title rescue publication.title -%></title>	
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link rel="icon" type="image/png" href="/hermes.png" />
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="<%= formatted_apis_assets_url :xml %>" />
@@ -15,18 +15,33 @@
 <div id="_wrapper">
   <div id="_header">
      <h1><%= publication.title -%></h1> 
-	 <div id="_navigation">
-	  		<a href="<%= root_path -%>" >Home</a>
- 			|   <a href="<%= galleries_path -%>" >Galleries</a>
- 			|   <a href="<%= images_path -%>" >Images</a>
- 			|   <a href="<%= world_maps_path -%>" >Maps</a>
-			|	<a href="<%= about_publication_path(Publication.current) -%>">About</a>
- 			|   <a href="<%= contact_publication_path(Publication.current) -%>">Contact</a>
- 			|   <a href="<%= signup_path %>" >Signup</a>
- 			|   <%= logged_in? ? "<a href=\"#{logout_path}\" >Logout '#{current_user.login}'</a>" : 
-								 "<a href=\"#{login_path}\" >Login</a>" -%>
- 	  </div>
-	  <!-- <p><%= request.env["HTTP_USER_AGENT"] %></p> -->
+	   <ul id="_navigation">
+  		<li class="with_separator">
+  		  <a href="<%= root_path -%>" >Home</a>
+  		</li>
+ 			<li class="with_separator">   
+ 			  <a href="<%= galleries_path -%>" >Galleries</a> 
+ 			</li>
+ 			<li class="with_separator">   
+ 			  <a href="<%= images_path -%>" >Images</a> 
+ 			</li>
+ 			<li class="with_separator">   
+ 			  <a href="<%= world_maps_path -%>" >Maps</a> 
+ 			</li>
+			<li class="with_separator">	
+			  <a href="<%= about_publication_path(Publication.current) -%>">About</a> 
+			</li>
+ 			<li class="with_separator">   
+ 			  <a href="<%= contact_publication_path(Publication.current) -%>">Contact</a> 
+ 			</li>
+ 			<li class="with_separator">   
+ 			  <a href="<%= signup_path %>" >Signup</a> 
+ 			</li>
+ 			<li>   
+ 			    <%= logged_in? ? "<a href=\"#{logout_path}\" >Logout '#{current_user.login}'</a>" : 
+								 "<a href=\"#{login_path}\" >Login</a>" -%> 
+			</li>
+ 	  </ul>
   </div>
   <div id="_content">
   	<%= yield %>
@@ -37,7 +52,7 @@
 	    <ol id="_sidebarList">
 			<% if flash[:notice] -%>
 				<li class="_sidebarContent red">
-					<%= flash[:notice] %>
+					<p><%= flash[:notice] %></p>
 				</li>
 			<% end %>
 			<%= render_sidebars %>

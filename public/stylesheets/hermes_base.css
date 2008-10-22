@@ -12,6 +12,7 @@ body, input, textarea, select {
   font-family: 		Verdana, sans-serif;
   }
 
+/* If we decordate all li's then lightview doesn't work properly */
 p, ._article li {
   line-height:		120%;
   letter-spacing:	115%;
@@ -24,6 +25,10 @@ p, ._article li {
 	make it much easier to change the 
 	styling later
 ---------------------------------------*/
+#_navigation {
+  color:			#555;
+}
+
 ._articleImage, ._thumbnail, ._thumbsmall,
 input, textarea, select {
   background: 		#222;
@@ -47,8 +52,7 @@ form h3, ._article h5, ._comment_author {
   color:			#ad9;
 }
 
-h2, a:visited, a:hover, a:link,
-#_navigation {
+h2, a:visited, a:hover, a:link {
   color:			#9ad;
 }
 
@@ -74,8 +78,13 @@ p.caption {
 /*
  	Basic image decoration
 */
+
+/* Text formatting is for img alt text */
 ._articleImage, ._thumbnail, ._thumbsmall {
   text-align: 		center;
+  white-space: 		nowrap;
+  overflow: 		hidden;
+  text-overflow: 	ellipsis;
   }
 
 ._thumbnail, ._thumbsmall {
