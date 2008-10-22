@@ -10,8 +10,8 @@ class Asset < ActiveRecord::Base
   
   STATUS                      = AssetStatus.status_array
   ALLOW_COMMENTS              = {"none" => 0, "open" => 1, "closed" => 2}
-  LAT                         = /\A([-+]?\d{1,2})[d°°] *(\d{1,2})[′\'] *(\d{1,2}\.?\d{0,4})[″\"] *(N|S)\Z/
-  LNG                         = /\A([-+]?\d{1,3})[d°°] *(\d{1,2})[′\'] *(\d{1,2}\.?\d{0,4})[″\"] *(E|W)\Z/
+  LAT                         = /\A([-+]?\d{1,2})[d°°] *(\d{1,2})[′\'] *(\d{1,2}\.?\d{0,4})[″\"] *(N|S)\Z/i
+  LNG                         = /\A([-+]?\d{1,3})[d°°] *(\d{1,2})[′\'] *(\d{1,2}\.?\d{0,4})[″\"] *(E|W)\Z/i
   DECIMAL                     = /\A[-+]?[0-9]*\.?[0-9]+\Z/
   GEO_GOOGLE                  = 1
   GEO_GPS                     = 2
@@ -91,7 +91,7 @@ class Asset < ActiveRecord::Base
   
   def latitude=(lat)
     if lat.is_a?(String) && lat_decimal = lat.match(LAT)
-      latitude_decimal = (lat_decimal[1].to_f + (lat_decimal[2].to_f / 60) + (lat_decimal[3].to_f / 3600)) * (lat_decimal[4] == "N" ? 1 : -1)
+      latitude_decimal = (lat_decimal[1].to_f + (lat_decimal[2].to_f / 60) + (lat_decimal[3].to_f / 3600)) * ((lat_decimal[4].downcase == "n") ? 1.0 : -1.0)
       super(latitude_decimal)
     else
       super(lat)
@@ -100,7 +100,7 @@ class Asset < ActiveRecord::Base
   
   def longitude=(lng)
     if lng.is_a?(String) && lng_decimal = lng.match(LNG)
-      longitude_decimal = (lng_decimal[1].to_f + (lng_decimal[2].to_f / 60) + (lng_decimal[3].to_f / 3600)) * (lng_decimal[4] == "E" ? 1 : -1)
+      longitude_decimal = (lng_decimal[1].to_f + (lng_decimal[2].to_f / 60) + (lng_decimal[3].to_f / 3600)) * ((lng_decimal[4].downcase == "e") ? 1.0 : -1.0)
       super(longitude_decimal)
     else
       super(lng)
