@@ -6,7 +6,7 @@ class Defensio
   class Error < RuntimeError; end
   class MandatoryParameterMissing < Error; end
   class InvalidAPIKey < Error; end
-  class NoAPIKey
+  class NoAPIKey < Error; end
   class NoSignatures < Error; end
   class InvalidRequest < Error; end
   class NoArticle < Error; end
@@ -69,20 +69,20 @@ class Defensio
     CONFIG[:server]      ||=  SERVER
     CONFIG[:debug]       ||=  true
     if RAILS_ENV == "production"
-      CONFIG[:api_key]     = Publication.current.defensio_api_key if Publication.current && Publication.current.defensio_api_key
+      CONFIG[:api_key]     = Publication.current.defensio_api_key if (Publication.current && Publication.current.defensio_api_key)
     end
     if !validate_key
       raise(InvalidAPIKey, "API Key '#{CONFIG[:api_key]}' is invalid") 
     end unless CONFIG[:no_validate_key]
     true
   end
-  
+
   def validate_key(options = {})
     merged_options = CONFIG.merge(options)
     @response = post(API[:validate_key], merged_options)
     success?(@response)
   end
-  
+
   def announce_article(article, options = {})
     raise NoArticle if article.nil?
     merged_options = CONFIG.merge(extract_options(article)).merge(options)
@@ -90,7 +90,7 @@ class Defensio
     @response = post(API[:announce_article], merged_options)
     success?(@response)  
   end
-  
+
   def audit_comment(article, comment, options = {})
     raise NoArticle if article.nil?
     raise NoComment if comment.nil?
@@ -102,14 +102,14 @@ class Defensio
     @response = post(API[:audit_comment], merged_options)
     success?(@response)    
   end
-  
+
   def report_false_negative(comment, options = {})
     raise NoComment if comment.nil?
     merged_options = CONFIG.merge(extract_options(comment)).merge(options)
     @response = post(API[:report_false_negative], merged_options)
     success?(@response)
   end
-  
+
   def report_false_positive(comment, options = {})
     raise NoComment if comment.nil?
     merged_options = CONFIG.merge(extract_options(comment)).merge(options)
@@ -117,14 +117,14 @@ class Defensio
     @response = post(API[:report_false_positive], merged_options)
     success?(@response)
   end
-  
+
   def get_stats(options = {})
     merged_options = CONFIG.merge(options)
     raise NoAPIKey if merged_option[:api_key].nil?    
     @response = post(API[:get_stats], merged_options)
     success?(@response)
   end
-    
+
 private    
   def extract_options(obj)
     options = {}
@@ -138,17 +138,17 @@ private
   def server_url(action, options)  
     "#{options[:server]}/#{options[:api_version]}/#{action}/#{options[:api_key]}.yaml"
   end
-  
+
   def convert_name(name)
     name.to_s.tr('_', '-')
   end
-  
+
   def post_encode(post_data)
     params = {}
     post_data.each {|k, v| params[convert_name(k)] = CGI.escape(v.to_s) }
     params
   end
-  
+
   def create_request(api, options)
     request = {}
     api.each do |k, v|
@@ -157,13 +157,13 @@ private
     end
     request
   end
-  
+
   def post(api, options)
     request = create_request(api, options)
     RAILS_DEFAULT_LOGGER.debug "Defensio request: #{server_url(api[:action], options)}"
     response = Net::HTTP.post_form(URI.parse(server_url(api[:action], options)), request)
     if response.class == Net::HTTPOK
-      result =  YAML::load(response.body)["defensio-result"]
+      result = YAML::load(response.body)["defensio-result"]
       RAILS_DEFAULT_LOGGER.debug "Defensio result: #{result.inspect}"
       return result
     elsif response.class == Net::HTTPNotFound
@@ -176,9 +176,9 @@ private
       raise InvalidRequest, response.inspect
     end
   end
-  
+
   def success?(response)
     response["status"] == "success"
   end
-  
+
 end
