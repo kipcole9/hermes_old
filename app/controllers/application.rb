@@ -26,14 +26,14 @@ class ApplicationController < ActionController::Base
   include SimpleSidebar
   helper SimpleSidebarHelper  
   
-  def rescue_action_in_public(exception)
-    status = response_code_for_rescue(exception)
-    log_exception(exception) if status != :not_found
-    case(status)
-    when :not_found
-      page_not_found
+  def rescue_action_locally(exception)
+    log_exception(exception) 
+    case(exception.class.name)
+    when 'ActionController::RoutingError', 'ActionController::UnknownAction', 'ActionView::MissingTemplate',
+         'ActiveRecord::RecordNotFound':
+      page_not_found         
     else
-      render_optional_error_file status
+      render_error_page
     end
   end
 
@@ -47,10 +47,15 @@ class ApplicationController < ActionController::Base
     @page_not_found = message
     respond_to do |format|
       format.html { render :template => "shared/page_not_found", :status => 404 }
-      format.xml  { head :status => 404 }
-      format.rss  { head :status => 404 }
-      format.atom { head :status => 404 }
-      format.kml  { head :status => 404 }
+      format.any  { head :status => 404 }
+    end
+  end
+
+  def render_error_page(message = "Sorry, something unexpected happened and your request could not be completed (we have been notified).")
+    @error_page = message
+    respond_to do |format|
+      format.html { render :template => "shared/error_page", :status => 500 }
+      format.any  { head :status => 500 }
     end
   end
   

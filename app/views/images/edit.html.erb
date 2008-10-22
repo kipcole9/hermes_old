@@ -1,0 +1,7 @@
+<div id="_form">
+<%= render :partial => "shared/form_heading", :locals => {:asset => @image} %>
+<% hermes_form_for :image, :url => get_url(@image), :html => {:method => get_method, :id => "_formEdit"} do |form| %>
+	<h3>Image Data</h3>
+	<%= render :partial => "shared/asset_summary", :locals => {:form => form} -%>
+<% end %>
+</div>

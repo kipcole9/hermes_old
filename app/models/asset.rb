@@ -10,8 +10,8 @@ class Asset < ActiveRecord::Base
   
   STATUS                      = AssetStatus.status_array
   ALLOW_COMMENTS              = {"none" => 0, "open" => 1, "closed" => 2}
-  LAT                         = /\A([-+]?\d{1,2})[d°] *(\d{1,2})\' *(\d{1,2}\.?\d{1,4})\" *(N|S)\Z/
-  LON                         = /\A([-+]?\d{1,3})[d°] *(\d{1,2})\' *(\d{1,2}\.?\d{1,4})\" *(E|W)\Z/
+  LAT                         = /\A([-+]?\d{1,2})[d°°] *(\d{1,2})[′\'] *(\d{1,2}\.?\d{0,4})[″\"] *(N|S)\Z/
+  LNG                         = /\A([-+]?\d{1,3})[d°°] *(\d{1,2})[′\'] *(\d{1,2}\.?\d{0,4})[″\"] *(E|W)\Z/
   DECIMAL                     = /\A[-+]?[0-9]*\.?[0-9]+\Z/
   GEO_GOOGLE                  = 1
   GEO_GPS                     = 2
@@ -89,6 +89,24 @@ class Asset < ActiveRecord::Base
         "AND (assets.status = #{Asset::STATUS[:published]})"
   end
   
+  def latitude=(lat)
+    if lat.is_a?(String) && lat_decimal = lat.match(LAT)
+      latitude_decimal = (lat_decimal[1].to_f + (lat_decimal[2].to_f / 60) + (lat_decimal[3].to_f / 3600)) * (lat_decimal[4] == "N" ? 1 : -1)
+      super(latitude_decimal)
+    else
+      super(lat)
+    end
+  end
+  
+  def longitude=(lng)
+    if lng.is_a?(String) && lng_decimal = lng.match(LNG)
+      longitude_decimal = (lng_decimal[1].to_f + (lng_decimal[2].to_f / 60) + (lng_decimal[3].to_f / 3600)) * (lng_decimal[4] == "E" ? 1 : -1)
+      super(longitude_decimal)
+    else
+      super(lng)
+    end
+  end
+
   # Comments flags
   def moderate_comments?
     Publication.current.moderate_comments || attributes['moderate_comments']
@@ -215,7 +233,7 @@ class Asset < ActiveRecord::Base
     #  8	 Address level accuracy. (Since 2.59
     
     host ||= User.environment["HOST"] rescue "localhost"
-    if self.country && (self.latitude.blank? || self.longitude.blank? || self.geocode_method == GEO_GOOGLE)
+    if self.country && !self.mappable?
       geocode_keys = []
       geocode_keys << self.location if self.location
       geocode_keys << self.city if self.city
