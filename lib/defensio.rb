@@ -86,7 +86,7 @@ class Defensio
   def announce_article(article, options = {})
     raise NoArticle if article.nil?
     merged_options = CONFIG.merge(extract_options(article)).merge(options)
-    raise NoAPIKey if merged_option[:api_key].nil?
+    raise NoAPIKey if merged_options[:api_key].nil?
     @response = post(API[:announce_article], merged_options)
     success?(@response)  
   end
@@ -98,7 +98,7 @@ class Defensio
     options[:user_logged_in] ||= User.logged_in? ? "true" : "false" if defined?(User) && User.respond_to?("logged_in?")
     options[:trusted_user] ||= User.current_user.is_admin? ? "true" : "false" if defined?(User)
     merged_options = CONFIG.merge(extract_options(article)).merge(extract_options(comment)).merge(options)
-    raise NoAPIKey if merged_option[:api_key].nil?
+    raise NoAPIKey if merged_options[:api_key].nil?
     @response = post(API[:audit_comment], merged_options)
     success?(@response)    
   end
@@ -106,6 +106,7 @@ class Defensio
   def report_false_negative(comment, options = {})
     raise NoComment if comment.nil?
     merged_options = CONFIG.merge(extract_options(comment)).merge(options)
+    raise NoAPIKey if merged_options[:api_key].nil? 
     @response = post(API[:report_false_negative], merged_options)
     success?(@response)
   end
@@ -113,14 +114,14 @@ class Defensio
   def report_false_positive(comment, options = {})
     raise NoComment if comment.nil?
     merged_options = CONFIG.merge(extract_options(comment)).merge(options)
-    raise NoAPIKey if merged_option[:api_key].nil?    
+    raise NoAPIKey if merged_options[:api_key].nil?    
     @response = post(API[:report_false_positive], merged_options)
     success?(@response)
   end
 
   def get_stats(options = {})
     merged_options = CONFIG.merge(options)
-    raise NoAPIKey if merged_option[:api_key].nil?    
+    raise NoAPIKey if merged_options[:api_key].nil?    
     @response = post(API[:get_stats], merged_options)
     success?(@response)
   end
