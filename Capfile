@@ -1,7 +1,9 @@
 load 'deploy' if respond_to?(:namespace) # cap2 differentiator
 Dir['vendor/plugins/*/recipes/*.rb'].each { |plugin| load(plugin) }
 load 'config/deploy'
-set :sitemap_path, "#{shared_path}/config/sitemap.xml"
+set :sitemap_dir, "#{shared_path}/config"
+set :sitemap_path, "#{sitemap_dir}/sitemap.xml"
+set :geo_sitemap_path, "#{sitemap_dir}/geo_sitemap.xml"
 
 namespace(:deploy) do
   desc "Symlink the database and other configs to the current release directory." 
@@ -14,6 +16,7 @@ namespace(:deploy) do
   desc "Symlink the sitemap to the current release directory." 
   task :symlink_sitemap_xml do 
     run "ln -nsf #{sitemap_path} #{release_path}/public/sitemap.xml" 
+    run "ln -nsf #{sitemap_path} #{release_path}/public/geo_sitemap.xml"
   end
   
   desc "Symlink the nginx_streaming plugin into the plugins directory - used only for ngix deployment." 
@@ -38,7 +41,7 @@ namespace(:deploy) do
   desc "Create sitemap" 
   task :create_sitemap, :roles => [:web] do
     run <<-EOF
-      cd #{shared_path} && cd ../current && rake RAILS_ENV=production hermes:create_sitemap dir=#{sitemap_path}
+      cd #{shared_path} && cd ../current && rake RAILS_ENV=production hermes:create_sitemap dir=#{sitemap_dir}
     EOF
   end
   

@@ -4,15 +4,16 @@ module HermesSitemap
   require           'rest_client'
   HTML_SITEMAP      = "/sitemap.xml"
   GEO_SITEMAP       = "/geo_sitemap.xml"
+  SITEMAP_DIR       = "#{RAILS_ROOT}/public"
   INCLUDE_ASSETS    = ["Article", "Image", "Gallery"]
   PRIORITY          = {"Article" => "0.8", "Image" => "0.5", "Gallery" => "0.6"}
   ENGINES =  {:google => "http://www.google.com/webmasters/tools/ping?sitemap=",
               :yahoo =>"http://search.yahooapis.com/SiteExplorerService/V1/updateNotification?appid=YJSNbUrV34ED_e4h67aKpPCduy5mZfijO1zjIG1IAn2BNt0mDMiLOsv_3laYS6_kEw--&url=",
               :msn => "http://webmaster.live.com/ping.aspx?siteMap="}  
   
-  def create_sitemap(sitemap_path = SITEMAP, publication = nil)
-    create_html_sitemap(sitemap_path = "#{RAILS_ROOT}/public/#{HTML_SITEMAP}", publication = nil)
-    create_geo_sitemap(sitemap_path = "#{RAILS_ROOT}/public/#{GEO_SITEMAP}", publication = nil)
+  def create_sitemap(sitemap_dir = SITEMAP_DIR, publication = nil)
+    create_html_sitemap(sitemap_dir.without_slash + HTML_SITEMAP, publication)
+    create_geo_sitemap(sitemap_dir.without_slash + GEO_SITEMAP, publication)
     ping_search_engines([HTML_SITEMAP, GEO_SITEMAP])
   end
   
@@ -20,7 +21,7 @@ module HermesSitemap
     ping_search_engines([HTML_SITEMAP, GEO_SITEMAP])
   end  
   
-  def create_html_sitemap(sitemap_path = SITEMAP, publication = nil)
+  def create_html_sitemap(sitemap_path, publication = nil)
     Publication.current = publication || Publication.default
     puts "Storing html sitemap in #{sitemap_path}"
     f = File.new(sitemap_path, File::CREAT|File::TRUNC|File::RDWR, 0644)
