@@ -107,7 +107,7 @@ module HermesSitemap
         url = provider_url + CGI.escape(root_url + sitemap)
         begin
           #puts "Pinging #{url}"
-          #result = RestClient.get(url)
+          result = RestClient.get(url)
           puts "Pinged #{provider.to_s.capitalize} for sitemap '#{sitemap}'."
         rescue RestClient::RequestFailed => e
           puts "Error pinging #{provider.to_s.capitalize} for sitemap '#{sitemap}'. Code #{e.http_code}"

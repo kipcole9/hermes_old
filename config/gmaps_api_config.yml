@@ -1,9 +1,9 @@
 development:
-    api_version: 2.132d
+    api_version: 2
 
 test:
     api_version: 2.132d
 
 production:
-    api_version: 2.132d
+    api_version: 2
 
