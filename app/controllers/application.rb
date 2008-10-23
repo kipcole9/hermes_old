@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   include SimpleSidebar
   helper SimpleSidebarHelper  
   
-  def rescue_action_locally(exception)
+  def rescue_action_in_public(exception)
     log_exception(exception) 
     case(exception.class.name)
     when 'ActionController::RoutingError', 'ActionController::UnknownAction', 'ActionView::MissingTemplate',
