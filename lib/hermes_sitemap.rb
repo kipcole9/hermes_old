@@ -2,8 +2,8 @@ module HermesSitemap
   include           ActionController::UrlWriter
   require           'cgi'
   require           'rest_client'
-  HTML_SITEMAP      = "#{RAILS_ROOT}/public/sitemap.xml"
-  GEO_SITEMAP       = "#{RAILS_ROOT}/public/geo_sitemap.xml"
+  HTML_SITEMAP      = "/sitemap.xml"
+  GEO_SITEMAP       = "/geo_sitemap.xml"
   INCLUDE_ASSETS    = ["Article", "Image", "Gallery"]
   PRIORITY          = {"Article" => "0.8", "Image" => "0.5", "Gallery" => "0.6"}
   ENGINES =  {:google => "http://www.google.com/webmasters/tools/ping?sitemap=",
@@ -11,8 +11,8 @@ module HermesSitemap
               :msn => "http://webmaster.live.com/ping.aspx?siteMap="}  
   
   def create_sitemap(sitemap_path = SITEMAP, publication = nil)
-    create_html_sitemap(sitemap_path = HTML_SITEMAP, publication = nil)
-    create_geo_sitemap(sitemap_path = GEO_SITEMAP, publication = nil)
+    create_html_sitemap(sitemap_path = "#{RAILS_ROOT}/public/#{HTML_SITEMAP}", publication = nil)
+    create_geo_sitemap(sitemap_path = "#{RAILS_ROOT}/public/#{GEO_SITEMAP}", publication = nil)
     ping_search_engines([HTML_SITEMAP, GEO_SITEMAP])
   end
   
@@ -103,9 +103,10 @@ module HermesSitemap
   def ping_search_engines(sitemaps)
     sitemaps.each do |sitemap|
       ENGINES.each do |provider, provider_url|
-        url = provider_url + CGI.escape(sitemap)
+        url = provider_url + CGI.escape(root_url + sitemap)
         begin
-          result = RestClient.get(url)
+          #puts "Pinging #{url}"
+          #result = RestClient.get(url)
           puts "Pinged #{provider.to_s.capitalize} for sitemap '#{sitemap}'."
         rescue RestClient::RequestFailed => e
           puts "Error pinging #{provider.to_s.capitalize} for sitemap '#{sitemap}'. Code #{e.http_code}"
