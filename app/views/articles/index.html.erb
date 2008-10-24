@@ -23,6 +23,8 @@
   <%= render :partial => "articles" %>
 </div>
 <p id="loading" style="display:none;">Loading more articles now...</p>
-<noscript>
-<%= render :partial => "shared/page_numbers", :locals => {:collection => @articles} %>
-</noscript>
+<% content_for :footnote do %>
+  <noscript>
+    <%= render :partial => "shared/page_numbers", :locals => {:collection => @articles} %>
+  </noscript>
+<% end %>  

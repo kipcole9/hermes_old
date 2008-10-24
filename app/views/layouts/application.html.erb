@@ -60,15 +60,19 @@
 	  </div>
   <% end %>
 
+  <div id="_footnote">
+    <%= yield :footnote %>
+  </div>
+    
   <div id="_footer">
-	<p>
-		<%= Publication.current.copyright_notice rescue "" %> <br />
-		<a href="http://technorati.com/faves?sub=addfavbtn&amp;add=<%= root_url %>">			
-			<%= image_tag("/images/social/Technorati_32x32.png") %> Add to Technorati Favorites
-		</a> |
-		<a href="<%= privacy_publication_path(Publication.current) -%>">Privacy Policy</a> |
-		<a href="<%= terms_publication_path(Publication.current) -%>">Terms of Service</a>
-	</p>
+  	<p>
+  		<%= Publication.current.copyright_notice rescue "" %> <br />
+  		<a href="http://technorati.com/faves?sub=addfavbtn&amp;add=<%= root_url %>">			
+  			<%= image_tag("/images/social/Technorati_32x32.png") %> Add to Technorati Favorites
+  		</a> |
+  		<a href="<%= privacy_publication_path(Publication.current) -%>">Privacy Policy</a> |
+  		<a href="<%= terms_publication_path(Publication.current) -%>">Terms of Service</a>
+  	</p>
   </div>
 </div>
 <%= javascript_include_merged :base %>	
