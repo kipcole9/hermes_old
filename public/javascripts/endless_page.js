@@ -4,6 +4,7 @@ var currentPage = 1;
 function checkScroll() {
   if (nearBottomOfPage()) {
     currentPage++;
+	$('loading').show();
     new Ajax.Request("/articles.js?page=" + currentPage, {asynchronous:true, evalScripts:true, method:'get'});
   } else {
     setTimeout("checkScroll()", 250);

@@ -1,5 +1,6 @@
 page.insert_html :bottom, :articles, :partial => "articles"
 if @articles.page_count > @articles.page
+  page[:loading].hide
   page.call 'checkScroll'
 else
   page[:loading].hide

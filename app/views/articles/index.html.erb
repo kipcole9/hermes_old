@@ -22,4 +22,7 @@
 <div id="articles">
   <%= render :partial => "articles" %>
 </div>
-<p id="loading">Loading more articles now...</p>
+<p id="loading" style="display:none;">Loading more articles now...</p>
+<noscript>
+<%= render :partial => "shared/page_numbers", :locals => {:collection => @articles} %>
+</noscript>
