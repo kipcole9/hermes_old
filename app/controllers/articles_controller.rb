@@ -2,7 +2,7 @@ class ArticlesController < AssetsController
 
 protected
   def page_size
-    3
+    10
   end
   
   def index_js
