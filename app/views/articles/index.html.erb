@@ -15,13 +15,11 @@
 	<%= auto_discovery_link_tag(:atom, formatted_articles_url(params.remove("page").merge(:format => "atom"))) %>
 <% end %>
 
-<% if @articles %>
-	<% for article in @articles -%>
-	    <div id="<%= 'article_' + article.id.to_s -%>" class="_article" >
-  		  <h2><%= link_to h(article.title), article %></h2>
-  		  <%= render :partial => "article_byline", :locals => {:article => article} -%>
-  		  <%= render_excerpt(article) %>
-  		  <%= render(:partial => "article_footer", :locals => {:article => article}) -%>
-	    </div>	
-	<% end %>
-<% end %>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'endless_page' %>
+<% end %>  
+
+<div id="articles">
+  <%= render :partial => "articles" %>
+</div>
+<p id="loading">Loading more page results...</p>

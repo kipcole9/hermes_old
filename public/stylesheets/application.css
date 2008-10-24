@@ -53,15 +53,23 @@
 /*--------------------------------------- 
 	Top of page menu bar 
 ---------------------------------------*/
-div#_navigation {
+#_navigation {
   margin:			0 5px 5px;
   padding:			0 20px 20px;
   border-width:		0 1px 1px;
+  text-align:		center;
+}
+
+#_navigation li {
+  display:			inline;
   font-size:		74%;
   text-transform:	uppercase;
   letter-spacing:	.2em;
-  text-align: 		center;
   }
+
+#_navigation li.with_separator:after {
+	content:		" | ";
+}
 
 /*---------------------------------------
 	Element spacing. In general, define
@@ -380,7 +388,6 @@ h2 + ._thumbsmallList {
 	that thumbnails are generated at 
 	160px dimensions
 ---------------------------------------*/
-
 ._thumbnail {
   margin-right: 	3px;			/* spacing between thumbnails	*/
   margin-bottom: 	3px;
@@ -413,7 +420,7 @@ h2 + ._thumbsmallList {
 
 /*---------------------------------------
 	Image search results
----------------------------------------*/	
+---------------------------------------*/
 ._thumbsmall {
   width: 			86px;
   height: 			86px;

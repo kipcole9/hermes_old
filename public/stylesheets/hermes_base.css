@@ -48,7 +48,7 @@ h3, h4, label, p.caption,
   color: 			#999;
 }
 
-form h3, ._article h5, ._comment_author {
+form h3, ._article h5, ._comment_author, #loading {
   color:			#ad9;
 }
 
@@ -73,6 +73,11 @@ p.caption {
   text-overflow: 	ellipsis;
   margin:			3px;
   font-size: 		78%;
+}
+
+/* Displayed when loading new pages in articles index via ajax */
+#loading {
+  font-style:		italic; 
 }
 
 /*

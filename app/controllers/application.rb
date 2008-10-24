@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   before_filter :set_publication
   before_filter :set_theme
   before_filter :save_environment
-  #before_filter :adjust_format_for_iphone 
   before_filter :set_timezone
   
   helper_method :iphone_user_agent?
@@ -80,11 +79,6 @@ protected
     RAILS_ENV == "production" ? super : false
   end
 
-  def adjust_format_for_iphone 
-    # Detect from iPhone user-agent 
-    request.format = :iphone if iphone_user_agent?
-  end 
-  
   # Request from an iPhone or iPod touch? 
   # (Mobile Safari user agent) 
   def iphone_user_agent? 

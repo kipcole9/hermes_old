@@ -8,6 +8,18 @@
 		<%= link_to "#{image_tag("/images/icons/photo.png")} Download kml file for this image", 
 					h(formatted_image_url(@image, :kml)) %>
 	</li>
+	<% if @image.can_update?(current_user) %>
+	  <li>
+  		<%= link_to "#{image_tag("/images/icons/photo.png")} Edit this image's metadata", 
+  					h(edit_image_url(@image)) %>
+  	</li>
+	<% end %> 
+	<% if @image.can_delete?(current_user) %>
+	  <li>
+  		<%= link_to "#{image_tag("/images/icons/photo.png")} Delete this image", 
+  					h(image_url(@image)), :confirm => "Are you sure?", :method => :delete %>
+  	</li>
+	<% end %>	
 </ul>	
 
 	

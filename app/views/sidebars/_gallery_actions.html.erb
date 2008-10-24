@@ -35,7 +35,19 @@
 	<li>
 		<%= link_to "#{image_tag("/images/icons/photo.png")} Subscribe to this gallery (media rss)", 
 					h(formatted_gallery_url(@gallery, :rss)) %>
-	</li>	
+	</li>
+	<% if @gallery.can_update?(current_user) %>
+	  <li>
+  		<%= link_to "#{image_tag("/images/icons/photo.png")} Edit this gallery", 
+  					h(edit_gallery_url(@gallery)) %>
+  	</li>
+	<% end %> 
+	<% if @gallery.can_delete?(current_user) %>
+	  <li>
+  		<%= link_to "#{image_tag("/images/icons/photo.png")} Delete this gallery", 
+  					h(gallery_url(@gallery)), :confirm => "Are you sure?", :method => :delete %>
+  	</li>
+	<% end %>		
 </ul>	
 
 	

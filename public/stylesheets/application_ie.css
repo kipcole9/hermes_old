@@ -1,0 +1,14 @@
+/* Fix for margin spacing at the bottom of the list */
+._thumbsmallList {
+  min-width:		0;
+  padding-bottom:	5px;
+}
+
+/* Fix caption placement */
+._articleImage p.caption {
+	position:		relative;
+	top:			-2px;
+	margin:			0;
+	padding:		0;
+
+}
