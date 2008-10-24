@@ -1,16 +1,16 @@
 <% if collection.page_count > 1 %>
-  	<h4>Page:
-	<%= collection.previous_page? ? link_to("previous", params.merge(:page => collection.previous_page)) : "" %>
-	<%= collection.next_page? ? link_to("next", params.merge(:page => collection.next_page)) : "" %>
-	<% prev_page = 0 %>
-	<% format_pagination_links(collection, :window_size => 9, :always_show_anchors => true, :link_to_current_page => true) do |n| %>
-		<%= "..." if n != prev_page + 1%>
-		<% if collection.page == n %>
-			<%= n %>
-		<% else %>
-			<%= link_to n.to_s, params.merge(:page => n) -%>
-		<% end %>
-		<% prev_page = n%>
-	<% end %>
+  	<h4 id="pageNumbers">Page:
+    	<%= collection.previous_page? ? link_to("previous", params.merge(:page => collection.previous_page)) : "" %>
+    	<%= collection.next_page? ? link_to("next", params.merge(:page => collection.next_page)) : "" %>
+    	<% prev_page = 0 %>
+    	<% format_pagination_links(collection, :window_size => 9, :always_show_anchors => true, :link_to_current_page => true) do |n| %>
+    		<%= "..." if n != prev_page + 1%>
+    		<% if collection.page == n %>
+    			<%= n %>
+    		<% else %>
+    			<%= link_to n.to_s, params.merge(:page => n) -%>
+    		<% end %>
+    		<% prev_page = n%>
+    	<% end %>
 	</h4>
 <% end %>

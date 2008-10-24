@@ -30,9 +30,5 @@ stylesheets:
   - hermes_base
   - hermes
   - hermes_ie
-- hermes_iphone:
-  - reset
-  - hermes_iphone_base
-  - hermes_iphone  
 - lightview:  
   - lightview
