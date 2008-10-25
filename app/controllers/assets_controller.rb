@@ -6,17 +6,17 @@ class AssetsController < ApplicationController
   before_filter :before_retrieve_object
   before_filter :retrieve_parent_assets
   before_filter :retrieve_this_asset, :only => [:edit, :update, :show, :destroy, :comments]
-  before_filter :retrieve_comments, :only => [:comments]
-  before_filter :login_required, :only => [:new, :create, :edit, :show, :update, :destroy, :index, :comments]
-  before_filter :retrieve_assets, :only => [:index]
+  before_filter :retrieve_comments,   :only => [:comments]
+  before_filter :login_required,      :only => [:new, :create, :edit, :show, :update, :destroy, :index, :comments]
+  before_filter :retrieve_assets,     :only => [:index]
   before_filter :after_retrieve_object
-  before_filter :create_asset, :only => [:new]
-  before_filter :set_sidebars, :only => [:edit, :update, :show, :index]
-  before_filter :remember_location, :only => [:show, :index]
+  before_filter :create_asset,        :only => [:new]
+  before_filter :remember_location,   :only => [:show, :index]
   
-  after_filter  :log_show, :only => [:show]
+  after_filter  :log_show,            :only => [:show]
+  
   ASSET_ACTIONS = ["live_search", "apis"]
-  BOTS          = /(Googlebot|yahoo! slurp|msnbot|Twiceler)/i
+  BOTS          = /(Googlebot|yahoo! slurp|msnbot|Twiceler|DotBot)/i
   GIS_BROWSERS  = /GoogleEarth/i
   
   # Proxies: implement in concrete Asset sub-class as required
@@ -35,10 +35,12 @@ class AssetsController < ApplicationController
   end
 
   def show
-    respond_to do |format|
-      format.html { render :action => :edit unless File.exist?(view_path) }
-      format.xml  { render :xml => @object.to_xml }
-      format.any  { send("show_#{params[:format]}") } if respond_to?("show_#{params[:format]}")      
+    if @object && stale?(:last_modified => @object.updated_at.utc, :etag => @object)
+      respond_to do |format|
+        format.html { render :action => :edit unless File.exist?(view_path) }
+        format.xml  { render :xml => @object.to_xml }
+        format.any  { send("show_#{params[:format]}") } if respond_to?("show_#{params[:format]}")      
+      end
     end
   end
   
@@ -112,9 +114,6 @@ class AssetsController < ApplicationController
       format.xml
     end
   end
-  
-  # Generally implemented in a subclass
-  def set_sidebars; end
   
   # Default page size.  Override in subclass as required.
   def page_size
@@ -269,134 +268,131 @@ protected
   
 private
 
-    def send_ajax_update_response(status_ok)
-      if status_ok
-        render :text => "Update successful.", :status => 200
-      else
-        render :text => "Update failed.", :status => 422
-      end
+  def send_ajax_update_response(status_ok)
+    if status_ok
+      render :text => "Update successful.", :status => 200
+    else
+      render :text => "Update failed.", :status => 422
     end
-    
-    def create_asset
-      @object = asset_obj.new
-      instance_variable_set(instance_variable_singular, @object)
-    end
+  end
+  
+  def create_asset
+    @object = asset_obj.new
+    instance_variable_set(instance_variable_singular, @object)
+  end
 
-    # Retrieve the asset relating to this request
-    def retrieve_this_asset
-      retrieve_asset(asset_obj, @object, params[:id])
+  # Retrieve the asset relating to this request
+  def retrieve_this_asset
+    retrieve_asset(asset_obj, @object, params[:id])
+  end
+  
+  # Make sure foreign keys are in place at create time
+  def update_parent_attributes
+    @object.asset.created_by = current_user if asset_obj.respond_to?("polymorph_class")
+    @parent_attributes.each do |k, v|
+      @object.send("#{k}=", v)
     end
+  end
     
-    # Make sure foreign keys are in place at create time
-    def update_parent_attributes
-      @object.asset.created_by = current_user if asset_obj.respond_to?("polymorph_class")
-      @parent_attributes.each do |k, v|
-        @object.send("#{k}=", v)
+  # Check for params that end in "_id"
+  def retrieve_parent_assets
+    @parent_attributes = {}
+    params.each do |k, v|
+      if k.to_s =~ /(.*)_id$/
+        parent_obj_name = "#{$1}".capitalize
+        parent_obj = Object.const_get(parent_obj_name)
+        parent_obj_attribute = parent_obj_name.downcase
+        parent_obj_instance_variable = "@#{parent_obj_attribute}"
+        retrieve_asset(parent_obj, parent_obj_instance_variable, v)
+        @parent_attributes[parent_obj_attribute] = instance_variable_get(parent_obj_instance_variable)
       end
     end
-      
-    # Check for params that end in "_id"
-    def retrieve_parent_assets
-      @parent_attributes = {}
-      params.each do |k, v|
-        if k.to_s =~ /(.*)_id$/
-          parent_obj_name = "#{$1}".capitalize
-          parent_obj = Object.const_get(parent_obj_name)
-          parent_obj_attribute = parent_obj_name.downcase
-          parent_obj_instance_variable = "@#{parent_obj_attribute}"
-          retrieve_asset(parent_obj, parent_obj_instance_variable, v)
-          @parent_attributes[parent_obj_attribute] = instance_variable_get(parent_obj_instance_variable)
-        end
-      end
-    end
-    
-    # Retrieve a row from 'target_obj' that has id 'target_id' and store it in instance variable
-    # 'instance_variable_singular'
-    def retrieve_asset(target_obj, instance_variable, target_id)
-      user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
-      if !(@object = target_obj.viewable_by(user).published.published_in(publication).find_by_name_or_id(target_id) rescue nil)
-        respond_to do |format|
-          format.html do
-            page_not_found("#{target_obj.name} '#{target_id}' not found!")
-          end
-          format.xml do
-            head :status => 404
-          end
-          format.any do
-            send("retrieve_this_#{params[:format]}")
-          end if respond_to?("retrieve_this_#{params[:format]}")
-        end unless ignore_not_found?(target_id, params[:format])
-      else
-        @asset = @object.asset if target_obj.respond_to?("polymorph_class")        
-      end
-      instance_variable_set(instance_variable_singular, @object)
-    end  
-
-    # Called from index action, invoke query parameters if any
-    def retrieve_assets
-      user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
-      @objects = asset_obj.viewable_by(user) \
-                    .published \
-                    .published_in(publication) \
-                    .conditions(marshall_params) \
-                    .included_in_index(user) \
-                    .tagged_with(unescape(params[:tags])) \
-                    .category_of(unescape(params[:category])) \
-                    .order('assets.created_at DESC') \
-                    .page(params[:page], page_size)  
-      if @objects.blank?
-        respond_to do |format|
-          format.html { flash[:notice] = "#{class_name}: found no items!" }
-          format.xml  { head :status => 404 }
-        end
-      end
-      instance_variable_set(instance_variable_plural, @objects)
-      true
-    end
-    
-    def retrieve_comments
-      @comments = @object.comments.published
-    end
-    
-    # Log the view. Also increment view_count.  We do it this way to avoid changing the
-    # updated_at column (which we use to mean update to metadata)
-    def log_show
-      if @asset and !is_search_bot?(request.env["HTTP_USER_AGENT"])
-        respond_to do |format|
-          format.html { log_asset_show("html") }
-          format.xml  { log_asset_show("xml")  }
-          format.kml  { log_asset_show("kml")  }
-          
-          # Note that GoogleEarth declares a user-agent when getting kml, but not getting jpg
-          # So basically this won't work until that is fixed
-          format.jpg  { log_asset_show("jpg") if is_gis_browser?(request.env["HTTP_USER_AGENT"])  }
-          format.any  {                        }
-        end
-      end
-    end
-    
-    def log_asset_show(format)
-      AssetView.log(publication.id, @asset, current_user, request.env["HTTP_USER_AGENT"], User.environment["IP"], request.env["HTTP_REFERER"], format)
-      Asset.increment_view_count(@asset.attributes["id"]) 
-    end
-    
-    def is_search_bot?(agent)
-      agent && agent.match(BOTS)
-    end
-    
-    def is_gis_browser?(agent)
-      agent && agent.match(GIS_BROWSERS)
-    end
-      
-    def remember_location
+  end
+  
+  # Retrieve a row from 'target_obj' that has id 'target_id' and store it in instance variable
+  # 'instance_variable_singular'
+  def retrieve_asset(target_obj, instance_variable, target_id)
+    user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
+    if !(@object = target_obj.viewable(user, publication).find_by_name_or_id(target_id) rescue nil)
       respond_to do |format|
-        format.html { store_location }
-        format.any  {                }
+        format.html do
+          page_not_found("#{target_obj.name} '#{target_id}' not found!")
+        end
+        format.xml do
+          head :status => 404
+        end
+        format.any do
+          send("retrieve_this_#{params[:format]}")
+        end if respond_to?("retrieve_this_#{params[:format]}")
+      end unless ignore_not_found?(target_id, params[:format])
+    else
+      @asset = @object.asset if target_obj.respond_to?("polymorph_class")        
+    end
+    instance_variable_set(instance_variable_singular, @object)
+  end  
+
+  # Called from index action, invoke query parameters if any
+  def retrieve_assets
+    user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
+    @objects = asset_obj.viewable(user, publication) \
+                  .conditions(marshall_params) \
+                  .tagged_with(unescape(params[:tags])) \
+                  .category_of(unescape(params[:category])) \
+                  .order('assets.created_at DESC') \
+                  .page(params[:page], page_size)  
+    if @objects.blank?
+      respond_to do |format|
+        format.html { flash[:notice] = "#{class_name}: found no items!" }
+        format.xml  { head :status => 404 }
       end
     end
-    
-    def set_time_zone
-      Time.zone = current_user.time_zone
+    instance_variable_set(instance_variable_plural, @objects)
+    true
+  end
+  
+  def retrieve_comments
+    @comments = @object.comments.published
+  end
+  
+  # Log the view. Also increment view_count.  We do it this way to avoid changing the
+  # updated_at column (which we use to mean update to metadata)
+  def log_show
+    if @asset and !is_search_bot?(request.env["HTTP_USER_AGENT"])
+      respond_to do |format|
+        format.html { log_asset_show("html") }
+        format.xml  { log_asset_show("xml")  }
+        format.kml  { log_asset_show("kml")  }
+        
+        # Note that GoogleEarth declares a user-agent when getting kml, but not getting jpg
+        # So basically this won't work until that is fixed
+        format.jpg  { log_asset_show("jpg") if is_gis_browser?(request.env["HTTP_USER_AGENT"])  }
+        format.any  {                        }
+      end
     end
+  end
+  
+  def log_asset_show(format)
+    AssetView.log(publication.id, @asset, current_user, request.env["HTTP_USER_AGENT"], User.environment["IP"], request.env["HTTP_REFERER"], format)
+    Asset.increment_view_count(@asset.attributes["id"]) 
+  end
+  
+  def is_search_bot?(agent)
+    agent && agent.match(BOTS)
+  end
+  
+  def is_gis_browser?(agent)
+    agent && agent.match(GIS_BROWSERS)
+  end
     
+  def remember_location
+    respond_to do |format|
+      format.html { store_location }
+      format.any  {                }
+    end
+  end
+  
+  def set_time_zone
+    Time.zone = current_user.time_zone
+  end
+  
 end

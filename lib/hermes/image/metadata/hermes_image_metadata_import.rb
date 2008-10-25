@@ -73,6 +73,7 @@ module Hermes
         THUMBNAIL_SUFFIX      = "-thumb"
         DISPLAY_SUFFIX        = "-display"
         SLIDE_SUFFIX          = "-slide"
+        Location_pattern      = /(\d{1,3}) deg (\d{1,2})\' (\d{1,2}\.\d{1,2})\"/
         
         # Instance methods
         def caption
@@ -182,10 +183,8 @@ module Hermes
 
         def set_latitude(image_exif)
           if image_exif["GPSLatitude"] && (lat = image_exif["GPSLatitude"].match(Location_pattern))
-            #puts "Degrees: '#{$1}', Minutes: '#{$2}', Seconds: '#{$3}'"
             lat_decimal = $1.to_f + ($2.to_f / 60.0) + ($3.to_f / 3600.0)
             lat_decimal = lat_decimal * -1 if image_exif["GPSLatitudeRef"] == "South"
-            #puts "Latitude decimal: '#{lat_decimal}'"
             send("latitude=", lat_decimal)
             @geo_set_counter += 1
           end
@@ -193,10 +192,8 @@ module Hermes
 
         def set_longitude(image_exif)
           if image_exif["GPSLongitude"] && (lon = image_exif["GPSLongitude"].match(Location_pattern))
-            #puts "Degrees: '#{$1}', Minutes: '#{$2}', Seconds: '#{$3}'"
-            lon_decimal = $1.to_f + ($2.to_f/60) + ($3.to_f/3600)
+            lon_decimal = $1.to_f + ($2.to_f / 60.0) + ($3.to_f / 3600.0)
             lon_decimal = lon_decimal * -1 if image_exif["GPSLongitudeRef"] == "West"
-            #puts "Longitude decimal: '#{lon_decimal}'"
             send("longitude=", lon_decimal)
             @geo_set_counter += 1
           end

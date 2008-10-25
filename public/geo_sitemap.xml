@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:geo="http://www.google.com/geo/schemas/sitemap/1.0" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<urlset xmlns:geo="http://www.google.com/geo/schemas/sitemap/1.0" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <url>
-    <loc>http://localhost/galleries/Kimberley-0707.kml</loc>
+    <loc>http://localhost/galleries/2.kml</loc>
     <lastmod>2008-07-24T18:00:17+10:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -10,7 +10,7 @@
     </geo:geo>
   </url>
   <url>
-    <loc>http://localhost/galleries/Ballooning-0508.kml</loc>
+    <loc>http://localhost/galleries/3.kml</loc>
     <lastmod>2008-07-24T18:00:19+10:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -19,7 +19,7 @@
     </geo:geo>
   </url>
   <url>
-    <loc>http://localhost/galleries/HunterValley-0408.kml</loc>
+    <loc>http://localhost/galleries/4.kml</loc>
     <lastmod>2008-07-24T18:00:19+10:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -28,7 +28,7 @@
     </geo:geo>
   </url>
   <url>
-    <loc>http://localhost/galleries/Bridge-to-Bridge-0508.kml</loc>
+    <loc>http://localhost/galleries/5.kml</loc>
     <lastmod>2008-10-13T15:48:31+11:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -37,7 +37,7 @@
     </geo:geo>
   </url>
   <url>
-    <loc>http://localhost/galleries/pushkar-fair.kml</loc>
+    <loc>http://localhost/galleries/7.kml</loc>
     <lastmod>2008-07-24T18:00:21+10:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -46,7 +46,7 @@
     </geo:geo>
   </url>
   <url>
-    <loc>http://localhost/galleries/Varanasi-1005.kml</loc>
+    <loc>http://localhost/galleries/8.kml</loc>
     <lastmod>2008-07-24T18:00:22+10:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -55,7 +55,7 @@
     </geo:geo>
   </url>
   <url>
-    <loc>http://localhost/galleries/Sarnath-1005.kml</loc>
+    <loc>http://localhost/galleries/9.kml</loc>
     <lastmod>2008-07-24T18:00:22+10:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -64,7 +64,7 @@
     </geo:geo>
   </url>
   <url>
-    <loc>http://localhost/galleries/fukuoka-march-2008.kml</loc>
+    <loc>http://localhost/galleries/10.kml</loc>
     <lastmod>2008-07-24T18:00:23+10:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -73,7 +73,7 @@
     </geo:geo>
   </url>
   <url>
-    <loc>http://localhost/galleries/HawksBaseball-0408.kml</loc>
+    <loc>http://localhost/galleries/11.kml</loc>
     <lastmod>2008-10-13T20:01:11+11:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -82,7 +82,7 @@
     </geo:geo>
   </url>
   <url>
-    <loc>http://localhost/galleries/Paris-0507.kml</loc>
+    <loc>http://localhost/galleries/12.kml</loc>
     <lastmod>2008-07-29T17:39:35+10:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -91,7 +91,7 @@
     </geo:geo>
   </url>
   <url>
-    <loc>http://localhost/galleries/pattaya-march-2008.kml</loc>
+    <loc>http://localhost/galleries/13.kml</loc>
     <lastmod>2008-07-24T18:00:26+10:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -100,7 +100,7 @@
     </geo:geo>
   </url>
   <url>
-    <loc>http://localhost/galleries/Vientiane-0407.kml</loc>
+    <loc>http://localhost/galleries/14.kml</loc>
     <lastmod>2008-07-24T18:00:26+10:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -109,7 +109,7 @@
     </geo:geo>
   </url>
   <url>
-    <loc>http://localhost/galleries/vientiane-and-vang-vieng-december-2007.kml</loc>
+    <loc>http://localhost/galleries/15.kml</loc>
     <lastmod>2008-10-24T13:33:40+11:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>

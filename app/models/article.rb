@@ -1,8 +1,8 @@
 class Article < ActiveRecord::Base 
-  include Hermes::ModelExtensions
   acts_as_polymorph
   acts_as_polymorph_taggable  
   acts_as_secure
+  acts_as_hermes
   acts_as_mappable            :default_units => :kms, :lat_column_name => 'latitude', :lng_column_name => 'longitude', :delegate => :asset
   has_many :pages
 

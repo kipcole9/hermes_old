@@ -58,14 +58,29 @@ class Asset < ActiveRecord::Base
     end
   }
   named_scope :published, lambda { {:conditions => Asset.published_policy} }
-  named_scope :included_in_index, lambda { |user|
-    unless user.is_admin?
-      {:conditions => "include_in_index = 1"}
+  named_scope :included_in_index, lambda { |*user|
+    (user.first && user.first.is_admin?) ? {:conditions => "include_in_index = 1"} : { }
+  }
+  named_scope :mappable,   { :conditions => '(latitude IS NOT NULL AND latitude <> 0) AND (longitude IS NOT NULL AND longitude <> 0)' } 
+  named_scope :popular,    lambda {|num|   {:order => "view_count DESC", :limit => num} }
+  named_scope :unpopular,  lambda {|num|   {:order => "created_at ASC", :limit => num}  }
+  named_scope :recent,     lambda {|num|   {:order => "created_at DESC", :limit => num} }
+  named_scope :conditions, lambda {|where| { :conditions => where } }
+  named_scope :limit,      lambda {|limit| { :limit => limit } }
+  named_scope :published_in, lambda {|publication| 
+    { :conditions => ["publications & ?", publication.bit_id] }
+  }
+  named_scope :category_of, lambda {|*cat| 
+    if cat && cat.first
+      {:conditions => "#{table_name}.id in (select #{table_name}.id \
+          from assets join assets_categories on #{polymorph_table_name}.id = assets_categories.asset_id \
+              join categories on categories.id = assets_categories.category_id \
+              where categories.name = '#{cat.first}')" }
     else
-      {:conditions => "1 = 1"}
+      { }
     end
-  }  
-  
+  }
+
   # All scoping methods and named_scopes leverage this access policy
   def self.access_policy(current_user)
     raise(Hermes::NoCurrentUser, "No Current User defined") unless current_user

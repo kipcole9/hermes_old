@@ -1,28 +1,26 @@
 class Image < ActiveRecord::Base
-  include Hermes::ModelExtensions  
   include Hermes::Image::Metadata::Import
   include ActionController::UrlWriter
   acts_as_polymorph
   acts_as_polymorph_taggable
   acts_as_secure
-  acts_as_mappable            :default_units => :kms, 
-                              :lat_column_name => 'latitude', :lng_column_name => 'longitude', 
-                              :delegate => :asset
+  acts_as_hermes
+  acts_as_mappable  :default_units => :kms, 
+                    :lat_column_name => 'latitude', :lng_column_name => 'longitude', 
+                    :delegate => :asset
+  
+  named_scope       :portrait,      :conditions => "orientation = 'p'"
+  named_scope       :landscape,     :conditions => "orientation = 'l'"
+  named_scope       :square,        :conditions => "orientation = 's'"
+  named_scope       :any
+
+  has_many          :slides,        :order => "position"
+  has_many          :galleries,     :through => :slides
+  belongs_to        :catalog
   
   before_validation_on_create :make_title
-                                        
-  named_scope :portrait,      :conditions => "orientation = 'p'"
-  named_scope :landscape,     :conditions => "orientation = 'l'"
-  named_scope :square,        :conditions => "orientation = 's'"
-  named_scope :any
+  skip_time_zone_conversion_for_attributes = [:taken_at]
 
-  has_many    :slides,        :order => "position"
-  has_many    :galleries,     :through => :slides
-  belongs_to  :catalog
-  
-  self.skip_time_zone_conversion_for_attributes = [:taken_at]
-
-  Location_pattern  = /(\d{1,3}) deg (\d{1,2})\' (\d{1,2}\.\d{1,2})\"/
   TAG_CLOUD_LIMIT   = 30
   ITEM_LIMIT        = 100
 
@@ -34,13 +32,13 @@ class Image < ActiveRecord::Base
     return nil unless publication && current_user
     case orient
     when :portrait
-      results = viewable_by(current_user).published.published_in(publication).portrait.find(:all, :limit => num, :order => "rand()")
+      results = viewable(current_user, publication).portrait.find(:all, :limit => num, :order => "rand()")
     when :landscape
-      results = viewable_by(current_user).published.published_in(publication).landscape.find(:all, :limit => num, :order => "rand()")
+      results = viewable(current_user, publication).landscape.find(:all, :limit => num, :order => "rand()")
     when :square
-      results = viewable_by(current_user).published.published_in(publication).square.find(:all, :limit => num, :order => "rand()")
+      results = viewable(current_user, publication).square.find(:all, :limit => num, :order => "rand()")
     else
-      results = viewable_by(current_user).published.published_in(publication).find(:all, :limit => num, :order => "rand()")
+      results = viewable(current_user, publication).find(:all, :limit => num, :order => "rand()")
     end
     num == 1 ? results.first : results
   end

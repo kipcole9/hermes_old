@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   acts_as_polymorph
   acts_as_polymorph_taggable
   acts_as_secure
+  acts_as_hermes
   before_validation_on_create     :set_name_and_title
   before_create                   :make_activation_code  
   before_create                   :set_groups

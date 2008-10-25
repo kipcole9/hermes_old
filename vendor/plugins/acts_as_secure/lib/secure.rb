@@ -11,38 +11,10 @@ module ActiveRecord
           before_save     :check_update_create_access
           before_destroy  :check_destroy_access
           
-          # Control finders that can be chained (they are really scope methods)
-          named_scope :published,  lambda { {:conditions => Asset.published_policy} }
-          named_scope :popular,    lambda {|num| {:order => "view_count DESC", :limit => num, :include => polymorph_name.to_sym } }
-          named_scope :unpopular,  lambda {|num| {:order => "created_at ASC", :limit => num, :include => polymorph_name.to_sym } }
-          named_scope :recent,     lambda {|num| {:order => "created_at DESC", :limit => num, :include => polymorph_name.to_sym } }
-          named_scope :conditions, lambda {|where| { :conditions => where } }
-          named_scope :order,      lambda {|order| { :order => order } }
-          named_scope :limit,      lambda {|limit| { :limit => limit } }
-          named_scope :included_in_index, lambda { |*user|
-            (user.first && user.first.is_admin?) ? {:conditions => "#{polymorph_table_name}.include_in_index = 1", :include => polymorph_name.to_sym} : { }
-          }
-
-          named_scope :published_in, lambda {|publication| 
-            { :conditions => ["assets.publications & ?", publication.bit_id], :include => polymorph_name.to_sym }
-          }
-          
           named_scope :viewable_by, lambda { |*user| 
             u = user.first || User.anonymous
             { :conditions => Asset.access_policy(u), :include => polymorph_name.to_sym }
           }   
-
-          named_scope :category_of, lambda {|*cat| 
-            if cat.first
-              {:conditions => "#{table_name}.id in (select #{table_name}.id \
-                  from #{table_name} join assets on #{table_name}.id = #{polymorph_table_name}.content_id and #{polymorph_table_name}.content_type = '#{self.name}' \
-                      join assets_categories on #{polymorph_table_name}.id = assets_categories.asset_id \
-                      join categories on categories.id = assets_categories.category_id \
-                      where categories.name = '#{cat.first}')" }
-            else
-              { }
-            end
-          } 
                        
           def find_by_name_or_id(param)
             return nil unless param 

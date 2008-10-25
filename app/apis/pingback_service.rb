@@ -2,7 +2,7 @@ require 'pingback_api'
 require 'rest_client'
 require 'hpricot'
 require 'cgi'
-include HermesControllerExtensions
+include Hermes::ControllerExtensions
 
 class PingbackService < ActionWebService::Base
   web_service_api PingbackAPI

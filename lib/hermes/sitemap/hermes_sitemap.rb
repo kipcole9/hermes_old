@@ -25,7 +25,7 @@ module Hermes
   
     def create_html_sitemap(sitemap_path, publication = nil)
       Publication.current = publication || Publication.default
-      puts "Storing html sitemap in #{sitemap_path}"
+      puts "Creating html sitemap in #{sitemap_path}"
       f = File.new(sitemap_path, File::CREAT|File::TRUNC|File::RDWR, 0644)
       xml = Builder::XmlMarkup.new(:target => f, :indent => 2)
       xml.instruct!
@@ -33,8 +33,9 @@ module Hermes
       xml.urlset "xmlns:xsi"          => "http://www.w3.org/2001/XMLSchema-instance",
       	         "xsi:schemaLocation" => "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd",
                  :xmlns               => "http://www.sitemaps.org/schemas/sitemap/0.9" do
-        assets = Asset.viewable_by(User.anonymous).published_in(Publication.current).published. \
-            find(:all, :conditions => ["content_type in (?)", INCLUDE_ASSETS], :order => "content_type ASC")
+        assets = Asset.viewable(User.anonymous,Publication.current).order("content_type ASC") \
+                      .find(:all, :conditions => ["content_type in (?)", INCLUDE_ASSETS])
+        puts "Sitemap has #{assets.length} URLs."
 
         # Root url
         root_lastmod        = Article.last.updated_at.iso8601 rescue Time.now.iso8601
@@ -74,8 +75,9 @@ module Hermes
       	         "xsi:schemaLocation" => "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd",
                  :xmlns               => "http://www.sitemaps.org/schemas/sitemap/0.9",
                  "xmlns:geo"          => "http://www.google.com/geo/schemas/sitemap/1.0" do
-        assets = Asset.viewable_by(User.anonymous).published_in(Publication.current).published. \
-            find(:all, :conditions => ["content_type in (?) AND latitude IS NOT NULL AND longitude IS NOT NULL", INCLUDE_ASSETS], :order => "content_type ASC")
+        assets = Asset.viewable(User.anonymous,Publication.current).mappable.order("content_type ASC") \
+                      .find(:all, :conditions => ["content_type in (?)", INCLUDE_ASSETS])
+        puts "Geo sitemap has #{assets.length} URLs."
 
         # Root url
         root_lastmod        = Article.last.updated_at.iso8601 rescue Time.now.iso8601

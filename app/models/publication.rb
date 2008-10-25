@@ -2,6 +2,7 @@ class Publication < ActiveRecord::Base
   acts_as_polymorph
   acts_as_polymorph_taggable
   acts_as_secure
+  acts_as_hermes
   
   before_validation_on_create   :set_bit_id
   before_validation_on_create   :set_name

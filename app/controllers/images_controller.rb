@@ -1,6 +1,23 @@
 class ImagesController < AssetsController
   skip_before_filter    :verify_authenticity_token, :only => :update
 
+  # We override show because we might be asked to show a jpg and
+  # we encode the size an image in the params[:id] and hence it won't
+  # be found by normal means.
+  def show
+    if @image then      
+      if stale?(:last_modified => @object.updated_at.utc, :etag => @object)
+        respond_to do |format|
+          format.html { render :action => :edit unless File.exist?(view_path) }
+          format.xml  { render :xml => @object.to_xml }
+          format.any  { send("show_#{params[:format]}") } if respond_to?("show_#{params[:format]}")      
+        end
+      end
+    else
+      show_jpg
+    end
+  end
+  
   def index_kml
     render :action => "index"
   end
@@ -108,7 +125,8 @@ protected
 
   def serve_image(image_file)
     image_name, image_type = image_from_param(image_file)
-    if image = Image.published_in(publication).published.viewable_by(current_user).find_by_name(image_name)
+    #if image = Image.published_in(publication).published.viewable_by(current_user).find_by_name(image_name)
+    if image = Image.viewable(current_user, publication).find_by_name(image_name)
       @asset = image.asset    # So log show will work
       path_name = image.send("#{image_type}_path_name")
     end
