@@ -2,6 +2,7 @@ class Bookmark < ActiveRecord::Base
   acts_as_polymorph
   acts_as_polymorph_taggable  
   acts_as_secure
+  acts_as_hermes
   
   require 'net/http'
   require 'uri'
@@ -11,6 +12,10 @@ class Bookmark < ActiveRecord::Base
   
   def url=(val)
     super(URI.escape(val))
+  end
+  
+  def to_param
+    self.name
   end
 
 private

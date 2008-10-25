@@ -12,6 +12,10 @@ class Gallery < ActiveRecord::Base
   DEFAULT_ITEM_LIMIT        = 12
   DEFAULT_PAGE_SIZE         = 6
   
+  def to_param
+    self.name
+  end
+  
   def gallery_of=(folder)
     super(folder.with_slash) if folder && folder.is_a?(String)
   end

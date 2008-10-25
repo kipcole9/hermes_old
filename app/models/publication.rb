@@ -9,6 +9,10 @@ class Publication < ActiveRecord::Base
   validates_presence_of         :domain
   validates_uniqueness_of       :domain
   
+  def to_param
+    self.name
+  end
+  
   def self.default
     @@default ||= find(:first, :conditions => ["default_publication = ?", true])
   end

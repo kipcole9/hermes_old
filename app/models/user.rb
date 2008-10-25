@@ -34,6 +34,10 @@ class User < ActiveRecord::Base
                   :birthday, :photo, :city, :display_theme, :latitude, :profile, :time_zone, :content_rating, 
                   :country, :given_name, :family_name, :locale, :longitude, :show_photo, :tag_list
   
+  def to_param
+    self.name
+  end
+
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
     u = find :first, :conditions => ['login = ? and activated_at IS NOT NULL', login]

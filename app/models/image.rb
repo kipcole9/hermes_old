@@ -24,6 +24,10 @@ class Image < ActiveRecord::Base
   TAG_CLOUD_LIMIT   = 30
   ITEM_LIMIT        = 100
 
+  def to_param
+    self.name
+  end
+  
   def self.find_by_name_or_filename(name)
     find :first, :conditions => ["#{polymorph_table_name}.name = ? OR filename = ?", name, name]
   end
