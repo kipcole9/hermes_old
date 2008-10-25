@@ -1,6 +1,5 @@
 require 'mini_exiftool'
-require 'hermes_image_metadata_import'
-include HermesImageMetadataImport
+include Hermes::Image::Metadata::Import
 
 class UnknownTags < ActiveRecord::Base
   def self.add(tag)

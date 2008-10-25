@@ -1,5 +1,5 @@
 class AssetsController < ApplicationController
-  include HermesControllerExtensions
+  include Hermes::ControllerExtensions
   
   before_filter :set_time_zone
   before_filter :sidebar_clear

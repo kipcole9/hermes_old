@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  include HermesControllerExtensions
+  include Hermes::ControllerExtensions
   before_filter :login_required, :except => [ :create ]
   before_filter :comments_open?, :only => [:create, :edit]
   before_filter :retrieve_comment, :only => [:ham, :spam]

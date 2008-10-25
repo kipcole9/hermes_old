@@ -2,16 +2,14 @@ namespace :hermes do
   
   desc "Upload Images"
   task(:upload_images => :environment) do
-    require "hermes_image_import"
-    include HermesImageImport
+    include Hermes::Image::Import
     User.current_user = User.admin
     upload_images ENV["dir"]
   end
   
   desc "List changed images"
   task(:changed_images => :environment) do
-    require "hermes_image_import"
-    include HermesImageImport
+    include Hermes::Image::Import
     User.current_user = User.admin    
     changed_images ENV["dir"]
   end
@@ -27,7 +25,7 @@ namespace :hermes do
   
   desc "Create sitemap"
   task(:create_sitemap => :environment) do
-    include HermesSitemap
+    include Hermes::Sitemap
     create_sitemap ENV["dir"]
   end
   
@@ -51,8 +49,7 @@ namespace :hermes do
   # into the Categories and Synonyms tables
   desc "Import controlled vocabulary"
   task(:import_controlled_vocabulary => :environment) do
-    require 'hermes_keywords_import'
-    include HermesKeywordsImport
+    include Hermes::KeywordsImport
     import_keywords
   end
 
@@ -68,7 +65,7 @@ namespace :hermes do
   task(:import_image_email => :environment) do
     Publication.current = Publication.default
     mail_config = YAML::load_file("#{RAILS_ROOT}/config/mailer_credentials.yml")["#{RAILS_ENV}"].symbolize_keys    
-    handler = HermesMail.new(:host => mail_config[:mail_host], :user => mail_config[:image_mail_user], :password => mail_config[:image_mail_password])
+    handler = Hermes::Mail.new(:host => mail_config[:mail_host], :user => mail_config[:image_mail_user], :password => mail_config[:image_mail_password])
     puts "About to import image emails."
     handler.get_mail(:delete => true) do |m|
       if (user = User.authorise_and_set(m.from))

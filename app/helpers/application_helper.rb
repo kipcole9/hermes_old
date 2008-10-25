@@ -1,6 +1,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-  include HermesHelper
+  include Hermes::FormBuilderInit
+  include Hermes::GeoExtensions
   
   def stylesheet_link_theme
     if publication.theme && File.exist?("#{RAILS_ROOT}/public/stylesheets/#{publication.theme}.css")

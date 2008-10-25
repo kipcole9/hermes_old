@@ -1,3 +1,3 @@
 require File.dirname(__FILE__) + '/lib/polymorph'
-ActiveRecord::Base.send(:include, ActiveRecord::Acts::Polymorph)
+ActiveRecord::Base.send(:include, Hermes::Polymorph)
 

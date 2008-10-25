@@ -1,4 +1,5 @@
 class GalleriesController < AssetsController
+  include Hermes::GeoExtensions
   
   def show_kml
     if @gallery.mappable?

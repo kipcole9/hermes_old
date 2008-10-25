@@ -4,7 +4,6 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 
-  #before_filter :raise_for_debugging
   before_filter :set_publication
   before_filter :set_theme
   before_filter :save_environment
@@ -114,9 +113,4 @@ protected
    end
   end
   
-  def raise_for_debugging
-    raise request.env["HTTP_USER_AGENT"].inspect
-  end
-  
-    
 end

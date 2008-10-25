@@ -1,6 +1,8 @@
 load 'deploy' if respond_to?(:namespace) # cap2 differentiator
 Dir['vendor/plugins/*/recipes/*.rb'].each { |plugin| load(plugin) }
 load 'config/deploy'
+set :branch,      "0.7"
+
 set :sitemap_dir, "#{shared_path}/config"
 set :sitemap_path, "#{sitemap_dir}/sitemap.xml"
 set :geo_sitemap_path, "#{sitemap_dir}/geo_sitemap.xml"

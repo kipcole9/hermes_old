@@ -5,6 +5,14 @@ class Asset < ActiveRecord::Base
   belongs_to                  :updated_by, :class_name => 'User', :foreign_key => "updated_by"
   has_many                    :comments, :dependent => :destroy
   has_many                    :asset_views, :dependent => :destroy
+  
+  acts_as_polymorph_asset     :accessors => [:tag_list, :category_ids, :category_names],  
+                              :readers => [:comments_open?, :comments_closed?, :comments_none?, :comments_require_login?,
+                                           :moderate_comments?, :status_description, :content_rating_description,
+                                           :mappable?, :geocode, :asset_id, :comments,
+                                           :permissions, :include_in_index?, :allow_pingbacks?, :view_count],
+                              :to_xml =>  [:name, :title, :latitude, :longitude, :tag_list, :category_names, :content_rating,
+                                           :description, :created_at, :updated_at, :created_by_email]   
   acts_as_mappable            :default_units => :kms, :lat_column_name => 'latitude', :lng_column_name => 'longitude'
   acts_as_taggable
   
@@ -36,20 +44,7 @@ class Asset < ActiveRecord::Base
                             
   validates_numericality_of :content_rating, :allow_nil => true,
                             :message => "must be an integer"
-                            
-  # Methods that will be inherited in the dependent class. Column attributed are included already.
-  # Accessors
-  POLYMORPH_READERS =       :comments_open?, :comments_closed?, :comments_none?, :comments_require_login?,
-                            :moderate_comments?, :status_description, :content_rating_description,
-                            :category_names, :category_ids, :mappable?, :geocode, :asset_id, :comments, :tag_list,
-                            :permissions, :include_in_index?, :allow_pingbacks?, :view_count
-                            
-  # Writers
-  POLYMORPH_WRITERS =       :tag_list, :category_ids, :category_names
-  
-  # Generated output in to_xml
-  POLYMORPH_XML_ATTRS =     :name, :title, :latitude, :longitude, :tag_list, :category_names, :content_rating,
-                            :description, :created_at, :updated_at, :created_by_email
+                          
   
   # Control finders that can be chained (they are really scope methods)
   # TODO DRY up this part with the one in acts_as_secure - especially the :published scope
@@ -268,18 +263,6 @@ class Asset < ActiveRecord::Base
     true
   end
   
-  def self.polymorph_readers
-    POLYMORPH_READERS rescue nil
-  end
-  
-  def self.polymorph_writers
-    POLYMORPH_WRITERS rescue nil
-  end
-  
-  def self.polymorph_xml_attrs
-    POLYMORPH_XML_ATTRS rescue nil
-  end
-      
   # Add location identifiers as tags
   def tag_list=(tags)
     location_tags = [self.location, self.city, self.state, self.country].compact.join(', ')

@@ -1,5 +1,6 @@
 set :application, "hermes"
 set :repository,  "git@github.com:kipcole9/hermes.git"
+set :deploy_via,  :remote_cache
 
 set :user, "kip"
 set :runner, "kip"

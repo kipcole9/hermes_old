@@ -1,5 +1,6 @@
 class Publication < ActiveRecord::Base
   acts_as_polymorph
+  acts_as_polymorph_taggable
   acts_as_secure
   
   before_validation_on_create   :set_bit_id

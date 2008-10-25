@@ -1,7 +1,7 @@
 # Include extensions
-require 'hermes'
-require 'hermes_extensions'
-require 'hermes_string_extensions'
-require 'hermes_geo_extensions'
-include HermesGeoExtensions
+Dir.glob("#{RAILS_ROOT}/lib/hermes/**/*.rb").each do |f|
+  require f
+end
+
+
 

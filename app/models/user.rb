@@ -2,6 +2,7 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
   acts_as_polymorph
+  acts_as_polymorph_taggable
   acts_as_secure
   before_validation_on_create     :set_name_and_title
   before_create                   :make_activation_code  
@@ -11,7 +12,7 @@ class User < ActiveRecord::Base
   
   # The assets we created
   has_many    :my_assets, :class_name => 'Asset', :foreign_key => :created_by
-  belongs_to  :photo, :class_name => 'Image', :foreign_key => :photo
+  belongs_to  :photo,     :class_name => 'Image', :foreign_key => :photo
   
   # Virtual attribute for the unencrypted password
   attr_accessor             :password

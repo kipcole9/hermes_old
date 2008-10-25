@@ -7,51 +7,36 @@ module ActiveRecord
 
       module ClassMethods
         def acts_as_secure(options = {})
-          configuration = { :name => :asset }
-          configuration.update(options) if options.is_a?(Hash)
-          
-          polymorph_name = configuration[:name].to_s.downcase
-          polymorph_table_name = polymorph_name.pluralize
           
           before_save     :check_update_create_access
           before_destroy  :check_destroy_access
           
           # Control finders that can be chained (they are really scope methods)
           named_scope :published,  lambda { {:conditions => Asset.published_policy} }
-          named_scope :popular,    lambda {|num| {:order => "view_count DESC", :limit => num, :include => :asset } }
-          named_scope :unpopular,  lambda {|num| {:order => "created_at ASC", :limit => num, :include => :asset } }
-          named_scope :recent,     lambda {|num| {:order => "created_at DESC", :limit => num, :include => :asset } }
+          named_scope :popular,    lambda {|num| {:order => "view_count DESC", :limit => num, :include => polymorph_name.to_sym } }
+          named_scope :unpopular,  lambda {|num| {:order => "created_at ASC", :limit => num, :include => polymorph_name.to_sym } }
+          named_scope :recent,     lambda {|num| {:order => "created_at DESC", :limit => num, :include => polymorph_name.to_sym } }
           named_scope :conditions, lambda {|where| { :conditions => where } }
           named_scope :order,      lambda {|order| { :order => order } }
           named_scope :limit,      lambda {|limit| { :limit => limit } }
           named_scope :included_in_index, lambda { |*user|
-            (user.first && user.first.is_admin?) ? {:conditions => "assets.include_in_index = 1", :include => :asset} : { }
+            (user.first && user.first.is_admin?) ? {:conditions => "#{polymorph_table_name}.include_in_index = 1", :include => polymorph_name.to_sym} : { }
           }
 
           named_scope :published_in, lambda {|publication| 
-            { :conditions => ["assets.publications & ?", publication.bit_id], :include => :asset }
+            { :conditions => ["assets.publications & ?", publication.bit_id], :include => polymorph_name.to_sym }
           }
           
           named_scope :viewable_by, lambda { |*user| 
             u = user.first || User.anonymous
-            { :conditions => Asset.access_policy(u), :include => :asset }
+            { :conditions => Asset.access_policy(u), :include => polymorph_name.to_sym }
           }   
-          
-          named_scope :tagged_with, lambda {|*tags|
-            options = (tags.last && tags.last.is_a?(Hash)) ? tags.pop : {}
-            if tags.first
-              sql = tagged_with_options(Tag.unsynonym(tags.first), options)
-              subquery = "#{polymorph_table_name}.id IN (SELECT #{sql[:select]} FROM #{polymorph_table_name} #{sql[:joins]} WHERE #{sql[:conditions]})"
-              { :conditions => subquery, :include => :asset }
-            else
-              { }
-            end
-          }
+
           named_scope :category_of, lambda {|*cat| 
             if cat.first
               {:conditions => "#{table_name}.id in (select #{table_name}.id \
-                  from #{table_name} join assets on #{table_name}.id = assets.content_id and assets.content_type = '#{self.name}' \
-                      join assets_categories on assets.id = assets_categories.asset_id \
+                  from #{table_name} join assets on #{table_name}.id = #{polymorph_table_name}.content_id and #{polymorph_table_name}.content_type = '#{self.name}' \
+                      join assets_categories on #{polymorph_table_name}.id = assets_categories.asset_id \
                       join categories on categories.id = assets_categories.category_id \
                       where categories.name = '#{cat.first}')" }
             else
@@ -62,7 +47,7 @@ module ActiveRecord
           def find_by_name_or_id(param)
             return nil unless param 
             if (param.is_a?(String) && param.is_integer?) || param.is_a?(Fixnum)
-              find(:first, :conditions => ["#{table_name}.id = ?", param], :include => :asset)
+              find(:first, :conditions => ["#{table_name}.id = ?", param], :include => polymorph_name.to_sym)
             else
               find_by_name(param)
             end
@@ -70,7 +55,7 @@ module ActiveRecord
           
           def find_by_name(param)
             return nil unless param 
-            find(:first, :conditions => ["assets.name = ?",param], :include => :asset)
+            find(:first, :conditions => ["#{polymorph_table_name}.name = ?",param], :include => polymorph_name.to_sym)
           end
           
           def page(num, per_page =  10)
