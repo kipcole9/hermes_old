@@ -46,12 +46,20 @@ module Synthesis
         source << ".#{ext}" if File.extname(source).blank? && ext
         unless source =~ %r{^[-a-z]+://}
           source = "/#{dir}/#{source}" unless source[0] == ?/
-          asset_id = rails_asset_id(source)
+          asset_id = nil # rails_asset_id(source)
           source << '?' + asset_id if defined?(RAILS_ROOT) and add_asset_id and not asset_id.blank?
-          source = "#{ActionController::Base.asset_host}#{@controller.request.relative_url_root}#{source}"
+          #source = "#{ActionController::Base.asset_host}#{@controller.request.relative_url_root}#{source}"
+          source = "#{root_url.without_slash}#{source}"
         end
         source
       end
+    
+      #def compute_public_path_for_packager(source, dir, ext, add_asset_id=true)
+        #return "/public/#{dir}/#{source}.#{ext}"
+        #path = compute_public_path(source, dir, ext)
+        #return path if add_asset_id
+        #path.gsub(/\?\d+$/, '')
+      #end
   
       # rewrite javascript path function to not include query string timestamp
       def javascript_path(source)

@@ -11,6 +11,10 @@
 #  - textilize methods require RedCloth
 # Example:
 # "<b>coolness</b>".strip_tags -> "coolness"
+#
+#
+# Sourced from http://www.csummers.org/2006/08/07/extend-string-to-use-actionviews-text-helpers
+#
 require 'singleton'
 # Singleton to be called in wrapper module
 class TextHelperSingleton
@@ -18,6 +22,7 @@ class TextHelperSingleton
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::TagHelper #tag_options needed by auto_link
   include ActionView::Helpers::SanitizeHelper
+  extend ActionView::Helpers::SanitizeHelper::ClassMethods # Required for rails 2.2
 end
 
 # Wrapper module
