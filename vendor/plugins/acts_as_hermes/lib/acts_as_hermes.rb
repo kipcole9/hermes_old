@@ -27,14 +27,17 @@ module Hermes
     def create_date
       self.asset.created_at.strftime("%Y/%m/%d")
     end
-  
-    def to_param
-      self.name
-    end
-      
+        
     def permalink
       send("#{self.class.name.downcase}_url", self, :host => Publication.current.domain)
     end
+  
+    protected
+    
+    def to_param
+      self.name
+    end
+
 
     module ClassMethods 
       def acts_as_hermes

@@ -4,8 +4,9 @@ var currentPage = 1;
 function checkScroll() {
   if (nearBottomOfPage()) {
     currentPage++;
+	var url = getNewUrl(currentPage);
 	$('loading').show();
-    new Ajax.Request("/articles.js?page=" + currentPage, {asynchronous:true, evalScripts:true, method:'get'});
+    new Ajax.Request(url, {asynchronous:true, evalScripts:true, method:'get'});
   } else {
     setTimeout("checkScroll()", 250);
   }
@@ -25,11 +26,36 @@ function pageHeight() {
 
 function setPage() {
 	var page = getUrlParam("page");
-	if (page == "") {
+	if (!page) {
 		page = 1;
 	};
 	currentPage = page;
 	checkScroll();
+}
+
+function getNewUrl(new_page) {
+	// The idea is just to update the url since
+	// it may have parameters we care about
+	var href = window.location.href
+	var has_params = /\?.+=/
+	if (!getUrlParam('page')) {
+		// Just add it to the end
+		if (has_params.exec(href)) {
+			return href + "&page=" + new_page;
+		} else {
+			return href + "?page=" + new_page;
+		}
+	} else {
+		// We need to substitute it
+		var regex = /[\?&](page=\d)/;
+		var page_param = regex.exec(href);
+		if (page_param) {
+			return href.replace(page_param[1],"page=" + new_page);
+		} else {
+			alert('Woops: Thought there was a page param but couldn\'t find it!');
+			return href;
+		}
+	}
 }
 
 function getUrlParam(name) {
@@ -38,7 +64,7 @@ function getUrlParam(name) {
   var regex = new RegExp( regexS );
   var results = regex.exec( window.location.href );
   if( results == null )
-    return "";
+    return null;
   else
     return results[1];
 }
