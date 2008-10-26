@@ -100,7 +100,7 @@ module Hermes
           self.created_by = User.find_by_email(image_exif["CreatorContactInfoCiEmailWork"]) || User.current_user
           if @geo_set_counter == 2 # Which means both lat and lng were set
             self.geocode_method = Asset::GEO_GPS
-            self.geocode_accuracy = Google_geocode_accuracy["premise"]
+            self.geocode_accuracy = Google_geocode_accuracy.length - 1
           end
           true
         end
