@@ -38,24 +38,26 @@ function getNewUrl(new_page) {
 	// it may have parameters we care about
 	var href = window.location.href
 	var has_params = /\?.+=/
+	var new_url = "";
 	if (!getUrlParam('page')) {
 		// Just add it to the end
 		if (has_params.exec(href)) {
-			return href + "&page=" + new_page;
+			new_url = href + "&page=" + new_page;
 		} else {
-			return href + "?page=" + new_page;
+			new_url = href + "?page=" + new_page;
 		}
 	} else {
 		// We need to substitute it
 		var regex = /[\?&](page=\d)/;
 		var page_param = regex.exec(href);
 		if (page_param) {
-			return href.replace(page_param[1],"page=" + new_page);
+			new_url = href.replace(page_param[1],"page=" + new_page);
 		} else {
 			alert('Woops: Thought there was a page param but couldn\'t find it!');
-			return href;
+			new_url =  href;
 		}
-	}
+	};
+	return new_url + "&format=js"
 }
 
 function getUrlParam(name) {

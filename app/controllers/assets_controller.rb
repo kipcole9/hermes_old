@@ -25,10 +25,6 @@ class AssetsController < ApplicationController
   
   # GET
   def index
-    if request.xhr?
-      request.format = :js
-    end
-    
     respond_to do |format|
       format.html
       format.rss
