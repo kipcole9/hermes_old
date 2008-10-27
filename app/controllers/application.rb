@@ -4,6 +4,7 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 
+  before_filter :massage_format
   before_filter :set_publication
   before_filter :set_theme
   before_filter :save_environment
@@ -73,6 +74,14 @@ class ApplicationController < ActionController::Base
   end
   
 protected
+
+  # Some old legacy pages had a .htm format so to preserve
+  # links we reformat
+  def massage_format
+    if params[:format] && params[:format] == "htm"
+      request.format = :html
+    end
+  end
  
   def ssl_required?
     RAILS_ENV == "production" ? super : false

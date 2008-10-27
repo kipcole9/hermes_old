@@ -29,7 +29,7 @@ class AssetsController < ApplicationController
       format.html
       format.rss
       format.atom
-      format.xml  { render :xml => @objects.to_xml }      
+      format.xml  { render :xml => @objects.to_xml }
       format.any  { send("index_#{params[:format]}") } if respond_to?("index_#{params[:format]}")
     end
   end
@@ -39,7 +39,7 @@ class AssetsController < ApplicationController
       respond_to do |format|
         format.html { render :action => :edit unless File.exist?(view_path) }
         format.xml  { render :xml => @object.to_xml }
-        format.any  { send("show_#{params[:format]}") } if respond_to?("show_#{params[:format]}")      
+        format.any  { send("show_#{params[:format]}") } if respond_to?("show_#{params[:format]}") 
       end
     end
   end
