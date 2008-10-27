@@ -39,7 +39,7 @@ class ImagesController < AssetsController
     if RAILS_ENV == "development"
       tmp_file = "#{RAILS_ROOT}/tmp/uploads/#{collect_filename}"
     else
-      tmp_file = "/u/apps/hermes/uploads/#{collect_filename}"
+      tmp_file = "#{RAILS_ROOT}/../uploads/#{collect_filename}"
     end
     f = File.new(tmp_file, "w")
     f.syswrite(request.raw_post)

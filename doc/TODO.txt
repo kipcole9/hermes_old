@@ -1,0 +1,23 @@
+Configuration Module:
+
+Image upload directory
+Image catalog directory
+
+
+
+Email import:
+
+Complete Articles email reader
+Add to cron (every 15 minutes?)
+
+
+Image:
+
+Images near - 50 closest images 
+			- within some tolerance
+			
+Slideshow:
+
+Use to replace random image with smooth
+transition
+
