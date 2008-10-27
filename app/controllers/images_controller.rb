@@ -7,7 +7,6 @@ class ImagesController < AssetsController
   def show
     if @image then      
       if stale?(:last_modified => @object.updated_at.utc, :etag => @object)
-        raise @image.inspect
         respond_to do |format|
           format.html { render :action => :edit unless File.exist?(view_path) }
           format.xml  { render :xml => @object.to_xml }
