@@ -16,7 +16,7 @@ class AssetsController < ApplicationController
   after_filter  :log_show,            :only => [:show]
   
   ASSET_ACTIONS = ["live_search", "apis"]
-  BOTS          = /(Googlebot|yahoo! slurp|msnbot|Twiceler|DotBot)/i
+  BOTS          = /(Googlebot|yahoo! slurp|msnbot|Twiceler|DotBot|friendfeed|MJ12bot|NetNewsWire|CCBot)/i
   GIS_BROWSERS  = /GoogleEarth/i
   
   # Proxies: implement in concrete Asset sub-class as required
@@ -315,15 +315,9 @@ private
     user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
     if !(@object = target_obj.viewable(user, publication).find_by_name_or_id(target_id) rescue nil)
       respond_to do |format|
-        format.html do
-          page_not_found("#{target_obj.name} '#{target_id}' not found!")
-        end
-        format.xml do
-          head :status => 404
-        end
-        format.any do
-          send("retrieve_this_#{params[:format]}")
-        end if respond_to?("retrieve_this_#{params[:format]}")
+        format.html { page_not_found("#{target_obj.name} '#{target_id}' not found!") }
+        format.xml  { head :status => 404 }
+        format.any  { send("retrieve_this_#{params[:format]}") } if respond_to?("retrieve_this_#{params[:format]}")
       end unless ignore_not_found?(target_id, params[:format])
     else
       @asset = @object.asset if target_obj.respond_to?("polymorph_class")        

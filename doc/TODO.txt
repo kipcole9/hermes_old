@@ -21,3 +21,20 @@ Slideshow:
 Use to replace random image with smooth
 transition
 
+Maps:
+
+Reconfigure asset_map into rjs (use endless_page as a model)
+
+
+Views:
+
+Refactor to use partial collections
+Refactor out to helpers (and refactor helpers)
+
+Controllers:
+
+Move to endless_page for images, galleries
+
+RDOC:
+
+Work out how to do rdocs in code
