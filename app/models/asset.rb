@@ -280,8 +280,8 @@ class Asset < ActiveRecord::Base
   
   # Add location identifiers as tags
   def tag_list=(tags)
-    location_tags = [self.location, self.city, self.state, self.country].compact.join(', ')
-    new_tags = [location_tags, tags].flatten.compact.join(', ')
+    location_tags = [self.location, self.city, self.state, self.country]
+    new_tags = [location_tags, tags].flatten.compact.reject{|n| n.blank?}.join(', ')
     puts "Setting new tags => '#{new_tags}'"
     super new_tags
   end
