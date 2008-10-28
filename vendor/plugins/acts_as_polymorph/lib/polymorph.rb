@@ -146,6 +146,24 @@ module Hermes
           def #{polymorph_name}_id
             self.#{polymorph_name}.id
           end
+          
+          def find_by_name_or_id(param)
+            return nil unless param 
+            if (param.is_a?(String) && param.is_integer?) || param.is_a?(Fixnum)
+              find(:first, :conditions => ["#{table_name}.id = ?", param], :include => polymorph_name.to_sym)
+            else
+              find_by_name(param)
+            end
+          end
+          
+          def find_by_name(param)
+            return nil unless param 
+            find(:first, :conditions => ["#{polymorph_table_name}.name = ?",param], :include => polymorph_name.to_sym)
+          end
+          
+          def page(num, per_page =  10)
+            find(:all, :page => {:size => per_page, :current => num})
+          end          
                       
         END_EVAL
       end
