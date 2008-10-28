@@ -4,7 +4,7 @@
 		<%= "(#{pluralize(article.view_count, "view")})" %>
 	<% end %>
 	<% if !article.comments_none? %>
-		<% if (@comment_count ||= article.comments.published.not_spam.count) > 0 %>
+		<% if (@comment_count = article.comments.published.not_spam.count) > 0 %>
 			<%= "(#{pluralize(@comment_count, "comment")})" %>
 		<% end %>
 	<% end %>	
