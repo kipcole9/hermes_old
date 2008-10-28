@@ -21,6 +21,11 @@ class Comment < ActiveRecord::Base
     :other      => "other"
   }
   
+  
+  def self.page(num, per_page =  10)
+    find(:all, :page => {:size => per_page, :current => num})
+  end
+
   def self.add_pingback(asset, sourceURI, body)
     comment = Comment.new(:asset => asset.asset, :comment_type => COMMENT_TYPE[:pingback],
                    :created_by => User.admin, :status => Asset::STATUS[:published],

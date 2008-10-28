@@ -67,11 +67,7 @@ module Hermes
           def self.find_by_name(param)
             return nil unless param 
             find(:first, :conditions => ["#{polymorph_table_name}.name = ?",param], :include => polymorph_name.to_sym)
-          end
-          
-          def self.page(num, per_page =  10)
-            find(:all, :page => {:size => per_page, :current => num})
-          end          
+          end         
           
           def initialize(attrs = nil)
             super(nil)

@@ -32,12 +32,9 @@ module Hermes
       send("#{self.class.name.downcase}_url", self, :host => Publication.current.domain)
     end
   
-    protected
-    
     def to_param
       self.name
     end
-
 
     module ClassMethods 
       def acts_as_hermes
@@ -80,6 +77,10 @@ module Hermes
       # Standard access method
       def viewable(user, publication)
         published_in(publication).published.viewable_by(user).included_in_index(user)
+      end
+            
+      def page(num, per_page =  10)
+        find(:all, :page => {:size => per_page, :current => num})
       end
       
     end
