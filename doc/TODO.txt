@@ -2,7 +2,12 @@ Configuration Module:
 
 Image upload directory
 Image catalog directory
+What are Bots
+What are GIS browsers
 
+Sidebars:
+
+Archive calendar sidebar
 
 
 Email import:
@@ -28,6 +33,7 @@ Reconfigure asset_map into rjs (use endless_page as a model)
 
 Views:
 
+Do "simple_format" on articles and descriptions if there is no <p></p>
 Refactor to use partial collections
 Refactor out to helpers (and refactor helpers)
 
