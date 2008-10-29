@@ -35,7 +35,7 @@ class AssetsController < ApplicationController
   end
 
   def show
-    if @object && stale?(:last_modified => @object.updated_at.utc, :etag => @object)
+    if @object && stale?(:last_modified => @object.updated_at.utc, :etag => [@object, @object.comments.count])
       respond_to do |format|
         format.html { render :action => :edit unless File.exist?(view_path) }
         format.xml  { render :xml => @object.to_xml }
