@@ -1,6 +1,10 @@
 class GalleriesController < AssetsController
   include Hermes::GeoExtensions
   
+  def index_js
+
+  end
+  
   def show_kml
     if @gallery.mappable?
       render :action => "show"
@@ -15,6 +19,10 @@ class GalleriesController < AssetsController
   
   def show_rs2
     render :action => "photofeed"
+  end
+  
+  def show_js
+    
   end
   
   def index_kml
@@ -34,7 +42,13 @@ class GalleriesController < AssetsController
       format.js {render :partial => "sidebars/galleries_popular.html.erb", :locals => {:ajax => true} }
     end
   end
-
+  
+  def after_retrieve_object
+    if params[:action] == "show"
+      @images = @gallery.images.published.published_in(publication).viewable_by(current_user).page(params[:page], page_size)
+    end
+  end
+  
   def page_size
     12
   end

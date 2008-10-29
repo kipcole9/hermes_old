@@ -2,7 +2,7 @@
 	sidebar	:asset_search
 	sidebar :gallery_actions
 	sidebar :social_bookmarks
-	sidebar :asset_map if (@asset.latitude && @asset.longitude)
+	sidebar :asset_map if @asset.mappable? 
 %>
 
 <% content_for :head do %>
@@ -13,18 +13,23 @@
 	<%= stylesheet_link_merged :lightview %>
 <% end %>
 
-<% images = @gallery.images.published_in(publication).published.viewable_by(current_user) \
-	.find(:all, :page => {:size => controller.page_size, :current => params[:page]}) %>
-
 <div class='_article'>
 	<h2><%= @gallery.title %></h2>
 	<%= render :partial => 'articles/article_byline', :locals => {:article => @gallery} -%>
-	<%= render :partial => "shared/page_numbers", :locals => {:collection => images} %>
 	<p><%= render :inline => @gallery.description -%></p>
-	<div id="thumbnailList" class="_thumbnailList clearfix">
-		<% images.each do |i| %>
-			<%= render :partial => "images/slide", :locals => {:image => i} %>
-		<% end %>
+	<div id="gallery_slides" class="_thumbnailList clearfix">
+	  <%= render :partial => "gallery_slides" %>
+		<p id="loading" style="display:none;">Loading more gallery images now...</p>
 	</div>
 </div>
 <%= render :partial => "comments/show", :object => @gallery %>
+
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'endless_page' %>
+<% end %>  
+
+<% content_for :footnote do %>
+  <noscript>
+    <%= render :partial => "shared/page_numbers", :locals => {:collection => @images} %>
+  </noscript>
+<% end %>

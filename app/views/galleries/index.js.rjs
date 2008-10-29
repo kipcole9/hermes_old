@@ -1,0 +1,7 @@
+page.insert_html :bottom, :galleries, :partial => "gallery_index_slides", :locals => {:galleries => @galleries}
+if @galleries.page_count > @galleries.page
+  page[:loading].hide
+  page.call 'checkScroll'
+else
+  page[:loading].hide
+end

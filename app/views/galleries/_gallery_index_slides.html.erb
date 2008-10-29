@@ -1,0 +1,4 @@
+<% galleries.each do |g| %>
+	<%= render :partial => "images/slide", :locals => {:image => g.popular_image(current_user), 
+		:caption => g.title, :gallery => g} %>
+<% end %>

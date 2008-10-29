@@ -1,0 +1,7 @@
+page.insert_html :bottom, :images, :partial => "images"
+if @images.page_count > @images.page
+  page[:loading].hide
+  page.call 'checkScroll'
+else
+  page[:loading].hide
+end

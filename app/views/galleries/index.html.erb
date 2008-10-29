@@ -19,11 +19,18 @@
 <div class='_article'>
 	<% category = params[:category] ? params[:category].capitalize + " " : "" %>
 	<h2><%= "#{category}Gallery Index" -%></h2>
-	<%= render :partial => "shared/page_numbers", :locals => {:collection => @galleries} %>
-	<div id="_allGalleries" class="_thumbnailList clearfix">
-		<% @galleries.each do |g| %>
-			<%= render :partial => "images/slide", :locals => {:image => g.popular_image(current_user), 
-				:caption => g.title, :gallery => g} %>
-		<% end %>
+	<div id="galleries" class="_thumbnailList clearfix">
+	  <%= render :partial => "gallery_index_slides", :locals => {:galleries => @galleries} %>
 	</div>
+	<p id="loading" style="display:none;">Loading more galleries now...</p>
 </div>
+
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'endless_page' %>
+<% end %>  
+
+<% content_for :footnote do %>
+  <noscript>
+    <%= render :partial => "shared/page_numbers", :locals => {:collection => @galleries} %>
+  </noscript>
+<% end %>

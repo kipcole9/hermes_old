@@ -22,6 +22,10 @@ class ImagesController < AssetsController
     render :action => "index"
   end
   
+  def index_js
+    
+  end
+  
   def show_kml
     if @image.mappable?
       render :action => "show"
