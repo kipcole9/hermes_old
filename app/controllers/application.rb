@@ -81,13 +81,16 @@ class ApplicationController < ActionController::Base
   
 protected
   def check_supported_browsers
-    if request.env["HTTP_USER_AGENT"] && 
-       request.env["HTTP_USER_AGENT"].match(/\AMozilla\/4.0 \(compatible; MSIE [456]/)
+    if browser_is_older_internet_explorer?
        respond_to do |format|
-         format.html { browser_not_supported }
-         format.any  {                       }
+         format.html { browser_not_supported }  # No good if htmml requested
+         format.any  {                       }  # But ok if other format requested
        end
     end
+  end
+  
+  def browser_is_older_internet_explorer?
+    request.user_agent && request.user_agent.match(/\AMozilla\/4.0 \(compatible; MSIE [456]/)
   end
 
   # Some old legacy pages had a .htm format so to preserve

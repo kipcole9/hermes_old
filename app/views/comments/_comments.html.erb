@@ -2,8 +2,10 @@
 	<h2>Comments</h2>
 	<% comments.each do |comment| %>
 		<div  id="<%= "comment_#{comment.id.to_s}" -%>" class="_comment">
-		<span class="_comment_author"> <%= "#{sanitize comment.author_name} said:" %></span>
-		<%= format_content(comment.content).strip_tags -%>	
+		<p>
+		  <span class="_comment_author"> <%= "#{sanitize comment.author_name} said:" %></span>
+		  <%= format_content(comment.content).strip_tags -%>
+		</p>  
 		<h3><%= "#{comment.created_at.strftime("%A, %B %d %Y at %H:%M %Z")} (#{time_ago_in_words comment.created_at} ago)" -%>
 			<% if current_user.is_admin? %>
 				<%= link_to_remote("Edit", :url => edit_comment_url(comment)) %> | 
