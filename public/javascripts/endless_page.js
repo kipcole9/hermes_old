@@ -36,8 +36,8 @@ function setPage() {
 function getNewUrl(new_page) {
 	// The idea is just to update the url since
 	// it may have parameters we care about
-	var href = window.location.href
-	var has_params = /\?.+=/
+	var href = window.location.href;
+	var has_params = /\?.+=/;
 	var new_url = "";
 	if (!getUrlParam('page')) {
 		// Just add it to the end
@@ -57,7 +57,7 @@ function getNewUrl(new_page) {
 			new_url =  href;
 		}
 	};
-	return new_url + "&format=js"
+	return new_url + "&format=js";
 }
 
 function getUrlParam(name) {
