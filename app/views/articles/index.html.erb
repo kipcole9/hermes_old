@@ -15,14 +15,11 @@
 	<%= auto_discovery_link_tag(:atom, formatted_articles_url(params.remove("page").merge(:format => "atom"))) %>
 <% end %>
 
-<% content_for :javascripts do %>
-  <%= javascript_include_tag 'endless_page' %>
-<% end %>  
-
 <div id="articles">
   <%= render :partial => "articles" %>
 </div>
 <p id="loading" style="display:none;">Loading more articles now...</p>
+
 <% content_for :footnote do %>
   <noscript>
     <%= render :partial => "shared/page_numbers", :locals => {:collection => @articles} %>

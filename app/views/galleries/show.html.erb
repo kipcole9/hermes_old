@@ -24,10 +24,6 @@
 </div>
 <%= render :partial => "comments/show", :object => @gallery %>
 
-<% content_for :javascripts do %>
-  <%= javascript_include_tag 'endless_page' %>
-<% end %>  
-
 <% content_for :footnote do %>
   <noscript>
     <%= render :partial => "shared/page_numbers", :locals => {:collection => @images} %>

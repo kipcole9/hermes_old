@@ -62,7 +62,7 @@ function fadeUpImage(image) {
 
 // Are all images loaded?
 function imagesAreLoaded() {
-	var images = $$('._thumbnail img'), status = 1;
+	var images = $$('._random_image img'), status = 1;
 	images.each(function(image, index) {
 		if(!image.complete) status = 0;
 	});

@@ -5,6 +5,7 @@ javascripts:
   - effects
   - dragdrop
   - controls
+  - endless_page
   - application
 - lightview:
   - scriptaculous    
