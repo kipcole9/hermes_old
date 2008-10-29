@@ -82,7 +82,7 @@ class ApplicationController < ActionController::Base
 protected
   def check_supported_browsers
     if request.env["HTTP_USER_AGENT"] && 
-       request.env["HTTP_USER_AGENT"].match(/Mozilla\/4.0 \(compatible; MSIE [456]/)
+       request.env["HTTP_USER_AGENT"].match(/\AMozilla\/4.0 \(compatible; MSIE [456]/)
        respond_to do |format|
          format.html { browser_not_supported }
          format.any  {                       }
