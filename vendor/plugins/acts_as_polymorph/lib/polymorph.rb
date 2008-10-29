@@ -34,6 +34,7 @@ module Hermes
         
         class_eval <<-END_EVAL
           has_one :#{polymorph_name}, :as => :#{as_name}, :dependent => :destroy
+          alias_method :ar_to_xml, :to_xml
           
           def acts_as_polymorph_class
             ::#{self.name}
@@ -55,19 +56,17 @@ module Hermes
             "#{polymorph_name}"
           end
           
-          def self.find_by_name_or_id(param)
-            return nil unless param 
-            if (param.is_a?(String) && param.is_integer?) || param.is_a?(Fixnum)
-              find(:first, :conditions => ["#{table_name}.id = ?", param], :include => polymorph_name.to_sym)
-            else
-              find_by_name(param)
-            end
+          def self.all_polymorph_readers
+            readers = [polymorph_class.polymorph_readers, polymorph_class.polymorph_accessors, polymorph_class.content_columns.map(&:name)].flatten
+            readers.reject! {|r| r == "id"}
+            readers
           end
-          
-          def self.find_by_name(param)
-            return nil unless param 
-            find(:first, :conditions => ["#{polymorph_table_name}.name = ?",param], :include => polymorph_name.to_sym)
-          end         
+
+          def self.all_polymorph_writers
+            writers = [polymorph_class.polymorph_writers, polymorph_class.polymorph_accessors, polymorph_class.content_columns.map(&:name)].flatten
+            writers.reject! {|r| r == "id"}
+            writers
+          end           
           
           def initialize(attrs = nil)
             super(nil)
@@ -76,97 +75,90 @@ module Hermes
             self
           end
 
-          define_delegate_methods(#{polymorph_class_name})
-          define_instance_methods(#{polymorph_class_name})
+          define_delegate_readers
+          define_delegate_writers
+          define_meta_methods
+          include InstanceMethods
         END_EVAL
       end
       
       # Attribute methods that proxy the Asset class attributes so we can mass assign
       # and otherwise update as if they were in this class
-      def define_delegate_methods(polymorph_class_name)
-        polymorph_name = polymorph_class_name.to_s.downcase
-        
+      def define_delegate_readers
         # Create delegate methods for polymorphic attributes/methods
-        # that are defined in the asset class
-        [polymorph_class_name.polymorph_readers, polymorph_class_name.polymorph_accessors, polymorph_class_name.content_columns.map(&:name)].flatten.each do |attr|
+        all_polymorph_readers.each do |attr|
           class_eval <<-END_EVAL
             def #{attr.to_s}
-              return self.#{polymorph_name}.#{attr.to_s}
+              return polymorph.#{attr.to_s}
             end
           END_EVAL
         end
+      end
         
+      def define_delegate_writers  
         # and writers
-        [polymorph_class_name.polymorph_writers, polymorph_class_name.polymorph_accessors, polymorph_class_name.content_columns.map(&:name)].flatten.each do |attr|
+        all_polymorph_writers.each do |attr|
           class_eval <<-END_EVAL
             def #{attr.to_s}= (val)
-              self.#{polymorph_name}.#{attr.to_s} = val
+              polymorph.#{attr.to_s} = val
             end
           END_EVAL
         end
-        
-        # define to_xml; including attributes defined for the #{polymorph_name}
-        class_eval <<-END_EVAL
-          alias_method :ar_to_xml, :to_xml
-          def to_xml(options = {})
-            default_except = [:crypted_password, :salt, :remember_token, 
-                              :remember_token_expires_at, :created_at, :updated_at]
-            polymorph_attrs = #{polymorph_class_name}.polymorph_xml_attrs                  
-                              
-            # Need to watch out - when called on an array element, options are acculumated.
-            # Thankfully options are not validated so we can use one to ensure we don't double up.                  
-            unless options[:first_loop_done] == 'yes'
-              options[:except] = (options[:except] ? options[:except] + default_except : default_except)
-              options[:methods] = (options[:methods] ? options[:methods] + polymorph_attrs : polymorph_attrs)
-              options[:first_loop_done] = 'yes'
-            end
-            ar_to_xml(options)
-          end
-        END_EVAL
       end
       
-      # Instance methods to synchronise saving between the two classes
-      def define_instance_methods(polymorph_class_name)
-        polymorph_name = polymorph_class_name.to_s.downcase
-        class_eval <<-END_EVAL          
-          def save(f = true)
-            # Save on a new record will also automatically save the Asset record
-            acts_as_polymorph_class.transaction do
-              is_new = self.new_record?
-              if result = super
-                result = self.#{polymorph_name}.save(f) unless is_new
-              end
-              self.#{polymorph_name}.errors.each {|e, m| self.errors.add(e, m)}
-              raise BadPolymorphicSave unless result # Raise forces rollback
-              true
-            end
-          rescue BadPolymorphicSave
-            false
+      # Instance methods to find the polymorph
+      def define_meta_methods
+        class_eval <<-END_EVAL
+          def polymorph
+            self.#{polymorph_name}
           end
-          
-          def save!
-            save || raise(RecordNotSaved)
-          end
-          
-          def destroy
-            acts_as_polymorph_class.transaction do
-              raise BadPolymorphicDestroy unless super
-            end
-            true
-          rescue BadPolymorphicDestroy
-            false
-          end
-
+                         
           def #{polymorph_name}_id
-            self.#{polymorph_name}.id
-          end       
-                      
+            polymorph.id
+          end
         END_EVAL
       end
     end
 
     module InstanceMethods
-
+      def save(f = true)
+        # Save on a new record will also automatically save the Asset record
+        acts_as_polymorph_class.transaction do
+          is_new = self.new_record?
+          if result = super
+            result = polymorph.save(f) unless is_new
+          end
+          polymorph.errors.each {|e, m| self.errors.add(e, m)}
+          raise BadPolymorphicSave unless result # Raise forces rollback
+          true
+        end
+      rescue BadPolymorphicSave
+        false
+      end
+      
+      def destroy
+        acts_as_polymorph_class.transaction do
+          raise BadPolymorphicDestroy unless super
+        end
+        true
+      rescue BadPolymorphicDestroy
+        false
+      end
+    
+      def to_xml(options = {})
+        default_except = [:crypted_password, :salt, :remember_token, 
+                          :remember_token_expires_at, :created_at, :updated_at]
+        polymorph_attrs = polymorph_class.polymorph_xml_attrs                  
+                          
+        # Need to watch out - when called on an array element, options are acculumated.
+        # Thankfully options are not validated so we can use one to ensure we don't double up.                  
+        unless options[:first_loop_done] == 'yes'
+          options[:except] = (options[:except] ? options[:except] + default_except : default_except)
+          options[:methods] = (options[:methods] ? options[:methods] + polymorph_attrs : polymorph_attrs)
+          options[:first_loop_done] = 'yes'
+        end
+        ar_to_xml(options)
+      end     
     end
   end
 end

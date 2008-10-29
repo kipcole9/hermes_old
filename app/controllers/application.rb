@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   before_filter :massage_format
   before_filter :set_publication
   before_filter :set_theme
+  before_filter :check_supported_browsers  
   before_filter :save_environment
   before_filter :set_timezone
   
@@ -50,6 +51,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def browser_not_supported
+    render :template => "shared/browser_not_supported", :layout => false, :status => 404
+  end
+
+
   def render_error_page(message = "Sorry, something unexpected happened and your request could not be completed (we have been notified).")
     @error_page = message
     respond_to do |format|
@@ -74,6 +80,15 @@ class ApplicationController < ActionController::Base
   end
   
 protected
+  def check_supported_browsers
+    if request.env["HTTP_USER_AGENT"] && 
+       request.env["HTTP_USER_AGENT"].match(/Mozilla\/4.0 \(compatible; MSIE [456]/)
+       respond_to do |format|
+         format.html { browser_not_supported }
+         format.any  {                       }
+       end
+    end
+  end
 
   # Some old legacy pages had a .htm format so to preserve
   # links we reformat

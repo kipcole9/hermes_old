@@ -244,20 +244,12 @@ class Asset < ActiveRecord::Base
     
     host ||= User.environment["HOST"] rescue "localhost"
     if self.country && !self.mappable?
-      geocode_keys = []
-      geocode_keys << self.location if self.location
-      geocode_keys << self.city if self.city
-      geocode_keys << self.state if self.state
-      geocode_keys << self.country if self.country
-      geocode_string = geocode_keys.join(", ")
+      geocode_string = [self.location, self.city, self.state, self.country].compact.join(',')
       # puts "Geocoding '#{geocode_string}'"
       results = Geocoding::get(geocode_string, :host => host)
       if results.status == Geocoding::GEO_UNKNOWN_ADDRESS
         # Try with just city and country
-        geocode_keys = []
-        geocode_keys << self.city if self.city
-        geocode_keys << self.country if self.country
-        geocode_new_string = geocode_keys.join(", ")
+        geocode_new_string = [self.city, self.country].compact.join(',')
         if geocode_new_string != geocode_string
           logger.info "Asset: Address for '#{geocode_string}' unknown, trying with '#{geocode_new_string}'"
           results = Geocoding::get(geocode_new_string, :host => host)
@@ -280,9 +272,10 @@ class Asset < ActiveRecord::Base
   
   # Add location identifiers as tags
   def tag_list=(tags)
+    new_tags = tags.is_a?(String) ? tags.split(',') : tags
     location_tags = [self.location, self.city, self.state, self.country]
-    new_tags = [location_tags, tags].flatten.compact.reject{|n| n.blank?}.uniq.join(', ')
-    super new_tags
+    updated_tags = [location_tags, new_tags].flatten.compact.reject{|n| n.blank?}.map{|n| n.strip}.uniq.join(', ')
+    super updated_tags
   end
   
 private
