@@ -7,7 +7,7 @@
 
 
 body, input, textarea, select {
-  color:			#ccc;
+  color:			#999;
   background:		#000;
   font-family: 		Verdana, sans-serif;
   }
@@ -34,21 +34,26 @@ input, textarea, select {
   background: 		#222;
 }
 
-h3, h4, label, p.caption, 
-#_footer, 
+h3, h4, 
+#_footer, ._article h5,
 ._articleFooter,
-._sidebarContent ul, ._sidebarContent ul a,
-._sidebarContent ul a:visited, 
 ._columnFirst {
-	color: 			#777;
+	color: 			#ddd;
 }
 
+._article h3, p.caption,
+._sidebarContent ul, ._sidebarContent ul a,
+._sidebarContent ul a:visited {
+  color:			#777;
+}
+
+label,
 ._sidebarError, ._sidebarContent, ._sidebarContent h2,
 ._infoWindow > ._thumbsmall, ._sidebarForm p + p {
   color: 			#999;
 }
 
-form h3, ._article h5, ._comment_author, #loading {
+form h3, ._comment_author, #loading {
   color:			#ad9;
 }
 
