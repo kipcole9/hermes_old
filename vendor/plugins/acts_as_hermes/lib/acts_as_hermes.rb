@@ -6,6 +6,11 @@ module Hermes
   
     include ActionController::UrlWriter   
 
+    def last_updated_at
+      comments_update_date = self.comments.empty? ? self.updated_at : self.comments.last.created_at
+      comments_update_date > self.updated_at ? comments_update_date : self.updated_at
+    end
+    
     # For pingbacks
     def add_pingback(sourceURI, body)
       Comment.add_pingback(self, sourceURI, body)

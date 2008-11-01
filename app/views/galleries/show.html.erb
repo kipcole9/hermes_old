@@ -17,15 +17,24 @@
 	<h2><%= @gallery.title %></h2>
 	<%= render :partial => 'articles/article_byline', :locals => {:article => @gallery} -%>
 	<p><%= render :inline => @gallery.description -%></p>
-	<div id="gallery_slides" class="_thumbnailList clearfix">
+	<div id="gallery" class="_thumbnailList clearfix">
 	  <%= render :partial => "images/images" %>
-		<p id="loading" style="display:none;">Loading more gallery images now...</p>
 	</div>
+	<p id="loading" style="display:none;">Loading more gallery images now...</p>
 </div>
+
 <%= render :partial => "comments/show", :object => @gallery %>
 
 <% content_for :footnote do %>
   <noscript>
     <%= render :partial => "shared/page_numbers", :locals => {:collection => @images} %>
   </noscript>
+<% end %>
+
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'scriptaculous' %>
+  <% if @gallery.can_update?(current_user) %>
+    <%= sortable_element("gallery", :tag => "div", :constraint => false, :url => { :action => "order" }) %>
+  <% end %>
+  <%= javascript_include_tag 'lightview' %>
 <% end %>

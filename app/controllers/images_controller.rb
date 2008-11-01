@@ -95,7 +95,10 @@ class ImagesController < AssetsController
   end
 
   def page_size
-    12
+    respond_to do |format|
+      format.html { 12  }
+      format.any  { 100 }
+    end
   end
 
   def recent

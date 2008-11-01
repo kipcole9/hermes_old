@@ -170,7 +170,9 @@ class Asset < ActiveRecord::Base
     asset_type = content_type if content_type.is_a?(String)
     asset_type = content_type.class.name if content_type.class.respond_to?("descends_from_active_record?")
     raise ArgumentError unless asset_type
-    maximum(:updated_at, :conditions => ["content_type = ?", asset_type])
+    asset_updated_at = maximum(:updated_at, :conditions => ["content_type = ?", asset_type])
+    comments_updated_at = maximum("comments.created_at", :conditions => ["content_type = ?", asset_type], :include => "comments")
+    asset_updated_at > comments_updated_at ? asset_updated_at : comments_updated_at
   end
   
   def content_rating=(c)

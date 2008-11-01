@@ -5,7 +5,7 @@ class AssetsController < ApplicationController
   before_filter :sidebar_clear
   before_filter :before_retrieve_object
   before_filter :retrieve_parent_assets
-  before_filter :retrieve_this_asset, :only => [:edit, :update, :show, :destroy, :comments]
+  before_filter :retrieve_this_asset, :only => [:edit, :update, :show, :destroy, :comments, :order]
   before_filter :retrieve_comments,   :only => [:comments]
   before_filter :login_required,      :only => [:new, :create, :edit, :show, :update, :destroy, :index, :comments]
   before_filter :retrieve_assets,     :only => [:index]

@@ -2,10 +2,9 @@ class ArticlesController < AssetsController
 
 protected
   def page_size
-    if RAILS_ENV == "production"
-      10
-    else
-      3
+    respond_to do |format|
+      format.html { 10  }
+      format.any  { 100 }
     end
   end
   

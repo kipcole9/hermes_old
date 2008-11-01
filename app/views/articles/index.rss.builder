@@ -24,7 +24,7 @@ do
           xml.comments(article_url(article) + "/#comments") 
           xml.wfw :commentRss, formatted_comments_article_url(article, :rss)
         end
-        xml.pubDate article.updated_at.rfc822
+        xml.pubDate article.last_updated_at.rfc822
         xml.guid article_url(article)
         xml.dc :creator, h(article.created_by.full_name)
         xml.georss :point, "#{article.latitude} #{article.longitude}" if article.mappable? 

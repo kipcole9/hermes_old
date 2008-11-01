@@ -1,8 +1,5 @@
-<% images = @gallery.images.viewable_by(current_user).published.published_in(publication) %>
-
-<% content_for :javascripts do %>
-	<%= javascript_include_merged :lightview %>
-<% end %>
+<% images = @gallery.images.published.published_in(publication).viewable_by(current_user) \
+    .order('slides.position') %>
 
 <% content_for :head do %>
 	<%= stylesheet_link_merged :lightview %>	

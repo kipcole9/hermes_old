@@ -27,9 +27,10 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem "hpricot",       :version => '>= 0.6', :source => "http://code.whytheluckystiff.net"
   config.gem "RedCloth",      :version => '>= 4.0'
-  config.gem "mini_exiftool", :version => '>= 0.5'
+  config.gem "mini_exiftool", :version => '>= 1.0'
   config.gem "rest-client",   :version => '>= 0.5', :lib => "rest_client"
-
+  config.gem "ruby-openid",   :version => '>= 2.1', :lib => "openid"
+  
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
   # :all can be used as a placeholder for all plugins not explicitly named

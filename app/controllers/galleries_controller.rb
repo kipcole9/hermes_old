@@ -5,6 +5,10 @@ class GalleriesController < AssetsController
 
   end
   
+  def show_js
+    
+  end
+  
   def show_kml
     if @gallery.mappable?
       render :action => "show"
@@ -29,6 +33,15 @@ class GalleriesController < AssetsController
     render :action => "index"
   end
   
+  def order
+    gallery_order = params[:gallery].map{|o| o.to_i}
+    @gallery.slides.each do |slide|
+      slide.position = slide_position_from_order(slide, gallery_order)
+      slide.save unless slide.position == -1
+    end
+    head :status => 200
+  end
+
   def recent
     respond_to do |format|
       format.html 
@@ -45,12 +58,27 @@ class GalleriesController < AssetsController
   
   def after_retrieve_object
     if params[:action] == "show"
-      @images = @gallery.images.published.published_in(publication).viewable_by(current_user).page(params[:page], page_size)
+      @images = @gallery.images.published.published_in(publication).viewable_by(current_user) \
+          .order('slides.position').page(params[:page], page_size)
     end
   end
   
   def page_size
-    12
+    respond_to do |format|
+      format.html { 12  }
+      format.js   { 12  }
+      format.any  { 100 }
+    end
   end
+  
+protected
+  
+  def slide_position_from_order(slide, gallery_order)
+    gallery_order.each_with_index do |image_id, index|
+      return index if slide.image_id == image_id
+    end
+    -1
+  end
+  
     
 end

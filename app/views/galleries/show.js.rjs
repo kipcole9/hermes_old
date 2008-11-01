@@ -1,4 +1,4 @@
-page.insert_html :bottom, :gallery_slides, :partial => "images/images"
+page.insert_html :bottom, :gallery, :partial => "images/images"
 if @images.page_count > @images.page
   page[:loading].hide
   page.call 'checkScroll'
