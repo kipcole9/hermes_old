@@ -71,7 +71,7 @@ protected
     redirect_back_or_default('/')
   end
   
-  def using_open_id?
-    !params[:openid_url].blank?
-  end
+  #def using_open_id?
+  #  !params[:openid_url].blank?
+  #end
 end

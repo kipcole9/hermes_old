@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081013085756) do
+ActiveRecord::Schema.define(:version => 20081102082700) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -43,14 +43,14 @@ ActiveRecord::Schema.define(:version => 20081013085756) do
   create_table "assets", :force => true do |t|
     t.string   "name"
     t.string   "title"
-    t.text     "description"
+    t.text     "description",            :limit => 16777215
     t.integer  "created_by"
     t.datetime "created_at"
     t.integer  "updated_by"
     t.datetime "updated_at"
-    t.integer  "view_count",                           :default => 0
+    t.integer  "view_count",                                 :default => 0
     t.integer  "status"
-    t.integer  "content_rating",                       :default => 5
+    t.integer  "content_rating",                             :default => 5
     t.string   "sublocation"
     t.string   "location"
     t.string   "city"
@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(:version => 20081013085756) do
     t.float    "latitude"
     t.float    "longitude"
     t.integer  "geocode_accuracy"
-    t.integer  "geocode_method",                       :default => 0
+    t.integer  "geocode_method",                             :default => 0
     t.integer  "allow_comments"
     t.boolean  "moderate_comments"
     t.integer  "content_id"
@@ -72,12 +72,12 @@ ActiveRecord::Schema.define(:version => 20081013085756) do
     t.integer  "update_permissions",     :limit => 8
     t.integer  "delete_permissions",     :limit => 8
     t.integer  "publications",           :limit => 8
-    t.boolean  "comments_require_login",               :default => false,    :null => false
+    t.boolean  "comments_require_login",                     :default => false,    :null => false
     t.string   "copyright_notice"
-    t.boolean  "include_in_index",                     :default => true
-    t.boolean  "allow_pingbacks",                      :default => true,     :null => false
-    t.integer  "map_zoom_level",         :limit => 2,  :default => 4
-    t.string   "map_type",               :limit => 10, :default => "Normal"
+    t.boolean  "include_in_index",                           :default => true
+    t.boolean  "allow_pingbacks",                            :default => true,     :null => false
+    t.integer  "map_zoom_level",         :limit => 2,        :default => 4
+    t.string   "map_type",               :limit => 10,       :default => "Normal"
   end
 
   add_index "assets", ["name", "content_type"], :name => "index_on_name_and_content_type", :unique => true
@@ -118,7 +118,7 @@ ActiveRecord::Schema.define(:version => 20081013085756) do
 
   create_table "comments", :force => true do |t|
     t.integer  "asset_id"
-    t.text     "content"
+    t.text     "content",          :limit => 16777215
     t.integer  "created_by"
     t.string   "created_by_email"
     t.string   "created_by_name"
@@ -202,10 +202,10 @@ ActiveRecord::Schema.define(:version => 20081013085756) do
     t.string   "exception_class"
     t.string   "controller_name"
     t.string   "action_name"
-    t.text     "message"
-    t.text     "backtrace"
-    t.text     "environment"
-    t.text     "request"
+    t.text     "message",         :limit => 16777215
+    t.text     "backtrace",       :limit => 16777215
+    t.text     "environment",     :limit => 16777215
+    t.text     "request",         :limit => 16777215
     t.datetime "created_at"
   end
 
@@ -217,14 +217,14 @@ ActiveRecord::Schema.define(:version => 20081013085756) do
     t.integer "object_id"
     t.string  "object_type"
     t.string  "track_filename"
-    t.text    "javascript"
+    t.text    "javascript",       :limit => 16777215
   end
 
   create_table "messages", :force => true do |t|
     t.string   "created_by_name",  :limit => 50
     t.string   "created_by_email", :limit => 50
     t.string   "website"
-    t.text     "content"
+    t.text     "content",          :limit => 16777215
     t.integer  "created_by"
     t.string   "ip_address",       :limit => 20
     t.string   "browser"
@@ -242,13 +242,9 @@ ActiveRecord::Schema.define(:version => 20081013085756) do
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.string  "nonce"
-    t.integer "created"
-  end
-
-  create_table "open_id_authentication_settings", :force => true do |t|
-    t.string "setting"
-    t.binary "value"
+    t.integer "timestamp",                  :null => false
+    t.string  "server_url"
+    t.string  "salt",       :default => "", :null => false
   end
 
   create_table "pages", :force => true do |t|
@@ -256,7 +252,7 @@ ActiveRecord::Schema.define(:version => 20081013085756) do
     t.string   "name"
     t.integer  "position"
     t.string   "heading"
-    t.text     "content"
+    t.text     "content",    :limit => 16777215
     t.string   "markup",     :limit => 50
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -289,13 +285,13 @@ ActiveRecord::Schema.define(:version => 20081013085756) do
     t.integer "bit_id",                     :limit => 8
     t.string  "theme"
     t.string  "domain"
-    t.integer "articles_per_page",                         :default => 10
-    t.integer "comments_disabled_after",                   :default => 0
-    t.boolean "default_publication",                       :default => false
-    t.integer "publish_status",                            :default => 1
-    t.text    "publish_status_description"
+    t.integer "articles_per_page",                              :default => 10
+    t.integer "comments_disabled_after",                        :default => 0
+    t.boolean "default_publication",                            :default => false
+    t.integer "publish_status",                                 :default => 1
+    t.text    "publish_status_description", :limit => 16777215
     t.string  "pop_server"
-    t.integer "port_number",                               :default => 110
+    t.integer "port_number",                                    :default => 110
     t.string  "email_userid"
     t.string  "email_password"
     t.string  "admin_email"
@@ -349,29 +345,29 @@ ActiveRecord::Schema.define(:version => 20081013085756) do
   create_table "unknown_tags", :force => true do |t|
     t.integer "position"
     t.string  "name"
-    t.integer "tag_count",    :default => 0
+    t.integer "tag_count",                        :default => 0
     t.string  "add_to"
     t.string  "synonym_of"
-    t.text    "found_in"
+    t.text    "found_in",     :limit => 16777215
     t.string  "updated_with"
   end
 
   create_table "users", :force => true do |t|
-    t.integer  "groups",                    :limit => 8,   :default => 0,     :null => false
+    t.integer  "groups",                    :limit => 8,        :default => 0,     :null => false
     t.string   "nick_name"
     t.string   "login"
     t.string   "given_name"
     t.string   "family_name"
     t.string   "email"
     t.date     "birthday"
-    t.text     "profile"
+    t.text     "profile",                   :limit => 16777215
     t.integer  "show_profile",              :limit => 1
     t.string   "display_theme"
     t.string   "crypted_password",          :limit => 40
     t.string   "salt",                      :limit => 40
     t.integer  "photo"
     t.integer  "show_photo",                :limit => 1
-    t.boolean  "disabled",                                 :default => false
+    t.boolean  "disabled",                                      :default => false
     t.string   "time_zone",                 :limit => 100
     t.string   "locale",                    :limit => 20
     t.string   "identity_url"
