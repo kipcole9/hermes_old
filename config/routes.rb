@@ -32,9 +32,11 @@ ActionController::Routing::Routes.draw do |map|
   # Authentication routes
   map.resource  :sessions
   map.signup '/signup', :controller => 'users', :action => 'new'
+  map.open_id_complete 'session', :controller => "sessions", :action => "create", :requirements => { :method => :get }
   map.login  '/login', :controller => 'sessions', :action => 'new'
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'
   map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate'
+
    
   # Assets routes
   map.resources :articles,  :collection => {:list => :get, :recent => :get, :popular => :get, :live_search => :post},
