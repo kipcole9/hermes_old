@@ -21,6 +21,12 @@
   border:			1px solid #555;
   }
 
+#_flash {
+  position:			relative;
+  top:				-5px;
+  margin-bottom:	5px;
+}
+
 #_content {
   width:			580px;
   float:			left;

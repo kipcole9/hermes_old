@@ -130,7 +130,7 @@ protected
       flash[:notice] = "#{asset_obj.name} created successfully."
       redirect_back_or_default('/') if after_create_object(true)
     else
-      flash[:notice] = "Could not create #{asset_obj.name}."
+      flash.now[:error] = "Could not create #{asset_obj.name}."
       set_error_sidebar
       if after_create_object(false)
         @object = asset_obj.new(params[param_name])
@@ -166,7 +166,7 @@ protected
       if request.xhr?
         send_ajax_update_response(false)
       else
-        flash[:notice] = "Could not update #{asset_obj.name}."
+        flash.now[:error] = "Could not update #{asset_obj.name}."
         set_error_sidebar
         render :action => "edit"
       end
@@ -188,7 +188,7 @@ protected
       after_destroy_object(true)
       flash[:notice] = "#{asset_obj.name} deleted successfully."
     else
-      flash[:notice] = "Could not delete #{asset_obj.name}."
+      flash[:error] = "Could not delete #{asset_obj.name}."
       set_error_sidebar
       after_destroy_object(false)
     end
@@ -330,13 +330,14 @@ private
     user = asset_obj.respond_to?("polymorph_class") ? current_user : nil
     @objects = asset_obj.viewable(user, publication) \
                   .conditions(marshall_params) \
+                  .included_in_index(current_user) \
                   .tagged_with(unescape(params[:tags])) \
                   .category_of(unescape(params[:category])) \
                   .order('assets.created_at DESC') \
                   .page(params[:page], page_size)  
     if @objects.blank?
       respond_to do |format|
-        format.html { flash[:notice] = "#{class_name}: found no items!" }
+        format.html { flash[:error] = "#{class_name}: found no items!" }
         format.xml  { head :status => 404 }
       end
     end
@@ -360,7 +361,7 @@ private
         # Note that GoogleEarth declares a user-agent when getting kml, but not getting jpg
         # So basically this won't work until that is fixed
         format.jpg  { log_asset_show("jpg") if is_gis_browser?(request.env["HTTP_USER_AGENT"])  }
-        format.any  {                        }
+        format.any  {                     }
       end
     end
   end

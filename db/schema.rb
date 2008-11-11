@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081102082700) do
+ActiveRecord::Schema.define(:version => 20081111051954) do
 
   create_table "articles", :force => true do |t|
     t.text   "content"
@@ -153,6 +153,15 @@ ActiveRecord::Schema.define(:version => 20081102082700) do
 
   add_index "country_alternates", ["alternate_name"], :name => "index_alternate_country_name", :unique => true
   add_index "country_alternates", ["country_id"], :name => "index_country_id"
+
+  create_table "event_instances", :force => true do |t|
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+  end
+
+  create_table "events", :force => true do |t|
+    t.string "frequency"
+  end
 
   create_table "galleries", :force => true do |t|
     t.string "gallery_of"

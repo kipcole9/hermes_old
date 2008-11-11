@@ -1,8 +1,17 @@
+Image management
+Separate image sizes into folders (ie. /display, /slide etc)
+This can allow for configurable image size disposition too
+on a per publication basis
+
+Add an iphone thumbnail (320/4 spacing, square, remove metadata) so
+its as small as possible for downloading.
+
 Configuration Module:
 Image upload directory
 Image catalog directory
 What are Bots
 What are GIS browsers
+Image sizes for the publication
 
 Sidebars:
 Archive calendar sidebar
@@ -28,7 +37,7 @@ Refactor to use partial collections
 Refactor out to helpers (and refactor helpers)
 
 Controllers:
-Move to endless_page for images, galleries
+DONE Move to endless_page for images, galleries
 
 RDOC:
 Work out how to do rdocs in code

@@ -89,20 +89,21 @@ class ImagesController < AssetsController
   end
   
   def random_slide
-    @images = Image.published_in(publication).published.viewable_by(current_user) \
+    @images = Image.published_in(publication).published.viewable_by(current_user).included_in_index(current_user) \
       .order('rand()').limit(1).find(:all, :conditions => ["images.id NOT IN (?)", params[:current]])
     render :partial => "slide", :locals => {:image => @images.first}
   end
 
   def page_size
     respond_to do |format|
-      format.html { 12  }
-      format.any  { 100 }
+      format.html { return 12  }
+      format.js   { return 12  }      
+      format.any  { return 100 }
     end
   end
 
   def recent
-    @images = Image.published_in(publication).published.viewable_by(current_user) \
+    @images = Image.published_in(publication).published.viewable_by(current_user).included_in_index(current_user) \
       .order('created_at DESC').limit(30).tagged_with(unescape(params[:tags])).page(params[:page], page_size)
     @heading = "Recent Image Index"
     respond_to do |format|
@@ -114,7 +115,7 @@ class ImagesController < AssetsController
   end
 
   def popular
-    @images = Image.published_in(publication).published.viewable_by(current_user) \
+    @images = Image.published_in(publication).published.viewable_by(current_user).included_in_index(current_user) \
       .order('view_count DESC').limit(30).tagged_with(unescape(params[:tags])).page(params[:page], page_size)
     @heading = "Popular Image Index"
     respond_to do |format|

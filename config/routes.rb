@@ -57,6 +57,7 @@ ActionController::Routing::Routes.draw do |map|
                                 :terms => :get, :contact => :get}
   map.resources :users
   map.resources :messages
+  map.resources :events  
 
   map.connect "logged_exceptions/:action/:id", :controller => "logged_exceptions"
 

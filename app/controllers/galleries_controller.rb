@@ -65,9 +65,9 @@ class GalleriesController < AssetsController
   
   def page_size
     respond_to do |format|
-      format.html { 12  }
-      format.js   { 12  }
-      format.any  { 100 }
+      format.html { return 12  }
+      format.js   { return 12  }
+      format.any  { return 100 }
     end
   end
   

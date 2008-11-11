@@ -3,8 +3,8 @@ class ArticlesController < AssetsController
 protected
   def page_size
     respond_to do |format|
-      format.html { 10  }
-      format.any  { 100 }
+      format.html { return 10  }
+      format.any  { return 100 }
     end
   end
   

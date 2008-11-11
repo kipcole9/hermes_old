@@ -55,7 +55,7 @@ module Hermes
         named_scope :limit,      lambda {|limit| { :limit => limit } }
         
         named_scope :included_in_index, lambda { |*user|
-          (user.first && user.first.is_admin?) ? {:conditions => "#{polymorph_table_name}.include_in_index = 1", :include => polymorph_name.to_sym} : { }
+          (user.first && user.first.is_admin?) ? { } : {:conditions => "#{polymorph_table_name}.include_in_index = 1", :include => polymorph_name.to_sym}
         }
 
         named_scope :published_in, lambda {|publication| 
@@ -81,7 +81,7 @@ module Hermes
       
       # Standard access method
       def viewable(user, publication)
-        published_in(publication).published.viewable_by(user).included_in_index(user)
+        published_in(publication).published.viewable_by(user)
       end
             
       def page(num, per_page =  10)

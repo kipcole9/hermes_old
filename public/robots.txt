@@ -7,9 +7,9 @@ Sitemap: http://www.noexpectations.com.au/sitemap.xml
 Sitemap: http://www.noexpectations.com.au/geo_sitemap.xml
 User-Agent: *
 Allow: /
-Disallow: /assets/live_search/
-Disallow: /images/live_search/
-Disallow: /images/random/
+Disallow: /assets/live_search
+Disallow: /images/live_search
+Disallow: /images/random
 Disallow: /Portfolios/
 Disallow: /signup
 Disallow: /login

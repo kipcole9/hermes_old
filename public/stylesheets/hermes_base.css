@@ -18,6 +18,24 @@ p, ._article li {
   letter-spacing:	115%;
 }
 
+p#_flashNotice, p#_flashError {
+  padding:			0.1em;
+  color:			black;
+  border:			1px dotted #555;	
+}
+
+p#_flashNotice img, p#_flashError img {
+  position:			relative;
+  top:				2px;
+}
+
+p#_flashNotice {
+  background:		#ad9;
+}
+
+p#_flashError {
+  background:		#f96;
+}
 
 /*---------------------------------------
 	Element styling. In general, define

@@ -1,0 +1,12 @@
+<%
+	sidebar :asset_search
+	sidebar :image_tag_cloud
+%>
+<div id="_form">
+<%= render :partial => "shared/form_heading", :locals => {:asset => @image} %>
+<% hermes_form_for :event, :url => get_url(@event), :html => {:method => get_method, :id => "_formEdit"} do |form| %>
+	<h3>Event Frequency</h3>
+	<%= form.text_field :frequency, :disabled => is_show?, :size => 43 %>
+	<%= render :partial => "shared/asset_summary", :locals => {:form => form} -%>
+<% end %>
+</div>

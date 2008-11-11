@@ -13,7 +13,7 @@ do
     xml.description publication.description
     @messages.each do |message|
       xml.item do
-        xml.title "Message from '#{message.author_name}'"
+        xml.title "Message from '#{message.author_name}' <#{message.author_email}>"
         xml.link message_url(message)
         xml.description do
           xml << message.content.strip_tags
