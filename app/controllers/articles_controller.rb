@@ -4,6 +4,7 @@ protected
   def page_size
     respond_to do |format|
       format.html { return 10  }
+      format.js   { return 10  }      
       format.any  { return 100 }
     end
   end
