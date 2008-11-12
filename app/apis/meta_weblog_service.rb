@@ -62,7 +62,7 @@ private
   def blogify_post(article)
     Blog::Post.new(:title => article.title, :mt_excerpt => article.description, 
       :dateCreated => article.dont_publish_before ? article.dont_publish_before.utc.iso8601 : nil,
-      :postid => article.name, :mt_tags => article.tag_list.join(', '), :description => article.content,
+      :postid => article.name, :mt_tags => article.tag_list.join(', '), :description => article.content, :mt_convert_breaks => article.markup_type,
       :categories => article.category_names.split(','), :mt_allow_comments => article.allow_comments, :mt_allow_pings => article.allow_pingbacks)
   end
 

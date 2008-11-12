@@ -4,7 +4,11 @@ class MovableTypeService < ActionWebService::Base
   web_service_api MovableTypeAPI
 
   def supportedTextFilters
-    [Blog::Filter.new(:key => "filter 1", :label => "label 1")]
+    filters = []
+    filters << Blog::Filter.new(:key => "none", :label => "None")
+    filters << Blog::Filter.new(:key => "simple", :label => "Simple")
+    filters << Blog::Filter.new(:key => "textile", :label => "Textile")
+    filters
   end
   
   def supportedMethods
