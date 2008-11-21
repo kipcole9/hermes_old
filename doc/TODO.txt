@@ -1,8 +1,3 @@
-Image management
-Separate image sizes into folders (ie. /display, /slide etc)
-This can allow for configurable image size disposition too
-on a per publication basis
-
 Add an iphone thumbnail (320/4 spacing, square, remove metadata) so
 its as small as possible for downloading.
 
@@ -12,6 +7,7 @@ Image catalog directory
 What are Bots
 What are GIS browsers
 Image sizes for the publication
+Installed formatters (RedCloth, RubyPants, SimpleFormat)
 
 Sidebars:
 Archive calendar sidebar
@@ -32,12 +28,10 @@ Maps:
 Reconfigure asset_map into rjs (use endless_page as a model)
 
 Views:
-Do "simple_format" on articles and descriptions if there is no <p></p>
 Refactor to use partial collections
 Refactor out to helpers (and refactor helpers)
 
 Controllers:
-DONE Move to endless_page for images, galleries
 
 RDOC:
 Work out how to do rdocs in code

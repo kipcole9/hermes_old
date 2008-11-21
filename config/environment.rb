@@ -27,6 +27,7 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem "hpricot",       :version => '>= 0.6', :source => "http://code.whytheluckystiff.net"
   config.gem "RedCloth",      :version => '>= 4.1', :lib => "redcloth"
+  config.gem "rubypants",     :version => '>= 0.2'
   config.gem "mini_exiftool", :version => '>= 1.0'
   config.gem "rest-client",   :version => '>= 0.5', :lib => "rest_client"
   config.gem "ruby-openid",   :version => '>= 2.1', :lib => "openid"

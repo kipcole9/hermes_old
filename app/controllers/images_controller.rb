@@ -19,7 +19,7 @@ class ImagesController < AssetsController
   end
   
   def index_kml
-    render :action => "index"
+    render(:action => "index")
   end
   
   def index_js

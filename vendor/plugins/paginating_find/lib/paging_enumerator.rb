@@ -67,7 +67,8 @@ class PagingEnumerator
     load_page unless results
     results.last
   end
-    # Return indexed item of result set
+  
+  # Return indexed item of result set
   def [](index)
     load_page unless results
     results[index]
