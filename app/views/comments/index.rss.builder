@@ -23,7 +23,7 @@ do
           xml << comment.content.strip_tags
         end
         xml.pubDate comment.updated_at.rfc822
-        xml.author h(comment.author_name)
+        xml.author h("#{comment.author_name} <#{comment.author_email}>")
       end
     end
   end
