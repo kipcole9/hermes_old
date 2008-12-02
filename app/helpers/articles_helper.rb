@@ -10,7 +10,7 @@ module ArticlesHelper
     else
       excerpt = article.description
     end
-    render_to_string :inline => excerpt
+    render :inline => excerpt
   end
   
   # Article rendering needs to consider the markup involved
