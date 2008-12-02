@@ -1,8 +1,8 @@
 <% for article in @articles -%>
     <div id="<%= 'article_' + article.id.to_s -%>" class="_article" >
-	  <h2><%= link_to h(article.title), article %></h2>
-	  <%= render :partial => "article_byline", :locals => {:article => article} -%>
-	  <%= render_excerpt(article) %>
-	  <%= render(:partial => "article_footer", :locals => {:article => article}) -%>
+  	  <h2><%= link_to h(article.title), article %></h2>
+  	  <%= render :partial => "article_byline", :locals => {:article => article} -%>
+  	  <%= render_excerpt(article) -%>
+  	  <%= render(:partial => "article_footer", :locals => {:article => article}) -%>
     </div>	
 <% end %>
