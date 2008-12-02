@@ -10,7 +10,9 @@ protected
   end
   
   def index_js
-
+    # Done only to force the correct mime type.  Rails 2.2.0 will set the wrong mime type
+    # whereas rails 2.2.0 set the correct mime type.
+    render :template => "articles/index.js.rjs", :content_type => "text/javascript"
   end
 
   
