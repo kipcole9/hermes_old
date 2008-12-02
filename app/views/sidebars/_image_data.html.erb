@@ -10,5 +10,15 @@
 			</div>
 		</div>
 	<% end %>
+	<% if current_user.is_admin? %>
+	  <div class="clearfix">
+  	  <div class="columnFirst">
+  			<%= Views -%>:
+  		</div>
+  		<div class="columnSecond">
+  			<%= @image.view_count -%>
+  		</div>
+  	</div>
+  <% end %>
 	</div>
 <% end %>
