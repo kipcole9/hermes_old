@@ -104,6 +104,12 @@ module Hermes
           end
           true
         end
+        
+        def import_taken_at
+          logger.info "Image Import: Import taken_at time for '#{self.full_path_name}'"
+          image_exif = MiniExiftool.new(self.full_path_name)
+          self.taken_at = image_exif["DateTimeOriginal"]
+        end
 
         def import_tags
           logger.info "Image Import Tags"
