@@ -19,7 +19,7 @@ class Image < ActiveRecord::Base
   belongs_to        :catalog
   
   before_validation_on_create :make_title
-  skip_time_zone_conversion_for_attributes = [:taken_at]
+  self.skip_time_zone_conversion_for_attributes = [:taken_at]
 
   TAG_CLOUD_LIMIT   = 30
   ITEM_LIMIT        = 100

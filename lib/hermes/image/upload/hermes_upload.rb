@@ -39,6 +39,7 @@ module Hermes
    
     def update_time(filename, target_uri)
       url = "#{target_uri.with_slash}images/#{CGI.escape(File.basename(filename))}"
+      puts url
       result = RestClient.get(url, :user_agent => HERMES_UPLOAD[:user_agent])
       return result.to_time
     rescue RestClient::ResourceNotFound => e

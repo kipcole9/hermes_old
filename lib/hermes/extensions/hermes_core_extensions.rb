@@ -69,7 +69,7 @@ module Hermes #:nodoc:
           # do nothing.  methods will be undefined
         end
         def truncate(length = 30, truncate_string = "…")
-          TextHelperSingleton.instance.truncate(self, length, truncate_string)
+          TextHelperSingleton.instance.truncate(self, :length => length, :omission => truncate_string)
         end
         def word_wrap(line_width = 80)
           TextHelperSingleton.instance.word_wrap(self, line_width)
