@@ -1,9 +1,9 @@
 module ArticlesHelper
   
   def render_excerpt(article)
-    if article.content
+    unless article.content.blank?
       if article.description.match(/<\/p>\Z/)
-        excerpt = article.description.sub(/<\/p>\Z/, link_to(" More&hellip;", article) + "</p>" )
+        excerpt = article.description.sub(/<\/p>\Z/, " " + link_to("More&hellip;", article) + "</p>" )
       else
         excerpt = article.description + " " + link_to("More&hellip;", article)
       end

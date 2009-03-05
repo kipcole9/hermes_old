@@ -16,7 +16,7 @@ class AssetsController < ApplicationController
   after_filter  :log_show,            :only => [:show]
   
   ASSET_ACTIONS = ["live_search", "apis"]
-  BOTS          = /(Googlebot|yahoo! slurp|msnbot|Twiceler|DotBot|friendfeed|MJ12bot|NetNewsWire|CCBot)/i
+  BOTS          = /(Googlebot|yahoo! slurp|msnbot|Twiceler|DotBot|friendfeed|MJ12bot|NetNewsWire|CCBot|Technoratibot|Shere Scout|Moreoverbot|BlogPulseLive)/i
   GIS_BROWSERS  = /GoogleEarth/i
   
   # Proxies: implement in concrete Asset sub-class as required
