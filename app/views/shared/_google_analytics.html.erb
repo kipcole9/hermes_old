@@ -2,6 +2,8 @@
 	<script src="<%= request.protocol %>www.google-analytics.com/ga.js" type='text/javascript' ></script>
 	<script type="text/javascript">
 		var pageTracker = _gat._getTracker("<%= Publication.current.google_analytics %>");
+		pageTracker._setLocalGifPath('/tracker.gif');
+		pageTracker._setLocalRemoteServerMode();
 		pageTracker._initData();
 		pageTracker._trackPageview();
 	</script>
