@@ -4,6 +4,7 @@
 		var pageTracker = _gat._getTracker("<%= Publication.current.google_analytics %>");
 		pageTracker._setLocalGifPath('/tracker.gif');
 		pageTracker._setLocalRemoteServerMode();
+		pageTracker._trackEvent("category", "action", "opt_label", "opt_value");
 		pageTracker._initData();
 		pageTracker._trackPageview();
 	</script>
