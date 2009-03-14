@@ -2,6 +2,8 @@
 log/*.log
 tmp/**/*
 tmp/*
+public/ga1.html
+public/ga2.html
 config/database.yml
 config/hermes_upload.yml
 config/mailer_credentials.yml
