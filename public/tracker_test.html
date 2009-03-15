@@ -50,7 +50,7 @@
 			not currently sent.</li>
 		<li>GA sends the character encoding of the page.  Not sure we need to do that - and we currently don't</li>	
 	</ul>	
-	
+	<p></p>
 	<h2>Testing</h2>
 	<p>The key things to test are:</p>
 	<ul>
@@ -65,13 +65,13 @@
 		<li>Check the flash version is correct (and is that enough info for what we need?)</li>
 	</ul>			
 	
+	<script src="/javascripts/tracker.js" type='text/javascript' ></script>
 	<script>
 		function o(name, value) {
 			document.write('<p><em>' + name + "</em>: " + value + "</p>");
 		};
-		
 		document.write('<br /><h2>Here are some basic metrics for this request.</h2>');
-		t = new _tks;
+		var t = new _tks;
 		o('Title', t.getPageTitle());
 		o('Visitor', t.getVisitor());
 		o('Session', t.getSession());
@@ -86,7 +86,6 @@
 		o('Campaign content', t.getCampContent());
 		o('User agent', t.getUserAgent());
 		o('Referrer', t.getReferrer());
-		
 		document.write('<br /><h2>Here is the url we sent to the tracking site</h2>');
 		url = t.trackPageview();
 		o('<p>Sent tracker', url + '</p>');
