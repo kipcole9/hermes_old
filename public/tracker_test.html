@@ -24,12 +24,21 @@
 	<pre>
 		&lt;script src="http://www.noexpectations.com.au/javascripts/tracker.js" type='text/javascript' >&lt;/script>
 		&lt;script>
-		  tracker = new _tks;
-		  // tracker.setAccount('code');
+		  tracker = new _tks(); 
 		  tracker.trackPageview();
 		&lt;/script>
 	</pre>
-	
+	<br />
+	<h2>Changes:</h2>
+	<ul><li>Now supports an account code: <pre>tracker = new _tks('account code')</pre> but since the domains aren't
+		set up then yet, it won't send anything properly if you use it.</li>
+		<li>Now will do http or https depending on the protocol of the loaded page.  This will avoid any "unsecure bits from
+			secure page" messages.</li>
+		<li>Added parameter 'utmcs' to describe character encoding of the document, taken from any provided meta
+			http-equiv tag.
+		</li>		
+	</ul>		
+	<br />
 	<h2>Important notes:</h2>
 	<ul><li>Of course we need a hosting site for the tracking stuff.  It's currently on my site but thats just for testing.</li>
 		<li>No account tagging yet which is why that call is currently commented out. We'll use the accoun
@@ -50,7 +59,7 @@
 			not currently sent.</li>
 		<li>GA sends the character encoding of the page.  Not sure we need to do that - and we currently don't</li>	
 	</ul>	
-	<p></p>
+	<br />
 	<h2>Testing</h2>
 	<p>The key things to test are:</p>
 	<ul>
@@ -79,6 +88,7 @@
 		o('Screen size', t.getScreenSize());
 		o('Color depth', t.getColorDepth());
 		o('Language', t.getLanguage());
+		o('Character encoding', t.getCharset());
 		o('Flash version', t.getFlashVersion());
 		o('Campaign name', t.getCampName());
 		o('Campaign source', t.getCampSource());
