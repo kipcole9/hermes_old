@@ -8,7 +8,9 @@ module Hermes
       class BadPolymorphicSave < RuntimeError; end
       class BadPolymorphicDestroy < RuntimeError; end
       
-      # For the "master" class
+      # For the "base" class.  Optional: only required if you have
+      # additional virtual attributes (methods) you want mapped into
+      # polymorphs
       def acts_as_polymorph_asset(options = {})
         configuration = { :accessors => [], :readers => [], :writers => [], :to_xml => [] }
         configuration.update(options) if options.is_a?(Hash)
@@ -21,8 +23,10 @@ module Hermes
         cattr_reader  :polymorph_accessors, :polymorph_readers, :polymorph_writers, :polymorph_xml_attrs
       end
       
-      # For the "child" classes
+      # For the "polymorph" classes
       def acts_as_polymorph(options = {})
+        # :name is the model name of the base class
+        # :content is the name of the polymorphic :as in the base class
         configuration = { :name => :asset, :as => :content }
         configuration.update(options) if options.is_a?(Hash)
         
@@ -82,7 +86,7 @@ module Hermes
         END_EVAL
       end
       
-      # Attribute methods that proxy the Asset class attributes so we can mass assign
+      # Attribute methods that proxy the base class attributes so we can mass assign
       # and otherwise update as if they were in this class
       def define_delegate_readers
         # Create delegate methods for polymorphic attributes/methods
@@ -122,7 +126,7 @@ module Hermes
 
     module InstanceMethods
       def save(f = true)
-        # Save on a new record will also automatically save the Asset record
+        # Save on a new record will also automatically save the base record
         acts_as_polymorph_class.transaction do
           is_new = self.new_record?
           if result = super

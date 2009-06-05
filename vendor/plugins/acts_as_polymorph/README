@@ -1,2 +1,84 @@
 ActsAsPolymorph
 ===============
+
+Acts_as_polymorph is intended to ease the effort of managing a polymorphic relationship by handling
+the coordination of creating, saving and destroying the related models as well as mapping
+attributes from the base model into the polymorph.
+
+Example
+=======
+
+Our blog system has multiple types of assets (Article, Image, Gallery, Map, ....) but
+we want a common naming, categorising and tagging function to unify asset search and 
+a common directory structure.  It can also be used as a basis for authorising asset 
+access (requires addition code which for my use is abstracted into a plugin called
+acts_as_secure - its not a general purpose plugin though).
+
+Lets say we have a base model called Asset (this is the default name of the base class
+used in the plugin).  And we have a polymorph called Article.  To use we define:
+
+class Asset < ActiveRecord::Base
+	# Define the polymorphic relationship
+	# in the standard way
+	belongs_to  :content, :polymorphic => true
+end
+
+# Assumes the base class is called Asset
+class Article < ActiveRecord::Base
+	acts_as_polymorph
+	
+	attr_accessible :category
+end
+
+# Configure a different base class
+class Article < ActiveRecord::Base
+	# Will create a polymorphic relationship with a model
+	# called Group that has a polymorphic association called 'content'
+	acts_as_polymorph :name => :asset, :as => :content
+	
+	# Article now has delegate methods for all attributes
+	# of the base model for reading and writing
+	
+	def example
+		# Access the category attribute on the base model
+		this.category 					=> returns self.asset.category
+		this.category = 'photo' 		=> same as self.asset.category = 'photo'
+	
+		this.save						=> saves this instance, and the base instance if required
+		this.errors						=> includes errors from the base model (they're copied over)
+		this.destroy					=> destroys this instance and the base instance too
+	end
+end
+
+Base models can also have virtual attributes made available in the polymorphs.
+This is directly from my web site:
+
+class Asset < ActiveRecord::Base
+  belongs_to                  :content, :polymorphic => true
+  
+  acts_as_polymorph_asset     :accessors => [:tag_list, :category_ids, :category_names],  
+                              :readers => [:comments_open?, :comments_closed?, :comments_none?, :comments_require_login?,
+                                           :moderate_comments?, :status_description, :content_rating_description,
+                                           :mappable?, :geocode, :asset_id, :comments,
+                                           :permissions, :include_in_index?, :allow_pingbacks?, :view_count],
+                              :to_xml =>  [:name, :title, :latitude, :longitude, :tag_list, :category_names, :content_rating,
+                                           :description, :created_at, :updated_at, :created_by_email]
+end
+
+acts_as_polymorph_asset allows the definition of additional virtual attributes
+that can be mapped into polymorphs and used directly as attributes there.
+
+:accessors will allow reading and writing
+:readers will allow reading
+:to_xml defines additional attributes that are included when calling
+to_xml in the polymorphic model.
+
+NOTE:
+====
+
+The plugin does not automatically create the base class when 
+calling new (or create) on a polymorph class.  I don't remember 
+why I don't do that.
+
+It means you'll have to update the plugin or add the required
+functions in your controllers.
