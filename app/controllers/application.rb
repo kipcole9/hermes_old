@@ -75,7 +75,7 @@ class ApplicationController < ActionController::Base
     return nil if cookies[:tzoffset].blank?
     @browser_timezone ||= begin
       min = cookies[:tzoffset].to_i
-      TimeZone[-min.minutes]
+      ActiveSupport::TimeZone[-min.minutes]
     end
   end
   
