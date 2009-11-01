@@ -1,0 +1,8 @@
+<script src="http://traphos.com/_tks.js" type='text/javascript' ></script>
+<script type="text/javascript">
+	var tracker = new _tks('tks-0befd3-1');
+	<% if logged_in? %>
+    tracker.setCid('<%= current_user.id %>');
+  <% end %>
+	tracker.trackPageview();
+</script>

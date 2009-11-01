@@ -41,6 +41,7 @@ module Hermes
       url = "#{target_uri.with_slash}images/#{CGI.escape(File.basename(filename))}"
       puts url
       result = RestClient.get(url, :user_agent => HERMES_UPLOAD[:user_agent])
+      puts "#{result}"
       return result.to_time
     rescue RestClient::ResourceNotFound => e
       return nil
