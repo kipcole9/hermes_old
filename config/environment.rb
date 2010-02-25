@@ -31,6 +31,7 @@ Rails::Initializer.run do |config|
   config.gem "mini_exiftool", :version => '>= 1.0'
   config.gem "rest-client",   :version => '>= 0.5', :lib => "rest_client"
   config.gem "ruby-openid",   :version => '>= 2.1', :lib => "openid"
+  config.gem "newrelic_rpm"
   
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
