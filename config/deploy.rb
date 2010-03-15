@@ -16,7 +16,10 @@ set :ssh_options, { :forward_agent => true, :port => 9876 }
 # your SCM below:
 set :scm, :git
 
-role :app, "kipcole.com"
-role :web, "kipcole.com"
-role :db,  "kipcole.com", :primary => true
+#role :app, "kipcole.com"
+#role :web, "kipcole.com"
+#role :db,  "kipcole.com", :primary => true
 
+role :app, "noexpectations.com.au"
+role :web, "noexpectations.com.au"
+role :db,  "noexpectations.com.au", :primary => true

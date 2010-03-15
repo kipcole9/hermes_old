@@ -2,7 +2,7 @@
 <script type="text/javascript">
 	var tracker = new _tks('tks-0befd3-1');
 	<% if logged_in? %>
-		tracker.setCid('<%= current_user.id %>');
+	tracker.setId('<%= current_user.id %>');
 	<% end %>
 	tracker.trackPageview();
 </script>

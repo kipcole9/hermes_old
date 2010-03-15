@@ -83,6 +83,7 @@ module Hermes
           define_delegate_writers
           define_meta_methods
           include InstanceMethods
+
         END_EVAL
       end
       
