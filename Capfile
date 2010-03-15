@@ -26,11 +26,14 @@ namespace(:deploy) do
     run "ln -nsf #{release_path}/vendor/deployment_plugins/nginx_streaming #{release_path}/vendor/plugins/ngix_streaming" 
   end
 
-  [ :stop, :start, :restart ].each do |t|
-    desc "#{t.to_s.capitalize} mongrels using god"
-    task t, :roles => :app do
-      sudo "god #{t.to_s} hermes"
-    end
+  desc "Restarting passenger with restart.txt"
+  task :restart, :roles => :app, :except => { :no_release => true } do
+    run "touch #{current_path}/tmp/restart.txt"
+  end
+
+  [:start, :stop].each do |t|
+    desc "#{t} task is a no-op with passenger"
+    task t, :roles => :app do ; end
   end
   
   desc "Create asset packages for production" 
