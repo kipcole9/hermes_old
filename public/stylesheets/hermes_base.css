@@ -190,12 +190,12 @@ code {
   }
 
 blockquote {
-  float: 			left;
+  /* float: 			left; */
   border-top:		1px solid #ad9;
   border-bottom: 	1px solid #ad9;
   padding: 			8px 8px 10px 8px;
-  margin-right: 	0.6em, 0.7em, 0.2em, 0.6em;
-  width: 			200px;
+  /* margin-right: 	0.6em, 0.7em, 0.2em, 0.6em;
+  width: 			200px; */
   font-style: 		italic;
   }
 
