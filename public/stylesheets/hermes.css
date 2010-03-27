@@ -136,6 +136,7 @@ h2 + ._thumbsmallList {
 ._article > h4 {
   font-size: 		90%;
   margin-bottom: 	0.7em;
+  margin-top:		0.7em;
 }
 
 ._article > h5 {
