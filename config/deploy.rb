@@ -1,6 +1,6 @@
 set :application, "hermes"
 set :repository,  "git@github.com:kipcole9/hermes.git"
-set :deploy_via,  :remote_cache
+#set :deploy_via,  :remote_cache
 
 set :user, "kip"
 set :runner, "kip"
@@ -20,6 +20,6 @@ set :scm, :git
 #role :web, "kipcole.com"
 #role :db,  "kipcole.com", :primary => true
 
-role :app, "noexpectations.com.au"
-role :web, "noexpectations.com.au"
-role :db,  "noexpectations.com.au", :primary => true
+role :app, "1ds.noexpectations.com.au"
+role :web, "1ds.noexpectations.com.au"
+role :db,  "1ds.noexpectations.com.au", :primary => true
