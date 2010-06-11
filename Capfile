@@ -39,20 +39,20 @@ namespace(:deploy) do
   desc "Create asset packages for production" 
   task :create_asset_packages, :roles => [:web] do
     run <<-EOF
-      cd #{release_path} && rake RAILS_ENV=production asset:packager:build_all
+      cd #{release_path} && /opt/ruby-enterprise/bin/rake RAILS_ENV=production asset:packager:build_all
     EOF
   end
   
   desc "Create sitemap" 
   task :create_sitemap, :roles => [:web] do
     run <<-EOF
-      cd #{current_path} && rake RAILS_ENV=production hermes:create_sitemap dir=#{sitemap_dir}
+      cd #{current_path} && /opt/ruby-enterprise/bin/rake RAILS_ENV=production hermes:create_sitemap dir=#{sitemap_dir}
     EOF
   end
   
   desc "Run database migrations"
   task :run_database_migrations, :roles => [:db] do
-    run "cd #{release_path} && rake RAILS_ENV=production db:migrate"
+    run "cd #{release_path} && /opt/ruby-enterprise/bin/rake RAILS_ENV=production db:migrate"
   end
 
   after 'deploy:update_code', 'deploy:create_asset_packages'
@@ -98,7 +98,7 @@ namespace(:mail) do
   desc "Get image emails and import"
   task :get_images do
     run <<-EOF
-      cd #{shared_path} && cd ../current && rake RAILS_ENV=production hermes:import_image_email
+      cd #{shared_path} && cd ../current && /opt/ruby-enterprise/bin/rake RAILS_ENV=production hermes:import_image_email
     EOF
   end
 end
